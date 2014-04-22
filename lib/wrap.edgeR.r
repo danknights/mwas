@@ -4,6 +4,8 @@
 "exact.test.edgeR" <- function(x, y, use.fdr=TRUE,
 		norm.factor.method=c('none','RLE')[1],
 		include.foldchange=FALSE){
+	require('edgeR')
+	
 	y <- as.factor(y)
 	if(length(levels(y)) != 2) stop('y must be a 2-level factor')
 
@@ -14,15 +16,6 @@
 	et <- exactTest(d)
 	
 	return(et)
-	
-	foldchange <- 2**et$table$logFC
-	names(foldchange) <- colnames(x)
-	pvals <- et$table$PValue
-	names(pvals) <- colnames(x)
-	if(use.fdr) pvals <- p.adjust(pvals,'fdr')
-	
-	if(include.foldchange) return(list(pvals=pvals, foldchange=foldchange))
-	return(pvals)
 }
 
 # x is samples x features
@@ -30,6 +23,9 @@
 # returns p-values
 "exact.test.edgeR.covariates" <- function(x, y, covariates=NULL,
 		use.fdr=TRUE, norm.factor.method=c('none','RLE')[1]){
+
+	require('edgeR')
+
 	d <- DGEList(count=t(x), group=y)
 	d <- calcNormFactors(d)
 
@@ -50,14 +46,6 @@
 	lrt <- glmLRT(fit,coef=2)
 	
 	return(lrt)
-
-	coeffs <- lrt$coefficients
-	names(coeffs) <- colnames(x)
-	pvals <- lrt$table$PValue
-	names(pvals) <- colnames(x)
-	if(use.fdr) pvals <- p.adjust(pvals,'fdr')
-	if(include.coefficients) return(list(pvals=pvals, coeffs=coeffs))
-	return(pvals)
 }
 
 
