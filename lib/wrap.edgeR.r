@@ -24,12 +24,22 @@ library('edgeR')
 # y is 2-group factor
 # returns p-values
 "exact.test.edgeR.covariates" <- function(x, y, covariates=NULL,
-		use.fdr=TRUE, norm.factor.method=c('none','RLE')[1]){
+		use.fdr=TRUE, norm.factor.method=c('none','RLE')[1],
+		estimate.trended.disp=FALSE,
+		verbose=TRUE){
 
 	require('edgeR')
 
+  # drop NA's
+  ix <- !is.na(y)
+  x <- x[ix,]
+  y <- y[ix]
+  covariates <- covariates[ix,]
+
+	if(verbose) cat('Making DGEList...\n')
 	d <- DGEList(count=t(x), group=y)
-	d <- calcNormFactors(d)
+	if(verbose) cat('calcNormFactors...\n')
+	d <- calcNormFactors(d,)
 
 	if(!is.null(covariates)){
 		covariates <- as.data.frame(covariates)
@@ -40,11 +50,18 @@ library('edgeR')
 		design <- model.matrix(~y)
 	}
 
+	if(verbose) cat('estimate common dispersion...\n')
 	d <- estimateGLMCommonDisp(d, design)
-	d <- estimateGLMTrendedDisp(d, design)
+	if(estimate.trended.disp){
+		if(verbose) cat('estimate trended dispersion...\n')
+		d <- estimateGLMTrendedDisp(d, design)
+	}
+	if(verbose) cat('estimate tagwise dispersion...\n')
 	d <- estimateGLMTagwiseDisp(d,design)
 	
+	if(verbose) cat('fit glm...\n')
 	fit <- glmFit(d,design)
+	if(verbose) cat('likelihood ratio test...\n')
 	lrt <- glmLRT(fit,coef=2)
 	
 	return(lrt)
