@@ -1,0 +1,14 @@
+#!/usr/bin/Rscript
+# regresses out distance that can be explained linearly by provided metadata
+# Rscript bdiv-regression.r distance-file map-file columns > new-distance-file
+source('~/drive//research/mwas/src/lib/bdiv.r')
+
+args <- commandArgs(trail=T)
+d <- read.table(args[1],sep='\t',head=T,row=1,check=F)
+m <- read.table(args[2],sep='\t',head=T,row=1,check=F,comment='')
+columns <- strsplit(args[3],',')[[1]]
+
+dr <- residual.distance(d,m[,columns,drop=F])
+
+cat('\t')
+write.table(dr,sep='\t',quote=F)
