@@ -12,9 +12,11 @@ library('vegan')
 # make option list and parse command line
 option_list <- list(
     make_option(c("-i","--input_fp"), type="character",
-        help="Input taxon table [required]."),
+        help="QIIME-formatted input taxon table (tab-delimited text, not biom) [required]."),
     make_option(c("-m","--map_fp"), type="character",default=NULL,
-        help="Mapping file (optional). If provided, only samples in both taxon table and mapping file will be plotted."),
+        help="QIIME-formatted mapping file (optional). If provided, only samples in both taxon table and mapping file will be plotted."),
+    make_option(c("-d","--distance_fp"), type="character",default=NULL,
+        help="QIIME-formatted distance table file (optional). If omitted, the script uses Bray-Curtis distance."),
     make_option(c("-w", "--which_taxa"), type="character", default=NULL,
         help="Comma-separated list of taxa to plot [default: plot top --nplot taxa]"),
     make_option(c("-s", "--shorten_taxa"),action='store_true',default=FALSE,
@@ -59,7 +61,14 @@ if(opts$shorten_taxa){
 	taxon.names <- shorten.taxonomy(taxon.names)
 }
 
-pc <- cmdscale(vegdist(x),k=5)
+if(is.null(opts$distance_fp)){
+	d <- vegdist(x)
+} else {
+	d <- read.table(opts$distance_fp,sep='\t',head=T,row=1,check=F)
+	d <- d[rownames(x),rownames(x)]
+	d <- as.dist(d)
+}
+pc <- cmdscale(d,k=5)
 
 
 # plots
