@@ -156,3 +156,63 @@
         cat(sprintf('collapsed from %d to %d.\n',ncol(x), length(reps)))
     return(list(reps=reps, groups=gr))
 }
+
+
+"inspect.env" <- function(){
+	objs <- ls(1)
+	objs <- objs[!is.null(objs)]
+	res <- split(objs, sapply(objs, function(xx) class(get(xx))))
+	for(i in seq_along(res)){
+		cat('\n')
+		cat(names(res)[i], ':\n',sep='')
+		print(res[[i]])
+	}
+	invisible(res)
+}
+
+
+"shorten.taxonomy" <- function(ids,delim=';',num.levels=1,must.include.level=7){
+	ids <- gsub('[kpcofgs]__$','Other',ids)
+	ids <- gsub('[kpcofgs]__','',ids)
+	newids <- ids
+	ids <- strsplit(ids,delim)
+	for(i in seq_along(ids)){
+		n <- length(ids[[i]])
+		j <- n
+		while(ids[[i]][j] == 'Other' || ids[[i]][j] == '') j <- j - 1
+		start.level <- min(must.include.level,j-num.levels+1)
+		start.level <- max(1,start.level)
+		newids[i] <- paste(ids[[i]][start.level:j],collapse=' ')
+		if(j < n) newids[i] <- paste('Uncl. ',newids[i],sep='')
+	}
+	
+	# add indices to duplicate names
+	counts <- table(newids)
+	if(max(counts) > 1){
+		for(name in names(counts)){
+			if(counts[name] > 1){
+				ix <- which(newids == name)
+				for(i in seq_along(ix)){
+					newids[ix[i]] <- paste(name,i,sep=' ')
+				}
+			}
+		}
+	}
+	
+	return(newids)
+}
+
+#QQ plot
+# http://GettingGeneticsDone.blogspot.com/
+# See http://gettinggeneticsdone.blogspot.com/p/copyright.html
+ 
+# Define the function
+qqplot.pvals = function(pvector, main=NULL, ...) {
+    o = -log10(sort(pvector,decreasing=F))
+    e = -log10( 1:length(o)/length(o) )
+    plot(e,o,pch=19,cex=1, main=main, ...,
+        xlab=expression(Expected~~-log[10](italic(p))),
+        ylab=expression(Observed~~-log[10](italic(p))),
+        xlim=c(0,max(e)), ylim=c(0,max(o)))
+    lines(e,e,col="red")
+}

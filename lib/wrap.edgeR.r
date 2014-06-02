@@ -30,17 +30,19 @@ library('edgeR')
 
 	require('edgeR')
 
-  # drop NA's
-  ix <- !is.na(y)
-  x <- x[ix,]
-  y <- y[ix]
-  covariates <- covariates[ix,]
+	# drop NA's
+	ix <- !is.na(y)
+	x <- x[ix,]
+	y <- y[ix]
+	covariates <- covariates[ix,]
+
+	# drop constant covariates
+	covariates <- covariates[,apply(covariates,2,function(xx) length(unique(xx)) > 1)]
 
 	if(verbose) cat('Making DGEList...\n')
 	d <- DGEList(count=t(x), group=y)
 	if(verbose) cat('calcNormFactors...\n')
 	d <- calcNormFactors(d,)
-
 	if(!is.null(covariates)){
 		covariates <- as.data.frame(covariates)
 		covariates <- cbind(y, covariates)
