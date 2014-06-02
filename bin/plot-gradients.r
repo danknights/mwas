@@ -19,6 +19,8 @@ option_list <- list(
         help="Comma-separated list of taxa to plot [default: plot top --nplot taxa]"),
     make_option(c("-s", "--shorten_taxa"),action='store_true',default=FALSE,
         help="Shorten taxonomy names to lowest defined level. [default: %default]"),
+    make_option(c("-x", "--multiple_axes"),action='store_true',default=FALSE,
+        help="Show PC1 v PC2, PC1 v PC3, PC2 v PC3 in 3 separate plots. [default: %default]"),
     make_option(c("-n", "--nplot"), type="numeric", default=10,
         help="Number of taxa to plot (in order of decreasing mean). Ignored if --which_taxa exists [default: %default]"),
     make_option(c("-o", "--outdir"), type="character", default='.',
@@ -62,13 +64,15 @@ pc <- cmdscale(vegdist(x),k=5)
 
 # plots
 fp <- sprintf('%s/gradients.pdf',opts$outdir)
-pdf(fp,width=11,height=3.75)
-par(mfrow=c(1,3))
-for(i in seq_along(taxon.names)){
-# 	fp <- sprintf('%s/gradient-%s.pdf',opts$outdir,taxon.names[i])
-# 	pdf(fp,width=11,height=3.75)
-# 	par(mfrow=c(1,3))
+if(opts$multiple_axes){
+	pdf(fp,width=11,height=3.75)
+	par(mfrow=c(1,3))
 	combs <- combn(1:3,2)
+} else {
+	pdf(fp,width=6,height=5)
+	combs <- matrix(1:2,ncol=1)
+}
+for(i in seq_along(taxon.names)){
 	for(j in 1:ncol(combs)){
 		show.gradients(x[,taxon.names[i]], pc[,combs[,j]], incl.legend=TRUE,pt.alpha='AA',
 			axis.labels=sprintf('PC%d',combs[,j]),
