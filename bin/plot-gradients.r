@@ -17,6 +17,8 @@ option_list <- list(
         help="QIIME-formatted mapping file (optional). If provided, only samples in both taxon table and mapping file will be plotted."),
     make_option(c("-d","--distance_fp"), type="character",default=NULL,
         help="QIIME-formatted distance table file (optional). If omitted, the script uses Bray-Curtis distance."),
+    make_option(c("-p","--pcoa_fp"), type="character",default=NULL,
+        help="QIIME-formatted pcoa table file (optional). If omitted, the script uses Bray-Curtis distance. If included, takes priority over --distance_fp."),
     make_option(c("-w", "--which_taxa"), type="character", default=NULL,
         help="Comma-separated list of taxa to plot [default: plot top --nplot taxa]"),
     make_option(c("-s", "--shorten_taxa"),action='store_true',default=FALSE,
@@ -61,15 +63,20 @@ if(opts$shorten_taxa){
 	taxon.names <- shorten.taxonomy(taxon.names)
 }
 
-if(is.null(opts$distance_fp)){
-	d <- vegdist(x)
+if(is.null(opts$pcoa_fp)){
+	if(is.null(opts$distance_fp)){
+		d <- vegdist(x)
+	} else {
+		d <- read.table(opts$distance_fp,sep='\t',head=T,row=1,check=F)
+		d <- d[rownames(x),rownames(x)]
+		d <- as.dist(d)
+	}
+	pc <- cmdscale(d,k=5)
 } else {
-	d <- read.table(opts$distance_fp,sep='\t',head=T,row=1,check=F)
-	d <- d[rownames(x),rownames(x)]
-	d <- as.dist(d)
+	pc <- read.table(opts$pcoa_fp,sep='\t',row=1,head=T)
+	pc <- pc[1:(nrow(pc)-2),1:min(5,ncol(pc))]
+	pc <- pc[rownames(x),]
 }
-pc <- cmdscale(d,k=5)
-
 
 # plots
 fp <- sprintf('%s/gradients.pdf',opts$outdir)

@@ -13,12 +13,11 @@
 									 test.type=c('linear','np')[1]
                             ){
     if(mixed && test.type == 'np') stop('Cannot perform mixed modeling with nonparametric test')
-    
 	rY <- Y # residuals
 	rY[,] <- NA
 	.X.72828 <<- as.data.frame(X)
 	na.ix <- rowSums(is.na(.X.72828)) > 0
-	.X.72828 <- droplevels(.X.72828[!na.ix,])
+	.X.72828 <- droplevels(.X.72828[!na.ix,,drop=F])
 	Y <- Y[!na.ix,]
     
 	fixed.ids <- setdiff(colnames(X),random.id)
@@ -120,6 +119,9 @@
 "association.tests.mixed.with.partial.residuals" <-function(X,Y,random.id=NULL,mixed=FALSE,
 									 remove.vowels.from.taxon.names=FALSE, drop.outlier.range=3,
 									 use.qvalue=FALSE, verbose=FALSE){
+	# drop constant columns
+	X <- X[,apply(X,2,function(xx) length(unique(xx)) > 1)]
+
 	full.res <- association.tests.mixed(X,Y,random.id=random.id,mixed=mixed,
 					remove.vowels.from.taxon.names,include.residuals=TRUE, drop.outlier.range=drop.outlier.range, use.qvalue=use.qvalue)
 	partial.residuals <- list()
@@ -150,7 +152,7 @@
 		gx.id <- colnames(X)[i]
 		if(verbose) cat(i,': ', gx.id,'\n',sep='');
 		ix.i <- !is.na(X[,i])
-		XX <- cbind(gx=X[ix.i,i],Z[ix.i,clin])
+		XX <- cbind(gx=X[ix.i,i],Z[ix.i,])
 		XX <- droplevels(XX[,apply(XX,2,function(xx) length(unique(xx))>1)])
 		colnames(XX)[1] <- gx.id
 		res <- association.tests.mixed(XX,Y[ix.i,],drop.outlier.range=drop.outlier.range)
