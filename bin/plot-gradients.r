@@ -74,7 +74,12 @@ if(is.null(opts$pcoa_fp)){
 	pc <- cmdscale(d,k=5)
 } else {
 	pc <- read.table(opts$pcoa_fp,sep='\t',row=1,head=T)
-	pc <- pc[1:(nrow(pc)-2),1:min(5,ncol(pc))]
+	if(rownames(pc)[nrow(pc)] == '% variation explained'){
+		pc <- pc[1:(nrow(pc)-2),1:min(5,ncol(pc))]
+	}
+	if(mean(rownames(x) %in% rownames(pc)) < 1){
+		stop('Taxon table row names do not match PC file row names')
+	}
 	pc <- pc[rownames(x),]
 }
 
