@@ -207,7 +207,7 @@
 # See http://gettinggeneticsdone.blogspot.com/p/copyright.html
  
 # Define the function
-qqplot.pvals = function(pvector, main=NULL, ...) {
+qqplot.pvals	 = function(pvector, main=NULL, ...) {
     o = -log10(sort(pvector,decreasing=F))
     e = -log10( 1:length(o)/length(o) )
     plot(e,o,pch=19,cex=1, main=main, ...,
@@ -216,3 +216,34 @@ qqplot.pvals = function(pvector, main=NULL, ...) {
         xlim=c(0,max(e)), ylim=c(0,max(o)))
     lines(e,e,col="red")
 }
+
+
+
+# Get balanced folds where each fold has close to overall class ratio
+"balanced.folds" <- function(y, nfolds=10){
+    folds = rep(0, length(y))
+	y <- as.factor(y)
+    classes = levels(y)
+    # size of each class
+    Nk = table(y)
+    # -1 or nfolds = len(y) means leave-one-out
+    if (nfolds == -1 || nfolds == length(y)){
+        invisible(1:length(y))
+    }
+    else{
+    # Can't have more folds than there are items per class
+    nfolds = min(nfolds, max(Nk))
+    # Assign folds evenly within each class, then shuffle within each class
+        for (k in 1:length(classes)){
+            ixs <- which(y==classes[k])
+            folds_k <- rep(1:nfolds, ceiling(length(ixs) / nfolds))
+            folds_k <- folds_k[1:length(ixs)]
+            folds_k <- sample(folds_k)
+            folds[ixs] = folds_k
+        }
+        invisible(folds)
+    }
+}
+
+
+

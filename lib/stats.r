@@ -499,6 +499,7 @@
 # params: list of additional parameters
 # importances: importances of features as predictors
 "rf.cross.validation" <- function(x, y, nfolds=10, folds=NULL, verbose=FALSE, ...){
+	require('randomForest')
     if(nfolds==-1) nfolds <- length(y)
     if(is.null(folds)) folds <- balanced.folds(y,nfolds=nfolds)
     result <- list()
