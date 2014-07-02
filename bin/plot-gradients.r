@@ -1,3 +1,4 @@
+#!/usr/bin/env Rscript
 # run with Rscript plot-gradients.r -i taxontable -w 'Bacteroides,Prevotella' -o outdir
 # 
 
