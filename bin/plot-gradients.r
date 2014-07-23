@@ -16,6 +16,8 @@ option_list <- list(
         help="QIIME-formatted input taxon table (tab-delimited text, not biom) [required]."),
     make_option(c("-m","--map_fp"), type="character",default=NULL,
         help="QIIME-formatted mapping file (optional). If provided, only samples in both taxon table and mapping file will be plotted."),
+    make_option(c("-c","--column"), type="character",default=NULL,
+        help="Name of metadata column to color plot by (optional). If included, does not plot gradients."),
     make_option(c("-d","--distance_fp"), type="character",default=NULL,
         help="QIIME-formatted distance table file (optional). If omitted, the script uses Bray-Curtis distance."),
     make_option(c("-p","--pcoa_fp"), type="character",default=NULL,
@@ -43,6 +45,7 @@ x <- t(read.table(opts$input_fp,sep='\t',head=T,row=1,check=F))
 if(!is.null(opts$map_fp)){
 	m <- read.table(opts$map_fp,sep='\t',head=T,row=1,check=F,comment='')
 	x <- x[intersect(rownames(x),rownames(m)),]
+	m <- droplevels(m[rownames(x),])
 }
 
 # check that taxon.names are in taxon table
@@ -85,7 +88,12 @@ if(is.null(opts$pcoa_fp)){
 }
 
 # plots
-fp <- sprintf('%s/gradients.pdf',opts$outdir)
+if(is.null(opts$column)) {
+	fp <- sprintf('%s/gradients.pdf',opts$outdir)
+} else {
+	if(!is.element(opts$column,colnames(m))) stop(paste(opts$column,'not in mapping file.'))
+	fp <- sprintf('%s/pcoa.pdf',opts$outdir)
+}
 if(opts$multiple_axes){
 	pdf(fp,width=11,height=3.75)
 	par(mfrow=c(1,3))
@@ -96,9 +104,15 @@ if(opts$multiple_axes){
 }
 for(i in seq_along(taxon.names)){
 	for(j in 1:ncol(combs)){
-		show.gradients(x[,taxon.names[i]], pc[,combs[,j]], incl.legend=TRUE,pt.alpha='AA',
-			axis.labels=sprintf('PC%d',combs[,j]),
-			title.text=sprintf('%s - PC%d v PC%d',taxon.names[i],combs[1,j],combs[2,j]))
+		if(is.null(opts$column)){
+			show.gradients(x[,taxon.names[i]], pc[,combs[,j]], incl.legend=TRUE,pt.alpha='AA',
+				axis.labels=sprintf('PC%d',combs[,j]),
+				title.text=sprintf('%s - PC%d v PC%d',taxon.names[i],combs[1,j],combs[2,j]))
+		} else {
+			show.metadata(m[,opts$column], pc[,combs[,j]], incl.legend=TRUE,pt.alpha='AA',
+				axis.labels=sprintf('PC%d',combs[,j]),
+				title.text=sprintf('%s - PC%d v PC%d',taxon.names[i],combs[1,j],combs[2,j]))
+		}
 	}
 }
 dev.off()

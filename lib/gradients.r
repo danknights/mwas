@@ -59,6 +59,50 @@
 }
 
 
+
+# Shows a PCoA plot colored by taxon gradients
+# x is a factor to color by
+# pc contains the two pc axes
+# filename: if not NULL, must be a string of the pdf output file name
+# scale.axes: e.g. c(1,-1) means to flip the second axis, not the first
+"show.metadata" <- function(y, pc, filename=NULL,
+                                incl.legend=TRUE,
+                                pt.alpha='FF',
+                                title.text='',
+                                axis.labels=c('PC1','PC2')){
+	library('RColorBrewer')
+	y.colors <- c(brewer.pal(9,'Set1'),brewer.pal(9,'Pastel1'),brewer.pal(8,'Dark2'),brewer.pal(8,'Accent'))
+
+	# reorder points randomly for drawing order
+    scrambleix <- sample(nrow(pc))
+    y <- y[scrambleix]
+    pc <- pc[scrambleix, ]
+    
+    y <- as.factor(as.character(y))
+    
+    pdf.width <- 5
+    if(incl.legend) pdf.width <- 6.5
+    if(!is.null(filename)) pdf(filename, width=5, height=5)
+    color.ix <- as.numeric(y)
+    if(max(color.ix) > length(y.colors)) stop(paste('y has more than',y.colors,'values.',sep=' '))
+    par(cex.main=.8)
+
+    xlim <- range(pc[,1]) * 1.05
+    ylim <- range(pc[,2]) * 1.05
+    if(incl.legend) xlim[2] <- xlim[2] + diff(range(xlim)) * .25
+
+    plot(pc[,1], pc[,2],type='p',pch=16,
+                 col=y.colors[color.ix],xlab=axis.labels[1],ylab=axis.labels[2],main=title.text,
+                 xlim=xlim, ylim=ylim)
+    if(incl.legend){
+		legend.pos <- 'right'
+		legend(legend.pos, legend=levels(y), fill=y.colors, cex=.65, y.intersp=1)
+	}
+
+    if(!is.null(filename)) dev.off()
+}
+
+
 # converts real values to indices between 1 and n 
 "get.gradient.ixs" <- function(x,n=10){
     stdx <- x-min(x)
