@@ -44,8 +44,8 @@ if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE
 x <- t(read.table(opts$input_fp,sep='\t',head=T,row=1,check=F))
 if(!is.null(opts$map_fp)){
 	m <- read.table(opts$map_fp,sep='\t',head=T,row=1,check=F,comment='')
-	x <- x[intersect(rownames(x),rownames(m)),]
-	m <- droplevels(m[rownames(x),])
+	x <- x[intersect(rownames(x),rownames(m)),,drop=F]
+	m <- droplevels(m[rownames(x),,drop=F])
 }
 
 # check that taxon.names are in taxon table
