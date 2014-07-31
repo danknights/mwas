@@ -40,7 +40,7 @@
 		legend.gradcols <- rev(rainbow(10,start=0,end=2/3))
 		gradixs <- get.gradient.ixs(newx,length(gradcols))
 	}
-    plot(pc[,1], pc[,2],type='p',pch=21,
+    plot(pc[,1], pc[,2],type='p',pch=21, cex=1.5,
                  col='#00000099', bg=gradcols[gradixs],
                  xlab=axis.labels[1],ylab=axis.labels[2],main=title.text,
                  xlim=xlim, ylim=ylim)
