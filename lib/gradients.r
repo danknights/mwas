@@ -40,8 +40,8 @@
 		legend.gradcols <- rev(rainbow(10,start=0,end=2/3))
 		gradixs <- get.gradient.ixs(newx,length(gradcols))
 	}
-    plot(pc[,1], pc[,2],type='p',pch=21, cex=1.5,
-                 col='#00000099', bg=gradcols[gradixs],
+    plot(pc[,1], pc[,2],type='p',pch=16, cex=1.5,
+                 col=gradcols[gradixs],
                  xlab=axis.labels[1],ylab=axis.labels[2],main=title.text,
                  xlim=xlim, ylim=ylim)
     if(incl.legend){
@@ -93,8 +93,8 @@
     ylim <- range(pc[,2]) * 1.05
     if(incl.legend) xlim[2] <- xlim[2] + diff(range(xlim)) * .25
 
-    plot(pc[,1], pc[,2],type='p',pch=21, cex=1.5,
-                 col='#00000099',bg=y.colors[color.ix],
+    plot(pc[,1], pc[,2],type='p',pch=16, cex=1.5,
+                 col=y.colors[color.ix],
                  xlab=axis.labels[1],ylab=axis.labels[2],main=title.text,
                  xlim=xlim, ylim=ylim)
     if(incl.legend){

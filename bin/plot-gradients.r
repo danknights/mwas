@@ -106,14 +106,14 @@ if(opts$multiple_axes){
 if(is.null(opts$column)){
 	for(i in seq_along(taxon.names)){
 		for(j in 1:ncol(combs)){
-			show.gradients(x[,taxon.names[i]], pc[,combs[,j]], incl.legend=TRUE,pt.alpha='AA',
+			show.gradients(x[,taxon.names[i]], pc[,combs[,j]], incl.legend=TRUE,pt.alpha='CC',
 				axis.labels=sprintf('PC%d',combs[,j]),
 				title.text=sprintf('%s - PC%d v PC%d',taxon.names[i],combs[1,j],combs[2,j]))
 		}
 	}
 } else {
 	for(j in 1:ncol(combs)){
-		show.metadata(m[,opts$column], pc[,combs[,j]], incl.legend=TRUE,pt.alpha='AA',
+		show.metadata(m[,opts$column], pc[,combs[,j]], incl.legend=TRUE,pt.alpha='CC',
 			axis.labels=sprintf('PC%d',combs[,j]),
 			title.text=sprintf('%s - PC%d v PC%d',opts$column,combs[1,j],combs[2,j]))
 	}

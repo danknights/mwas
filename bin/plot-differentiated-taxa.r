@@ -105,12 +105,12 @@ fp <- sprintf('%s/beeswarms.pdf',opts$outdir)
 pdf(fp,width=4,height=4)
 par(oma=c(4,0,0,0),mar=c(4,4,.5,.5))
 cols <- y.colors <- c(brewer.pal(9,'Set1'),brewer.pal(9,'Pastel1'),brewer.pal(8,'Dark2'),brewer.pal(8,'Accent'))[-6]
-cols <- sprintf('%saa',cols)
+cols <- sprintf('%sbb',cols)
 for(i in hit.ix){
 	taxon <- x[,i]
 	taxon.name <- colnames(x)[i]
 	beeswarm(taxon ~ env,corral='random',las=2,
-		col='#00000099',
+		col='#000000bb',
 		bg=cols,
 		pch=21,ylab=taxon.name,xlab='')
 }
