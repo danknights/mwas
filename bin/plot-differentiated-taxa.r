@@ -30,10 +30,14 @@ option_list <- list(
         help="Comma-separated list of taxa to plot [default: plot top --nplot taxa]"),
     make_option(c("-s", "--shorten_taxa"),action='store_true',default=FALSE,
         help="Shorten taxonomy names to lowest defined level. [default: %default]"),
+    make_option(c("-r", "--sort_by_abundance"),action='store_true',default=FALSE,
+        help="Sort resulting plots by decreasing relative abundance (instead of significance) [default: %default]"),
     make_option(c("-n", "--nplot"), type="numeric", default=NULL,
         help="Number of taxa to plot (in order of decreasing significance). Ignored if --which_taxa exists [default: %default]"),
 	make_option(c("-a","--alpha"), type='numeric', default=.05,
 		help='Maximum false discovery rate to report. Ignored if --which_taxa exists or --nplot exists [default: %default]'),
+    make_option(c("-O","--category_order"), type="character", default=NULL,
+        help="Optional ordering of categories (comma-separated) [default alphabetical]."),	
     make_option(c("-o", "--outdir"), type="character", default='.',
         help="Output directory [default %default]")
 )
@@ -94,6 +98,11 @@ if(length(hit.ix) == 0){
 # save hits
 write.differentiation.test.results(diff.tests, filename=sprintf('%s/test_results.txt',opts$outdir))
 
+# sort by relative abundance if requested
+if(opts$sort_by_abundance){
+	hit.ix <- hit.ix[order(colMeans(x)[hit.ix],decreasing=TRUE)]
+}
+
 if(opts$shorten_taxa){
 	colnames(x) <- shorten.taxonomy(colnames(x))
 	taxon.names <- shorten.taxonomy(taxon.names)
@@ -101,6 +110,19 @@ if(opts$shorten_taxa){
 		
 # plots
 env <- m[,opts$column]
+
+# fix order if requested
+if(!is.null(opts$category_order)){
+	level.order <- strsplit(opts$category_order,',')[[1]]
+	expected.levels <- sort(unique(as.character(env)))
+	if(!identical(sort(unique(level.order)),expected.levels)){
+		stop(paste("--category_order list does not contain the same categories",
+				   "as the provided mapping file:",
+				   paste(sort(unique(env)),collapse=', '),'\n',sep=' '))
+	}
+	env <- factor(env,levels=level.order)
+}
+
 fp <- sprintf('%s/beeswarms.pdf',opts$outdir)
 pdf(fp,width=4,height=4)
 par(oma=c(4,0,0,0),mar=c(4,4,.5,.5))

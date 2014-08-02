@@ -19,8 +19,9 @@
     if(incl.legend) pdf.width <- 6.5
     if(!is.null(filename)) pdf(filename, width=5, height=5)
     
-    par(cex.main=.8)
-
+    par(cex.main=.65)
+	par(cex.axis=.6)
+	
     xlim <- range(pc[,1]) * 1.05
     ylim <- range(pc[,2]) * 1.05
     if(incl.legend) xlim[2] <- xlim[2] + diff(range(xlim)) * .25
