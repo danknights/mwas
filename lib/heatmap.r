@@ -46,12 +46,16 @@
 	sepwidth=c(0,0)
 	if(!is.null(column.color.by)){
 		dw.colors <- rep('black',nrow(x))
-		dw.color.palette <- colorRampPalette(c(brewer.pal(9,'Set1')[1],'snow3'))(nbreaks)
-		color.ix <- as.numeric(cut(column.color.by,breaks = nbreaks))
-		for(i in seq_along(column.color.by)){
-			if(!is.na(column.color.by[i])){
-				dw.colors[i] <- dw.color.palette[color.ix[i]]
+		if(class(column.color.by) == 'numeric'){
+			dw.color.palette <- colorRampPalette(c(brewer.pal(9,'Set1')[1],'snow3'))(nbreaks)
+			color.ix <- as.numeric(cut(column.color.by,breaks = nbreaks))
+			for(i in seq_along(column.color.by)){
+				if(!is.na(column.color.by[i])){
+					dw.colors[i] <- dw.color.palette[color.ix[i]]
+				}
 			}
+		} else {
+			dw.colors <- brewer.pal(9,'Set1')[as.numeric(column.color.by)]
 		}
 		dw.colors <- dw.colors[column.order]
 		obj <- heatmap.2(as.matrix(t(x))[,column.order],

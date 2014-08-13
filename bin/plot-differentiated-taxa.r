@@ -28,6 +28,10 @@ option_list <- list(
         help="Minimum fraction of samples in which taxon must be present to be included [default: %default]."),
     make_option(c("-w", "--which_taxa"), type="character", default=NULL,
         help="Comma-separated list of taxa to plot [default: plot top --nplot taxa]"),
+    make_option(c("-t", "--transform_type"), type="character", default="norm-asin-sqrt",
+        help="Relative abundance transform type (none, asin-sqrt, or norm-asin-sqrt) [default: norm-asin-sqrt]"),
+    make_option(c("-X", "--x_axis_label"), type="character", default="",
+        help="Label for x axis [default: blank]"),
     make_option(c("-s", "--shorten_taxa"),action='store_true',default=FALSE,
         help="Shorten taxonomy names to lowest defined level. [default: %default]"),
     make_option(c("-r", "--sort_by_abundance"),action='store_true',default=FALSE,
@@ -48,9 +52,9 @@ opts <- parse_args(OptionParser(option_list=option_list),
 if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
 
 # LOAD DATA
-x <- t(read.table(opts$input_fp,sep='\t',head=T,row=1,check=F))
+x <- t(read.table(opts$input_fp,sep='\t',head=T,row=1,check=F,quote='"'))
 if(!is.null(opts$map_fp)){
-	m <- read.table(opts$map_fp,sep='\t',head=T,row=1,check=F,comment='')
+	m <- read.table(opts$map_fp,sep='\t',head=T,row=1,check=F,comment='',quote='"')
 	x <- x[intersect(rownames(x),rownames(m)),,drop=F]
 	m <- droplevels(m[rownames(x),,drop=F])
 }
@@ -58,8 +62,14 @@ if(!is.null(opts$map_fp)){
 # remove rare features
 x <- x[,colMeans(x > 0) >= opts$min_prevalence]
 
-# asin sqrt
-x <- asin(sqrt(x))
+# data transform
+if(opts$transform_type == 'asin-sqrt'){
+	x <- asin(sqrt(x))
+} else if(opts$transform_type == 'norm-asin-sqrt'){
+	x <- asin(sqrt(x))/asin(sqrt(1))
+} else if(opts$transform_type != 'none'){
+	stop(paste('Unrecognized data transform type:',opts$transform_type))
+}
 
 # check that taxon.names are in taxon table
 if(is.null(opts$which_taxa)){
@@ -77,7 +87,7 @@ if(is.null(opts$which_taxa)){
 if(!is.element(opts$column,colnames(m))) stop(paste(opts$column,'not in mapping file.'))
 
 # identify differentiated features
-diff.tests <- differentiation.test(x, m[,opts$column], parametric=FALSE)
+diff.tests <- differentiation.test(x, m[,opts$column], alpha=2, parametric=FALSE)
 
 if(is.null(opts$which_taxa)){
 	if(is.null(opts$nplot)){
@@ -123,17 +133,19 @@ if(!is.null(opts$category_order)){
 	env <- factor(env,levels=level.order)
 }
 
-fp <- sprintf('%s/beeswarms.pdf',opts$outdir)
-pdf(fp,width=4,height=4)
-par(oma=c(4,0,0,0),mar=c(4,4,.5,.5))
-cols <- y.colors <- c(brewer.pal(9,'Set1'),brewer.pal(9,'Pastel1'),brewer.pal(8,'Dark2'),brewer.pal(8,'Accent'))[-6]
+par(oma=c(1,0,0,0),mar=c(4,4,.5,.5), cex.axis=.85, cex.lab=.85, cex=2)
+cols <-  c(brewer.pal(9,'Set1'),brewer.pal(9,'Pastel1'),brewer.pal(8,'Dark2'),brewer.pal(8,'Accent'))[-6]
+cols[1:2] <- cols[2:1]
 cols <- sprintf('%sbb',cols)
 for(i in hit.ix){
 	taxon <- x[,i]
 	taxon.name <- colnames(x)[i]
+	filename.i <- sprintf('%s/beeswarm-%s.pdf',opts$outdir,taxon.name)
+	pdf(filename.i,width=4,height=4)
+
 	beeswarm(taxon ~ env,corral='random',las=2,
 		col='#000000bb',
 		bg=cols,
-		pch=21,ylab=taxon.name,xlab='')
+		pch=21,ylab=taxon.name,xlab=opts$x_axis_label)
+	dev.off()
 }
-dev.off()

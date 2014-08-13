@@ -41,9 +41,9 @@ if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE
 
 
 # LOAD DATA
-x <- t(read.table(opts$input_fp,sep='\t',head=T,row=1,check=F))
+x <- t(read.table(opts$input_fp,sep='\t',head=T,row=1,check=F,quote='"'))
 if(!is.null(opts$map_fp)){
-	m <- read.table(opts$map_fp,sep='\t',head=T,row=1,check=F,comment='')
+	m <- read.table(opts$map_fp,sep='\t',head=T,row=1,check=F,comment='',quote='"')
 	x <- x[intersect(rownames(x),rownames(m)),,drop=F]
 	m <- droplevels(m[rownames(x),,drop=F])
 }
