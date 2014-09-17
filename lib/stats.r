@@ -165,7 +165,15 @@
 					rY[rownames(Y),i][!outlier.72828] <- resid(m)
 				}
 			} else {
-				m <- lm(fixed.formula, data=.X.72828, subset=!outlier.72828)
+				# if there are columns that are now constant (one group) after dropping 
+				# outliers, remove them
+				.X.72829 <- droplevels(.X.72828[!outlier.72828,,drop=F])
+				.X.72829 <- .X.72829[,apply(.X.72829,2,function(xx) length(unique(xx))) > 1,drop=F]
+				y.72829 <- y.72828[!outlier.72828]
+				if(ncol(.X.72829) == 0) stop('No non-constant variables left after removing outlier samples')
+				m <- lm(y.72829 ~ ., data=.X.72829)
+				
+# 				m <- lm(fixed.formula, data=droplevels(.X.72828), subset=!outlier.72828)
 				res.i <- summary(m)[[4]]
 				ix <- count:(count + nrow(res.i) - 2)
 				res[ix,c('pvalue','coefficient')] <- res.i[-1,c('Pr(>|t|)','Estimate')]
@@ -630,3 +638,44 @@
     return(result)    
 }
 
+# transforms data according to various transforms
+"data.transform" <- function(x,transform_type='none'){
+	if(transform_type == 'asin-sqrt'){
+		x <- asin(sqrt(x))
+	} else if(transform_type == 'norm-asin-sqrt'){
+		x <- asin(sqrt(x))/asin(sqrt(1))
+	} else if(transform_type == 'sqrt'){
+		x <- x**(1/2)
+	} else if(transform_type == '1.5root'){
+		x <- x**(1/1.5)
+	} else if(transform_type == '3root'){
+		x <- x**(1/3)
+	} else if(transform_type == '4root'){
+		x <- x**(1/4)
+	} else if(transform_type == '5root'){
+		x <- x**(1/5)
+	} else if(transform_type == '6root'){
+		x <- x**(1/6)
+	} else if(transform_type == '7root'){
+		x <- x**(1/7)
+	} else if(transform_type == '8root'){
+		x <- x**(1/8)
+	} else if(transform_type == '9root'){
+		x <- x**(1/9)
+	} else if(transform_type == '10root'){
+		x <- x**(1/10)
+	} else if(transform_type == '100root'){
+		x <- x**(1/100)
+	} else if(transform_type == '1000root'){
+		x <- x**(1/1000)
+	} else if(transform_type == '10000root'){
+		x <- x**(1/10000)
+	} else if(transform_type == '100000root'){
+		x <- x**(1/100000)
+	} else if(transform_type == '1000000root'){
+		x <- x**(1/1000000)
+	} else if(transform_type != 'none'){
+		stop(paste('Unrecognized data transform type:',transform_type))
+	}
+	return(x)
+}

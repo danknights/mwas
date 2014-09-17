@@ -87,7 +87,7 @@
     tprs[fprs > tprs] <- fprs[fprs > tprs]
 	auc.res <- auc(fprs, tprs)
 
-	return(list(fprs=fprs, tprs=tprs, auc=auc))
+	return(list(fprs=fprs, tprs=tprs, auc=auc.res))
 }
 
 # assuming T/F response y and numeric p, finds the threshold which maximizes OR
@@ -144,3 +144,80 @@
 	return(res)
 }
 
+# Derives an additive risk index: bad bugs minus good bugs
+# for y == TRUE
+# x is taxon/OTU/feature table
+# y is TRUE/FALSE for disease or other phenotype
+# alpha determines FDR threshold for inclusion of bugs
+# eps is small value to add to all zero entries in feature table
+# 
+# return value includes risk.index.f, a function that takes a matrix with the same
+# named columns as x and returns the risk index for each row.
+"get.risk.index" <- function(x, y, alpha=0.25, eps=NULL,
+		transform.type=c('none','asin-sqrt','sqrt','1.5-root','3-root','10-root','100-root')[1],
+		parametric=FALSE, verbose=FALSE){
+
+	x <- data.transform(x,transform.type)
+	diff.tests <- differentiation.test(x, y, parametric=parametric)
+	hit.ix <- which(diff.tests$qvalues <= alpha)
+
+	if(length(hit.ix) == 0){
+		stop('No hits found.\n')
+	} else if (verbose) {
+		cat("There were",length(hit.ix),"taxa significant at FDR of",alpha,'\n')
+	}
+
+	# get rid of zeros (if eps > 0)
+	if(!is.null(eps)) x[x==0] <- eps
+
+	# identify good/bad bugs
+	good.bugs <- diff.tests$classwise.means[,1] > diff.tests$classwise.means[,2] & diff.tests$qvalues < alpha
+	bad.bugs <- diff.tests$classwise.means[,1] < diff.tests$classwise.means[,2] & diff.tests$qvalues < alpha
+
+	sum.good.bugs <- numeric(nrow(x))
+	sum.bad.bugs <- numeric(nrow(x))
+	if(sum(good.bugs) > 0) sum.good.bugs <- rowSums(x[,good.bugs,drop=F])
+	if(sum(bad.bugs) > 0) sum.bad.bugs <- rowSums(x[,bad.bugs,drop=F])
+
+	# risk index is simply additive bad bugs vs good bugs
+	risk.index <- sum.bad.bugs - sum.good.bugs
+
+	# risk.index.f 
+	"risk.index.f" <- function(x){
+		sum.good.bugs.i <- numeric(nrow(x))
+		sum.bad.bugs.i <- numeric(nrow(x))
+		if(sum(good.bugs) > 0) sum.good.bugs.i <- rowSums(x[,good.bugs,drop=F])
+		if(sum(bad.bugs) > 0) sum.bad.bugs.i <- rowSums(x[,bad.bugs,drop=F])
+		return(sum.bad.bugs.i - sum.good.bugs.i)
+	}
+	
+	return(list(
+		risk.index=risk.index,
+		risk.index.f=risk.index.f,
+		diff.tests=diff.tests,
+		good.bugs=good.bugs,
+		bad.bugs=bad.bugs,
+		hit.ix=hit.ix,
+		alpha=alpha
+	))
+}
+
+
+
+# performs cross-validated assessment of risk index performance
+# returns AUC, maximum f1, fprs/tprs for a sequence of thresholds
+#
+# nfolds=-1 means leave-one-out
+"cv.risk.index" <- function(x, y, alpha=.25, nfolds=10, 
+		transform.type='none'){
+	x <- data.transform(x, transform.type)
+	folds <- balanced.folds(y,nfolds=nfolds)
+	
+	risk.index <- numeric(nrow(x))
+	for(fold in 1:length(unique(folds))){
+		fold.ix <- which(fold == folds)
+		res <- get.risk.index(x[-fold.ix,,drop=F],y[-fold.ix], alpha=alpha)
+		risk.index[fold.ix] <- res$risk.index.f(x[fold.ix,,drop=F])
+	}
+	return(risk.index)
+}
