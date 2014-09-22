@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 # run with Rscript plot-gradients.r -i taxontable -w 'Bacteroides,Prevotella' -o outdir
-# 
 
 # REQUIRED GLOBAL VARIABLES: PLEASE EDIT
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/gradients.r',sep=''))
