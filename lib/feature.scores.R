@@ -1,4 +1,4 @@
-"mwas.feature.scores" <- function(x, y, feature.ids, filename='feature_importance_scores.txt', outdir='.'){
+"mwas.feature.scores" <- function(x, y, feature.ids, selection_thres = 0, filename='feature_importance_scores.txt', outdir='.'){
   result <- rf.out.of.bag(x, y)
 
   save.rf.results.importances(result, feature.ids, filename, outdir)
@@ -11,7 +11,7 @@
   i <- 0
   endFeatures = NULL;
   
-  while (features[i,1] > 1) { # features over 1 importance are "decently" important (?)
+  while (features[i,1] >= selection_thres) { # features over thres importance are kept
   	endFeatures <- rbind(endFeatures,features[i,:])
   	i <- i + 1
   }
