@@ -30,3 +30,18 @@
   return(best.model)
 }
 
+
+
+# Tunes glmnet model using k-fold cross-validation to select lambda
+# returns the best model.
+# inputs
+# x: data matrix (samples x features)
+# y: response vector (must be a factor with two classes)
+# k: number of folds for cross-validation
+# 
+# outputs list with:
+# trained glmnet model that works with predict()
+"best.glmnet" <- function(x, y, k=10){
+	
+	return(best.model)
+}

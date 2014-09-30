@@ -245,5 +245,15 @@ qqplot.pvals	 = function(pvector, main=NULL, ...) {
     }
 }
 
-
-
+"is.outlier" <- function(x,range=1.5){
+	# normalize first
+	x <- (x - mean(x)) / sd(x)
+    sx <- summary(x)
+    q1 <- sx[2]
+    q3 <- sx[5]
+    iqr <- q3 - q1
+    ret <- x > q3  + range * iqr | x < q1 - range * iqr
+    if(any(is.na(ret))) ret <- rep(FALSE,length(x))
+    if(all(ret)) ret <- !ret # don't call all outliers
+    return(ret)
+}

@@ -19,7 +19,9 @@ library('beeswarm')
 # make option list and parse command line
 option_list <- list(
     make_option(c("-i","--input_fp"), type="character",
-        help="QIIME-formatted input taxon table (tab-delimited text, not biom) [required]."),
+        help="QIIME-formatted input taxon, OTU, or feature table (see --input_type) (tab-delimited text, not biom) [required]."),
+    make_option(c("-I","--input_format"), type="character", default='Taxon table',
+        help="Format of classic QIIME-formatted input table: \"Taxon table\" or \"OTU table\"  [default: %default]."),
     make_option(c("-m","--map_fp"), type="character",default=NULL,
         help="QIIME-formatted mapping file (optional). If provided, only samples in both taxon table and mapping file will be plotted."),
     make_option(c("-c","--column"), type="character",default=NULL,
@@ -34,6 +36,8 @@ option_list <- list(
         help="Label for x axis [default: blank]"),
     make_option(c("-s", "--shorten_taxa"),action='store_true',default=FALSE,
         help="Shorten taxonomy names to lowest defined level. [default: %default]"),
+    make_option(c("-C", "--suppress_relative_abundance_conversion"),action='store_true',default=FALSE,
+        help="Do not convert input to relative abundances (assumes already relative abundances). [default: %default]"),
     make_option(c("-r", "--sort_by_abundance"),action='store_true',default=FALSE,
         help="Sort resulting plots by decreasing relative abundance (instead of significance) [default: %default]"),
     make_option(c("-n", "--nplot"), type="numeric", default=NULL,
@@ -52,12 +56,19 @@ opts <- parse_args(OptionParser(option_list=option_list),
 if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
 
 # LOAD DATA
-x <- t(read.table(opts$input_fp,sep='\t',head=T,row=1,check=F,quote='"'))
+if(opts$input_format == "Taxon table"){
+	x <- t(read.table(opts$input_fp,sep='\t',head=T,row=1,check=F,quote='"'))
+} else if(opts$input_format == "OTU table") {
+	x <- t(read.table(opts$input_fp,sep='\t',head=T,row=1,check=F,quote='"',comment='',skip=1))
+} else {
+	stop("Unknown input format\n")
+}
 if(!is.null(opts$map_fp)){
 	m <- read.table(opts$map_fp,sep='\t',head=T,row=1,check=F,comment='',quote='"')
 	x <- x[intersect(rownames(x),rownames(m)),,drop=F]
 	m <- droplevels(m[rownames(x),,drop=F])
 }
+browser()
 
 # remove rare features
 x <- x[,colMeans(x > 0) >= opts$min_prevalence]
