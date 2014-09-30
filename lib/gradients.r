@@ -72,7 +72,7 @@
                                 pt.alpha='FF',
                                 title.text='',
                                 axis.labels=c('PC1','PC2')){
-	library('RColorBrewer')
+	require('RColorBrewer')
 	y.colors <- c(brewer.pal(9,'Set1'),brewer.pal(9,'Pastel1'),brewer.pal(8,'Dark2'),brewer.pal(8,'Accent'))
 	y.colors <- sprintf('%s%s',y.colors,pt.alpha)
 	
