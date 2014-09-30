@@ -1,4 +1,4 @@
-library('edgeR')
+require('edgeR')
 
 # x is samples x features
 # y is 2-group factor
