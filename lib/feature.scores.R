@@ -10,12 +10,14 @@
   # they are no longer important (threshold > 1)
   i <- 0
   endFeatures = NULL;
-  endIx = c();
+  
   while (features[i,1] > 1) { # features over 1 importance are "decently" important (?)
   	endFeatures <- rbind(endFeatures,features[i,:])
   	i <- i + 1
   }
-  return(endFeatures)
+  endIx <- match(rownames(endFeatures),colnames(x))
+  return(list(features = endFeatures, ix = endIx))
+  
 }
 
 "rf.out.of.bag" <- function(x,y, verbose=verbose, ...){
