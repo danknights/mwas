@@ -49,7 +49,7 @@ if (grep(".biom",opts$map_fp)) {
 	otus <- t(as.matrix(biom_data(biom_table)))        # OTU table - classic format
 }
 else {
-	trycatch(otus <- read.delim('map-subset-imputed.txt', sep='\t',
+	trycatch(otus <- read.delim(opts$OTU_table_fp, sep='\t',
 	comment='',head=T,row.names=1,check.names=F),error = function(err) 
 		print("Couldn't parse OTU table. If BIOM format, use .biom extension"))
 }
