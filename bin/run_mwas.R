@@ -5,8 +5,16 @@ source("../lib/load_library.r")
 #source('~/Documents/FMT_stability/hmp_fmt/lib/health_index_methods.R')
 
 # convert arguments to vector
-myPackages <- c("biom", "optparse", "e1071", "kernlab","randomForest", "glmnet", "pROC", "ROCR")
-load.library(myPackages)
+#myPackages <- c("biom", "optparse", "e1071", "kernlab","randomForest", "glmnet", "pROC", "ROCR")
+#load.library(myPackages)
+require(biom)
+require(optparse) 
+require(e1071) 
+require(kernlab)
+require(randomForest)
+require(glmnet)
+require(pROC)
+require(ROCR)
 
 ####################### Parse INPUT options #####
 
@@ -36,8 +44,15 @@ if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE
 ######################## Load data #######
 mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
 
-biom_table <- read_biom(opts$OTU_table_fp)         # OTU table - biom format
-otus <- t(as.matrix(biom_data(biom_table)))        # OTU table - classic format
+if (grep(".biom",opts$map_fp)) {
+	biom_table <- read_biom(opts$OTU_table_fp)         # OTU table - biom format
+	otus <- t(as.matrix(biom_data(biom_table)))        # OTU table - classic format
+}
+else {
+	trycatch(otus <- read.delim('map-subset-imputed.txt', sep='\t',
+	comment='',head=T,row.names=1,check.names=F),error = function(err) 
+		print("Couldn't parse OTU table. If BIOM format, use .biom extension"))
+}
 data.list <- remove.nonoverlapping.samples(map = mapping, otus = otus)
 # 
 feat.Data <- data.list$otus                        # feature data for training
