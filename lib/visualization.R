@@ -8,6 +8,7 @@
 }
 
 "plot.beeswarm.dt" <- function(cols, x_axis_label, hit.ix, env, outdir) {
+	require(beeswarm)
 	cols <-  c(brewer.pal(9,'Set1'),brewer.pal(9,'Pastel1'),brewer.pal(8,'Dark2'),brewer.pal(8,'Accent'))[-6]
 	cols[1:2] <- cols[2:1]
 	cols <- sprintf('%sbb',cols)
