@@ -1,0 +1,49 @@
+"evaluate.mwas" <- function(x, model, desired, binaryClass=TRUE){
+  # Model evaluation with different criteria. 
+  #
+  # 1. classification accuracy
+  # 2. area under the ROC (AUC)
+  # 3. Matthew's correlation coefficients (MCC)
+  # 4. Cohen's Kappa
+  #
+  # --- input: 
+  #         x: feature vector
+  #     model: trained model
+  #   desired: desired output
+  #  binaryClass: two-class classification or multiclass problem
+  #
+  # --- output:
+  #   evalobj: evaluation object - $error, $accuracy, $auc, $mcc, $kappa
+  #
+  
+    predicted <- predict(model, x)  # predicted output
+    
+    sample.num <- length(desired)
+    
+    # confusion matrix
+    c.matrix <- t(sapply(levels(desired), function(level) table(predicted[desired==level])))
+    
+    rocobj <- roc.mwas(x, predicted, desired)
+    
+    evalobj <- list()
+    evalobj$error <- sum(as.numeric(predicted != desired))/sample.num
+    evalobj$acc <- (c.matrix[1,1]+c.matrix[2,2])/sum(c.matrix) # == 1 - evalobj$error 
+    evalobj$auc <- rocobj$auc
+    
+    # MCC =  (TP*TN - FP*FN)/(sqrt((TP+FP)(TP+FN)(TN+FP)(TN+FN)))
+    evalobj$mcc <- (c.matrix[1,1]*c.matrix[2,2])/(
+      sqrt((c.matrix[1,1]+c.matrix[1,2])*
+             (c.matrix[1,1]*c.matrix[2,1])*
+             (c.matrix[2,2]*c.matrix[1,2])*
+             (c.matrix[2,2]*c.matrix[2,1])))
+    
+    # Kappa = (Pr(a)-Pr(e))/(1-Pr(e))
+    # Pr(a): relative observed agreement among raters = (TP+TN)/(P+N) = acc
+    # Pr(e): the hypothetical probability of chance agreement 
+    #        = ((TP+FP)/(P+N)*(TP+FP)/(P+N)+(FN+TN)/(P+N)*(FP+TN)/(P+N))
+    Pr.e <- (c.matrix[1,1]+c.matrix[1,2])/sum(c.matrix)*(c.matrix[1,1]*c.matrix[2,1])/sum(c.matrix)+
+      (c.matrix[2,1]*c.matrix[2,2])/sum(c.matrix)*(c.matrix[1,2]*c.matrix[2,2])/sum(c.matrix)
+    evalobj$kappa <- (evalobj$acc - Pr.e)/(1 - Pr.e)
+    
+    return(evalobj)
+  }
