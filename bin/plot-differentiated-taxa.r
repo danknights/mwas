@@ -11,10 +11,9 @@ source(paste(Sys.getenv('MWAS_DIR'),'/lib/gradients.r',sep=''))
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/util.r',sep=''))
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/stats.r',sep=''))
 
-library('RColorBrewer')
-library('optparse')
-library('vegan')
-library('beeswarm')
+require('RColorBrewer')
+require('optparse')
+require('vegan')
 
 # make option list and parse command line
 option_list <- list(
@@ -144,6 +143,4 @@ if(!is.null(opts$category_order)){
 	env <- factor(env,levels=level.order)
 }
 
-# need: cols, hit.ix, 
-# call with opts$outdir as outdir, opts$x_axis_label
 plot.beeswarm.dt(cols, opts$x_axis_label, hit.ix, env, opts$outdir)
