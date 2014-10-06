@@ -1,3 +1,17 @@
+## main function calling all testing, model training, model testing and visualization
+# ------  
+#  input: 
+#  1. OTU table - BIOM or classic format (required)
+#  2. map file   (required)
+#  3. category name(s) (required)
+#  4. method - classifier method (optional); if omitted then need to specify a trained model file
+#  5. trained model file (optional) - requried if no method specified
+#  6. SVM kernel type (optional) - only for SVM classification method
+#  7. number of folds in cross-validation [default: 10]
+#  8. output directory: save classification model, model evaluation results, visualization file etc.
+#
+#
+
 source("../lib/I-methods.r") # for OTUs, mapping files operation
 source("../lib/load_library.r")
 
@@ -21,13 +35,15 @@ require(ROCR)
 # make option list and parse command line
 option_list <- list(
   make_option(c("-i","--OTU_table_fp"), type="character",
-              help="BIOM format of OTU table [requried]."),
+              help="BIOM format or classic format of OTU table [requried]."),
   make_option(c("-m","--map_fp"), type="character",
               help="Mapping file  [required]."),
   make_option(c("-c","--category"), type="character",
               help="Column name in the mapping file [requried]"),
-  make_option(c("-m", "--method"),type='character',default="RF",
-              help="Classifier type [default: %default]"),
+  make_option(c("-t", "--method"),type='character',     #,default="RF",
+              help="Classifier type [required for model training]"),
+  make_option(c("-d", "--model"),type='character',
+              help="Trained classifier model file [required if no method provided]"),
   make_option(c("-k", "--kernel"),type='character',default="radial",
               help="SVM kernel type [default: %default]"),
   make_option(c("-f", "--fold"),type='numeric',default=10,
@@ -61,12 +77,19 @@ desired.response <- factor(data.list$map[[opts$categories]]) # desired lables
 desired.labels <- desired.response
 levels(desired.labels) <- 0:length(levels(desired.labels))-1
 
-#Training.Data <- cbind(feat.Data, desired.labels)      # combine feature and labels together
-# ix <- which(!is.na(desired.labels))                  # indices of non-NA's
 
-#print(desired.labels)
-cv.ind <- sample(dim(feat.data)[1])
+if (exists(opts$method, mode="character")) { # training mode
+  training.set <- feat.Data
+  model.obj <- cross.validation.mwas(feat.Data, desired.labels, nfold=opts$fold, classifier=opts$method, savefile=TRUE, opts)
+  ## need feature selection and testing.set
+  
+}
+else{ # tesing mode
+  testing.set <- feat.Data 
+  ## need feature selection process
+  model.obj <- load(opts$model)
+}
 
+results <- model.evaluation.mwas(testing.set, opts$model)
 
-training.set <- feat.Data
-model.obj <- ml.cross.validation(feat.Data, desired.labels, nfold=opts$fold, classifier=opts$method, savefile=TRUE, opts)
+### save results ## 
