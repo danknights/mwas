@@ -1,4 +1,4 @@
-"evaluate.mwas" <- function(x, model, desired, binaryClass=TRUE){
+"model.evaluation.mwas" <- function(x, model, desired){
   # Model evaluation with different criteria. 
   #
   # 1. classification accuracy
