@@ -1,4 +1,8 @@
-"mwas.feature.scores" <- function(x, y, feature.ids, selection_thres = 0, filename='feature_importance_scores.txt', outdir='.'){
+"mwas.feature.scores" <- function(...) UseMethod("mwas.feature.scores") {
+
+}
+
+"mwas.feature.selection" <- function(x, y, feature.ids, selection_thres = 1, filename='feature_importance_scores.txt', outdir='.'){
   result <- rf.out.of.bag(x, y)
 
   save.rf.results.importances(result, feature.ids, filename, outdir)
@@ -19,6 +23,7 @@
   return(list(features = endFeatures, ix = endIx))
   
 }
+
 
 "rf.out.of.bag" <- function(x,y, verbose=verbose, ...){
   rf.model <- randomForest(x,y,keep.inbag=TRUE,importance=TRUE,do.trace=verbose,...) # scale = TRUE

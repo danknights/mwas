@@ -33,7 +33,7 @@
 	require('flux')
 	fprs.mean=rowMeans(fprs)
 	tprs.mean=rowMeans(tprs)
-	auc.mean <- auc(fprs.mean,tprs.mean)
+	auc.mean <- flux::auc(fprs.mean,tprs.mean)
 
 	res <- list(fprs.mean=fprs.mean, tprs.mean=tprs.mean,
 				fprs=fprs, tprs=tprs,
@@ -156,9 +156,8 @@
 "get.risk.index" <- function(x, y, alpha=0.25, eps=NULL,
 		transform.type=c('none','asin-sqrt','sqrt','1.5-root','3-root','10-root','100-root')[1],
 		parametric=FALSE, verbose=FALSE){
-
 	x <- data.transform(x,transform.type)
-	diff.tests <- differentiation.test(x, y, parametric=parametric)
+	diff.tests <- differentiation.test(x, y, parametric=parametric, alpha=alpha)
 	hit.ix <- which(diff.tests$qvalues <= alpha)
 
 	if(length(hit.ix) == 0){

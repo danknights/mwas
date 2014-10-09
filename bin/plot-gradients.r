@@ -38,11 +38,19 @@ opts <- parse_args(OptionParser(option_list=option_list),
 # create output directory if needed
 if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
 
-
 # LOAD DATA
 x <- t(read.table(opts$input_fp,sep='\t',head=T,row=1,check=F,quote='"'))
 if(!is.null(opts$map_fp)){
 	m <- read.table(opts$map_fp,sep='\t',head=T,row=1,check=F,comment='',quote='"')
+    # check rownames in mapping file matrix
+    missing.taxa.samples <- setdiff(rownames(x), rownames(m))
+    missing.map.samples <- setdiff(rownames(m), rownames(x))
+    if(length(missing.taxa.samples) > 0){
+        stop(sprintf('\n\nError: one or more sample names from taxonomy table (%s, ...) not present in metadata table (%s, ...).',
+            paste(sort(missing.taxa.samples)[1:5],collapse=', '),
+            paste(sort(missing.map.samples)[1:5],collapse=', ')))
+    }
+    
 	x <- x[intersect(rownames(x),rownames(m)),,drop=F]
 	m <- droplevels(m[rownames(x),,drop=F])
 }
@@ -71,9 +79,18 @@ if(is.null(opts$pcoa_fp)){
 		d <- vegdist(x)
 	} else {
 		d <- read.table(opts$distance_fp,sep='\t',head=T,row=1,check=F)
+		# check rownames in distance matrix
+		missing.taxa.samples <- union(setdiff(rownames(x), rownames(d)), setdiff(rownames(x), colnames(d)))
+		missing.distance.samples <- union(setdiff(rownames(d), rownames(x)), setdiff(colnames(d), rownames(x)))
+        if(length(missing.taxa.samples) > 0){
+    		stop(sprintf('\n\nError: one or more sample names from taxonomy table (%s, ...) not present in distance table (%s, ...).',
+		        paste(sort(missing.taxa.samples)[1:5],collapse=', '),
+		        paste(sort(missing.distance.samples)[1:5],collapse=', ')))
+		}
 		d <- d[rownames(x),rownames(x)]
 		d <- as.dist(d)
 	}
+
 	pc <- cmdscale(d,k=5)
 } else {
 	pc <- read.table(opts$pcoa_fp,sep='\t',row=1,head=T)

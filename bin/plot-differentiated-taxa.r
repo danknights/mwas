@@ -64,10 +64,17 @@ if(opts$input_format == "Taxon table"){
 }
 if(!is.null(opts$map_fp)){
 	m <- read.table(opts$map_fp,sep='\t',head=T,row=1,check=F,comment='',quote='"')
+    # check rownames in mapping file matrix
+    missing.taxa.samples <- setdiff(rownames(x), rownames(m))
+    missing.map.samples <- setdiff(rownames(m), rownames(x))
+    if(length(missing.taxa.samples) > 0){
+        stop(sprintf('\n\nError: one or more sample names from taxonomy table (%s, ...) not present in metadata table (%s, ...).',
+            paste(sort(missing.taxa.samples)[1:5],collapse=', '),
+            paste(sort(missing.map.samples)[1:5],collapse=', ')))
+    }
 	x <- x[intersect(rownames(x),rownames(m)),,drop=F]
 	m <- droplevels(m[rownames(x),,drop=F])
 }
-browser()
 
 # remove rare features (do by minimum prevalence or average prevalence)
 x <- x[,colMeans(x > 0) >= opts$min_prevalence]
