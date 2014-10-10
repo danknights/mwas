@@ -11,8 +11,8 @@
 #  8. output directory: save classification model, model evaluation results, visualization file etc.
 #  9. plot type - heatmap, beeswarm, violin, gradient
 #  10. feature selection option - TRUE or FALSE
-#  11. statistical parameters
-#  12. 
+#  11. feature selection parameter - threshold in RF
+#  12. statistical options
 #
 
 source("../lib/I-methods.r") # for OTUs, mapping files operation
@@ -31,7 +31,7 @@ require(kernlab)
 require(randomForest)
 require(glmnet)
 require(pROC)
-require(ROCR)
+#require(ROCR)
 
 ####################### Parse INPUT options #####
 
@@ -43,16 +43,24 @@ option_list <- list(
               help="Mapping file  [required]."),
   make_option(c("-c","--category"), type="character",
               help="Column name in the mapping file [requried]"),
-  make_option(c("-t", "--method"),type='character',     #,default="RF",
+  make_option(c("-t", "--method"),type='character',     #default="RF",
               help="Classifier type [required for model training]"),
-  make_option(c("-d", "--model"),type='character',
-              help="Trained classifier model file [required if no method provided]"),
-  make_option(c("-k", "--kernel"),type='character',default="radial",
-              help="SVM kernel type [default: %default]"),
+  make_option(c("-d", "--mode"),type='character',
+              help="Function mode [required]"),
+  make_option(c("-k", "--param"),type='character',default="radial",
+              help="Classifier parameter, e.g. SVM kernel type [default: %default]"),
   make_option(c("-f", "--fold"),type='numeric',default=10,
               help="Number of folds in cross-validation [default: %default]"),
   make_option(c("-o", "--outdir"),type='character',default=".",
               help="Output directory [default: %default]")
+  make_option(c("-v", "--plottype"),type='character', default="heatmap",
+              help="Plot type [default: %default]")
+  make_option(c("-s", "--feat"),type='logical',default=TRUE,
+              help="Option for feature selection [default: %default]")
+  make_option(c("-b", "--feat_param"),type='numeric',default=0,
+              help="Parameter for feature selection [default: %default]")
+  make_option(c("-a", "--statistcs"),type='character',default="linear",
+              help="Statistical testing options [default: %default]")
 )
 opts <- parse_args(OptionParser(option_list=option_list),
                    args=commandArgs(trailing=TRUE))
