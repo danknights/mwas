@@ -9,8 +9,7 @@
 #  best.model : model parameters
 
 "persist.model.mwas" <- function(x, y, nfolds=10, 
-                               classifier=c("RF","SVM", "knn", "MLR")[1], 
-                               savefile = TRUE, opts, ...){
+                               classifier=c("RF","SVM", "knn", "MLR")[1],...){
   # x - feature set (observation * features)
   # y - desried response
   cv.ind <- sample(dim(x)[1])
@@ -33,19 +32,30 @@
     validation.labels <- y[!sampl_ind %in% idx]
     
     candidate.model[[cv.ind]] <- cross.validation(train.set, train.labels, nfolds, classifier, ...)
-    candidate.rocobj[[cv.ind]] <- roc(validation.set, candidate.model[cv.ind], validation.labels)
+    candidate.rocobj[[cv.ind]] <- roc.mwas(validation.set, model = candidate.model[cv.ind], response = validation.labels)
   }
-  best.ind <- which.max(candidate.rocobj$auc) #### find the best auc index?
-  best.model <- candidate.model[best.ind]
   
-  if (savefile) save(best.model, file = paste(opts$outdir,"/trained.model", collapse='', sep=''))
+  ####### ISSUE: train final model on whole data set
+  #best.ind <- which.max(candidate.rocobj$auc) #### find the best auc index?
+  #best.model <- candidate.model[best.ind]
+  best.model <- cross.validation(x, y, nfolds, classifier, ...)
+  
+  
+  ####### ISSUE: Calculate mean and std of error/AUC, MCC, Kappa
+  # using candidate.rocobj
+  #
+  
+  
+  
+  # if (savefile) save(best.model, file = paste(opts$outdir,"/trained.model", collapse='', sep=''))
+  # Saving file is integrated into export.mwas.R
   
   return(best.model)
 }
 
 
 # Jackknife 
-# i) parameters estimated from the whole sample data
+# 1) parameters estimated from the whole sample data
 # 2) each element is, in turn, dropped from the sample 
 #    and the parameter of interest is estimated from this smaller sample.
 # 3) the difference between the whole sample estimation and the partial estimate 
@@ -63,8 +73,7 @@
 #  model estimation : error and standard deviation
 
 "jackknife.mwas" <- function(x, y, nfolds=10, 
-                                classifier=c("RF","SVM", "knn", "MLR")[1], 
-                                opts, ...){
+                                classifier=c("RF","SVM", "knn", "MLR")[1],...){
   # x - feature set (observation * features)
   # y - desried response
   cv.ind <- sample(dim(x)[1])
@@ -77,5 +86,4 @@
   #
   
   return(model.estimate)
-}
 }
