@@ -37,7 +37,7 @@
     # save AUC, if there is any
     # save MCC, if there is any
     # save Cohen's Kappa, if there is any
-    save.results.svm(test.results$prediction, opts, ...)
+    save.results(test.results, opts, ...)
   }  
 
 }

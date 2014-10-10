@@ -81,7 +81,7 @@ create.color.bars<-function(map, color.var, color.list)
 # kegg_pathways: vector of pathways, useful for highlighting different levels
 # heatmap.title: title to display on the heatmap 
 # outputfile: heatmap output file name 
-mwas.heatmap <- function(otu, map, diff.features, cluster.var, color.var, color.list, kegg_pathways, heatmap.title="", outputfile)
+heatmap.mwas <- function(otu, map, diff.features, cluster.var, color.var, color.list, kegg_pathways, heatmap.title="", outputfile)
 #TODO add some extra formatting parameters here
 # OPTIONAL: distance matrix
 {
