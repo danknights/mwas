@@ -18,7 +18,7 @@
   #   evalobj: evaluation object - $error, $accuracy, $auc, $mcc, $kappa
   #
 
-  predicted <- predict(model, x)  # predicted output
+  predicted <- predict(model, x, decision.values = TRUE, probablity=TRUE)  # predicted output
   
   evalobj <- list()
   evalobj$prediction <- predicted
