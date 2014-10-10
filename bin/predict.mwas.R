@@ -3,7 +3,7 @@
 # -----
 # input:
 #       x : original feature vector
-#    model: trained model
+#    model: trained model with selected feature vector index
 #       y : desired response [optional]
 #  is.feat: whether feature selection is required. [default: TRUE] 
 # -----
@@ -11,13 +11,12 @@
 #   export training results as a file, including train model and model evaluation
 # 
 "predict.mwas" <- function(x, model, y, ...){
-  if (is.feat){
-    feat.set <- feature.scores.mwas(x, y, selection_threshold = 0)
-    train.set <- x[,feat.set$ix]
+  if ("feat.set" %in% model){
+    test.set <- x[, model$feat.set]
   }
-  else train.set <- x
+  else test.set <- x
   
-  best.model <- persist.model.mwas(train.set, y, nfolds=10, classifier=method, ...)
+  best.model <- model.evaluation.mwas(test.set, model$trained.model, nfolds=10, classifier=method, ...)
   
   export.mwas(trained.model = best.model, feat.set = feat.set)
   return()
