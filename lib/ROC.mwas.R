@@ -1,8 +1,9 @@
-"roc.mwas" <- function(x, predicted, response, is.plot=TRUE){
+"roc.mwas" <- function(x, model, predicted, response, is.plot=FALSE){
   # Receiver operating characteristic - using package 'pROC' or 'ROCR'
   # ----- input:
   #         x: feature vector
-  # predicted: predicted output using the trained model
+  #     model: trained model
+  # predicted: predicted output using the trained model (if no model is specified as input)
   #   response: desired response 
   #
   # ----- output:
@@ -15,7 +16,8 @@
   #
   #
   
-  # predicted <- predict(model, x)
+  if exists('model') predicted <- predict(model, x) # if model si
+  
   if (length(levels(response)) == 2)  # binary classification
     rocobj <- roc(response, as.numeric(predicted), percent=TRUE, ci=TRUE, plot=is.plot)
   else    # multi-class classification
