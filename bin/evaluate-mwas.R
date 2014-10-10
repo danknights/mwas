@@ -16,7 +16,7 @@
 #
 
 source("../lib/I-methods.r") # for OTUs, mapping files operation
-source("../lib/load_library.r")
+#source("../lib/load_library.r")
 
 #source("Documents/FMT_stability/dist_median.r")
 #source('~/Documents/FMT_stability/hmp_fmt/lib/health_index_methods.R')
