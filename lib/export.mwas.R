@@ -37,8 +37,7 @@
     # save AUC, if there is any
     # save MCC, if there is any
     # save Cohen's Kappa, if there is any
-    test.results$prediction
-    save(test.results$prediction, file = paste(opts$outdir,"/prediction_results.txt", collapse='', sep='')) 
+    save.results.svm(test.results$prediction, opts)
   }  
   if (exists(results.plot)){
     # save plots required by users (opts$visualize)
@@ -48,4 +47,16 @@
     #
     #
   }
+}
+
+#
+#
+# 
+"save.results.svm" <- function(pred.obj, opts){
+  filepath <- sprintf('%s/prediction_labels_likelihood.txt', opts$outdir)
+  results.table <- merge(pred.obj$predicted, attr(pred.obj$predicted, "probabilities"))
+  sink(filepath)
+  cat('#SampleIndex\t')
+  write.table(results.table,sep='\t',quote=F)
+  sink(NULL)
 }
