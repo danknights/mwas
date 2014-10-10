@@ -1,6 +1,6 @@
 # mapping file: gg-map-adults.txt
-# OTU table (classic): GG_100nt_even10k-adults.txt
-# OTU table (biom): GG_100nt_even10k-adults.biom
+# OTU table (classic): GG_100nt_even10k-adults-s20.biom
+# OTU table (biom): GG_100nt_even10k-adults-s20.txt
 # genus-level taxonomy: taxa/GG_100nt_even10k-adults_L6.txt
 # multi-level taxonomy: taxa/merged-taxa.txt
 # distance matrix: beta/unweighted_unifrac_GG_100nt_even10k-adults.txt
