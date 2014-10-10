@@ -26,17 +26,19 @@
       best.model<-list()
       best.model$trained.model <- trained.model
     }
+   # should save as rdt format
     save(best.model, file = paste(opts$outdir,"/trained.model", collapse='', sep=''))    
   }
   
   if (exists(test.results)){
-    # save classification accuracy, if there is acc
-    # save predicted labels  
+    # save predicted labels and/or likelihood probabilities
+    # save classification accuracy, if there is acc 
     # save likelihood probabilities, if there is any
     # save AUC, if there is any
     # save MCC, if there is any
     # save Cohen's Kappa, if there is any
-    
+    test.results$prediction
+    save(test.results$prediction, file = paste(opts$outdir,"/prediction_results.txt", collapse='', sep='')) 
   }  
   if (exists(results.plot)){
     # save plots required by users (opts$visualize)
