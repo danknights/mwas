@@ -9,8 +9,7 @@
 #  best.model : model parameters
 
 "persist.model.mwas" <- function(x, y, nfolds=10, 
-                               classifier=c("RF","SVM", "knn", "MLR")[1], 
-                               savefile = TRUE, opts, ...){
+                               classifier=c("RF","SVM", "knn", "MLR")[1],...){
   # x - feature set (observation * features)
   # y - desried response
   cv.ind <- sample(dim(x)[1])
@@ -64,8 +63,7 @@
 #  model estimation : error and standard deviation
 
 "jackknife.mwas" <- function(x, y, nfolds=10, 
-                                classifier=c("RF","SVM", "knn", "MLR")[1], 
-                                opts, ...){
+                                classifier=c("RF","SVM", "knn", "MLR")[1],...){
   # x - feature set (observation * features)
   # y - desried response
   cv.ind <- sample(dim(x)[1])
