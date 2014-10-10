@@ -10,7 +10,7 @@
 #   $feautres: selected feature vector
 #   $ix      : selected feautre index in the feature vector
 #
-"mwas.feature.scores" <- function(x, y, selection_threshold = 0){
+"feature.scores.mwas" <- function(x, y, selection_threshold = 0){
   result <- rf.out.of.bag(x, y)
 
   imp <- varimp(result$rf.model, mode=1, scale=T) # scaled is great for feature picking
