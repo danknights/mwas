@@ -1,0 +1,185 @@
+#SampleID	BarcodeSequence	RUN_PREFIX	AGE	LONGITUDE	ELEVATION	RUN_DATE	RUN_LANE	SEX	FAMILY_RELATIONSHIP	COUNTRY	FLXDATA_PUBLISHED	HOST_SUBJECT_ID	ANONYMIZED_NAME	PUBLICATION_ALIAS	RUN	AGE_IN_YEARS	LATITUDE	REGION	Description
+Amz5teenF.418519	TAACTCTGATGC	s_4_1_withindex_sequence	18	-67.646	78	7/25/11	Run_559_lane_4	female	Sister	GAZ:Venezuela	n	850:ggs245	ggs245	Amz5teenF	559	18	5.425833	4	yatsunenko_global_gut
+AmzC32adltF.418671	TACAGTCTCATG	s_6_1_withindex_sequence	20	-67.609	77	7/25/11	Run_559_lane_6	female	None	GAZ:Venezuela	n	850:ggs317	ggs317	AmzC32adltF	559	20	5.410833	6	yatsunenko_global_gut
+h147M.1.418531	TACTACATGGTC	s_7_1_withindex_sequence	20	35.3	2991	7/25/11	Run_559_lane_7	female	Mother	GAZ:Malawi	n	850:ggs27	ggs27	h147M.1	559	20	-15.38	7	yatsunenko_global_gut
+AmzC5adltF.418439	GTGTGTGTCAGG	s_6_1_withindex_sequence	20	-67.609	77	7/25/11	Run_559_lane_6	female	Mother	GAZ:Venezuela	n	850:ggs316	ggs316	AmzC5adltF	559	20	5.410833	6	yatsunenko_global_gut
+AmzC31adltF.418549	TAGTCGTCTAGT	s_6_1_withindex_sequence	21	-67.609	77	7/25/11	Run_559_lane_6	female	None	GAZ:Venezuela	n	850:ggs293	ggs293	AmzC31adltF	559	21	5.410833	6	yatsunenko_global_gut
+h208M.1.418731	GTGTACCTATCA	s_3_1_withindex_sequence	21	35.3	2243	7/25/11	Run_559_lane_3	female	Mother	GAZ:Malawi	n	850:ggs45	ggs45	h208M.1	559	21	-16.002	3	yatsunenko_global_gut
+AmzC10adltF1.418809	TAGTGTGCTTCA	s_6_1_withindex_sequence	22	-67.609	77	7/25/11	Run_559_lane_6	female	SisterAdlt	GAZ:Venezuela	n	850:ggs309	ggs309	AmzC10adltF1	559	22	5.410833	6	yatsunenko_global_gut
+F3T2pre4.418583	GTACAAGAGTGA	s_11_1_withindex_sequence	23	-90.225	169	8/1/11	Run_565_lane_1	female	Twin2	GAZ:United States of America	n	850:ggs217	ggs217	F3T2pre4	565	23	38.64699	11	yatsunenko_global_gut
+h257M.1.418454	TACTGGACGCGA	s_3_1_withindex_sequence	23	35.3	2991	7/25/11	Run_559_lane_3	female	Mother	GAZ:Malawi	n	850:ggs57	ggs57	h257M.1	559	23	-15.38	3	yatsunenko_global_gut
+h305M.1.418771	TACTTCGCTCGC	s_12_1_withindex_sequence	23	35.4	2564	8/1/11	Run_565_lane_2	female	Mother	GAZ:Malawi	n	850:ggs78	ggs78	h305M.1	565	23	-15.3	12	yatsunenko_global_gut
+AmzC11adltF2.418843	TACTTCGCTCGC	s_6_1_withindex_sequence	23	-67.609	77	7/25/11	Run_559_lane_6	female	SisterAdlt	GAZ:Venezuela	n	850:ggs318	ggs318	AmzC11adltF2	559	23	5.410833	6	yatsunenko_global_gut
+F3T1pre4.418699	GCTTCATAGTGT	s_11_1_withindex_sequence	23	-90.225	169	8/1/11	Run_565_lane_1	female	Twin1	GAZ:United States of America	n	850:ggs216	ggs216	F3T1pre4	565	23	38.64699	11	yatsunenko_global_gut
+F4T1pre4.418431	GTATGACTGGCT	s_11_1_withindex_sequence	23	-90.225	169	8/1/11	Run_565_lane_1	female	Twin1	GAZ:United States of America	n	850:ggs218	ggs218	F4T1pre4	565	23	38.64699	11	yatsunenko_global_gut
+F4T2pre4.418418	GTCTACACACAT	s_11_1_withindex_sequence	23	-90.225	169	8/1/11	Run_565_lane_1	female	Twin2	GAZ:United States of America	n	850:ggs219	ggs219	F4T2pre4	565	23	38.64699	11	yatsunenko_global_gut
+TS185.418675	GTACAAGAGTGA	s_1_1_withindex_sequence	24	-90.225	169	7/25/11	Run_559_lane_1	female	Twin2	GAZ:United States of America	y	850:ggs132	ggs132	TS185	559	24	38.64699	1	yatsunenko_global_gut
+AmzC6adltF.418525	GTGTTGCAGCAT	s_6_1_withindex_sequence	24	-67.609	77	7/25/11	Run_559_lane_6	female	Mother	GAZ:Venezuela	n	850:ggs290	ggs290	AmzC6adltF	559	24	5.410833	6	yatsunenko_global_gut
+USchp1Mom.418814	GTAGCAACGTCT	s_2_1_withindex_sequence	24	-75.164	39	7/25/11	Run_559_lane_2	female	Mother	GAZ:United States of America	n	850:ggs154	ggs154	USchp1Mom	559	24	39.95234	2	yatsunenko_global_gut
+TS184.418577	GCTTCATAGTGT	s_1_1_withindex_sequence	24	-90.225	169	7/25/11	Run_559_lane_1	female	Twin1	GAZ:United States of America	y	850:ggs131	ggs131	TS184	559	24	38.64699	1	yatsunenko_global_gut
+AmzC2adltF.418621	TACATCACCACA	s_6_1_withindex_sequence	24	-67.609	77	7/25/11	Run_559_lane_6	female	Mother	GAZ:Venezuela	n	850:ggs291	ggs291	AmzC2adltF	559	24	5.410833	6	yatsunenko_global_gut
+h95M.1.418831	TACACACATGGC	s_4_1_withindex_sequence	24	35.3	2991	7/25/11	Run_559_lane_4	female	Mother	GAZ:Malawi	n	850:ggs106	ggs106	h95M.1	559	24	-15.38	4	yatsunenko_global_gut
+h101M.1.418586	GTTGTATACTCG	s_3_1_withindex_sequence	24	35.3	2991	7/25/11	Run_559_lane_3	female	Mother	GAZ:Malawi	n	850:ggs3	ggs3	h101M.1	559	24	-15.38	3	yatsunenko_global_gut
+h279M.1.418530	GTCATATCGTAC	s_3_1_withindex_sequence	24	35.3	2991	7/25/11	Run_559_lane_3	female	Mother	GAZ:Malawi	n	850:ggs71	ggs71	h279M.1	559	24	-15.38	3	yatsunenko_global_gut
+AmzC10adltF2.418591	TAGACTGTACTC	s_6_1_withindex_sequence	24	-67.609	77	7/25/11	Run_559_lane_6	female	SisterAdlt	GAZ:Venezuela	n	850:ggs292	ggs292	AmzC10adltF2	559	24	5.410833	6	yatsunenko_global_gut
+h9M.1.418588	GGATCGCAGATC	s_4_1_withindex_sequence	24.03	35.3	2243	7/25/11	Run_559_lane_4	female	Mother	GAZ:Malawi	n	850:ggs110	ggs110	h9M.1	559	24.03	-16.002	4	yatsunenko_global_gut
+TS164.418396	TACGTGTACGTG	s_1_1_withindex_sequence	25	-90.225	169	7/25/11	Run_559_lane_1	female	Twin2	GAZ:United States of America	y	850:ggs129	ggs129	TS164	559	25	38.64699	1	yatsunenko_global_gut
+TS4.418810	GTCGCTGTCTTC	s_1_1_withindex_sequence	25	-90.225	169	7/25/11	Run_559_lane_1	female	Twin1	GAZ:United States of America	y	850:ggs118	ggs118	TS4	559	25	38.64699	1	yatsunenko_global_gut
+h78M.1.418725	TAAGCGCAGCAC	s_4_1_withindex_sequence	25	35.3	2991	7/25/11	Run_559_lane_4	female	Mother	GAZ:Malawi	n	850:ggs98	ggs98	h78M.1	559	25	-15.38	4	yatsunenko_global_gut
+TS163.418636	TAACAGTCGCTG	s_1_1_withindex_sequence	25	-90.225	169	7/25/11	Run_559_lane_1	female	Twin1	GAZ:United States of America	y	850:ggs128	ggs128	TS163	559	25	38.64699	1	yatsunenko_global_gut
+TS128.418470	GTCGTGTGTCAA	s_1_1_withindex_sequence	25	-90.225	169	7/25/11	Run_559_lane_1	female	Twin2	GAZ:United States of America	y	850:ggs126	ggs126	TS128	559	25	38.64699	1	yatsunenko_global_gut
+TS127.418550	GTATCCATGCGA	s_1_1_withindex_sequence	25	-90.225	169	7/25/11	Run_559_lane_1	female	Twin1	GAZ:United States of America	y	850:ggs125	ggs125	TS127	559	25	38.64699	1	yatsunenko_global_gut
+TS5.418546	GTGAGGTCGCTA	s_1_1_withindex_sequence	25	-90.225	169	7/25/11	Run_559_lane_1	female	Twin2	GAZ:United States of America	y	850:ggs119	ggs119	TS5	559	25	38.64699	1	yatsunenko_global_gut
+TS8.418379	TAGATCCTCGAT	s_1_1_withindex_sequence	26	-90.225	169	7/25/11	Run_559_lane_1	female	Twin2	GAZ:United States of America	y	850:ggs122	ggs122	TS8	559	26	38.64699	1	yatsunenko_global_gut
+h68M.1.418773	GTATGCGCTGTA	s_11_1_withindex_sequence	26	35.4	2564	8/1/11	Run_565_lane_1	female	Mother	GAZ:Malawi	n	850:ggs95	ggs95	h68M.1	565	26	-15.3	11	yatsunenko_global_gut
+h10M.1.418706	TAGAGAGAGTGG	s_12_1_withindex_sequence	26	35.3	2243	8/1/11	Run_565_lane_2	female	Mother	GAZ:Malawi	n	850:ggs6	ggs6	h10M.1	565	26	-16.002	12	yatsunenko_global_gut
+TS25.418407	GTGATAGTGCCG	s_2_1_withindex_sequence	26	-90.225	169	7/25/11	Run_559_lane_2	female	Twin1	GAZ:United States of America	y	850:ggs162	ggs162	TS25	559	26	38.64699	2	yatsunenko_global_gut
+TS26.418393	GTTGTATACTCG	s_2_1_withindex_sequence	26	-90.225	169	7/25/11	Run_559_lane_2	female	Twin2	GAZ:United States of America	y	850:ggs163	ggs163	TS26	559	26	38.64699	2	yatsunenko_global_gut
+USchp41Mom.418801	GTAGCTGACGCA	s_11_1_withindex_sequence	26	-75.164	39	8/1/11	Run_565_lane_1	female	Mother	GAZ:United States of America	n	850:ggs203	ggs203	USchp41Mom	565	26	39.95234	11	yatsunenko_global_gut
+TS7.418860	TACGCGCTGAGA	s_1_1_withindex_sequence	26	-90.225	169	7/25/11	Run_559_lane_1	female	Twin1	GAZ:United States of America	y	850:ggs121	ggs121	TS7	559	26	38.64699	1	yatsunenko_global_gut
+h60M.1.418694	GGTCGTAGCGTA	s_3_1_withindex_sequence	27	35.3	2243	7/25/11	Run_559_lane_3	female	Mother	GAZ:Malawi	n	850:ggs91	ggs91	h60M.1	559	27	-16.002	3	yatsunenko_global_gut
+TS14.418541	GTATATCCGCAG	s_2_1_withindex_sequence	27	-90.225	169	7/25/11	Run_559_lane_2	female	Twin2	GAZ:United States of America	y	850:ggs160	ggs160	TS14	559	27	38.64699	2	yatsunenko_global_gut
+TS13.418619	GGTCGTAGCGTA	s_2_1_withindex_sequence	27	-90.225	169	7/25/11	Run_559_lane_2	female	Twin1	GAZ:United States of America	y	850:ggs159	ggs159	TS13	559	27	38.64699	2	yatsunenko_global_gut
+h37M.1.418863	TAGATAGCAGGA	s_12_1_withindex_sequence	27	35.3	2243	8/1/11	Run_565_lane_2	female	Mother	GAZ:Malawi	n	850:ggs83	ggs83	h37M.1	565	27	-16.002	12	yatsunenko_global_gut
+TS110.418428	GCTTACATCGAG	s_1_1_withindex_sequence	28	-90.225	169	7/25/11	Run_559_lane_1	female	Twin2	GAZ:United States of America	y	850:ggs123	ggs123	TS110	559	28	38.64699	1	yatsunenko_global_gut
+h85M.1.418596	GTACTCTAGACT	s_4_1_withindex_sequence	28	35.3	2991	7/25/11	Run_559_lane_4	female	Mother	GAZ:Malawi	n	850:ggs102	ggs102	h85M.1	559	28	-15.38	4	yatsunenko_global_gut
+TS2.418517	GGTCACTGACAG	s_1_1_withindex_sequence	28	-90.225	169	7/25/11	Run_559_lane_1	female	Twin2	GAZ:United States of America	y	850:ggs116	ggs116	TS2	559	28	38.64699	1	yatsunenko_global_gut
+TS1.418828	GCTGTAGTATGC	s_1_1_withindex_sequence	28	-90.225	169	7/25/11	Run_559_lane_1	female	Twin1	GAZ:United States of America	y	850:ggs115	ggs115	TS1	559	28	38.64699	1	yatsunenko_global_gut
+Amz4adltF.418711	GTCGTGTGTCAA	s_4_1_withindex_sequence	28	-67.646	78	7/25/11	Run_559_lane_4	female	Mother	GAZ:Venezuela	n	850:ggs235	ggs235	Amz4adltF	559	28	5.425833	4	yatsunenko_global_gut
+TS109.418691	TAGCACACCTAT	s_2_1_withindex_sequence	28	-90.225	169	7/25/11	Run_559_lane_2	female	Twin1	GAZ:United States of America	y	850:ggs165	ggs165	TS109	559	28	38.64699	2	yatsunenko_global_gut
+Amz7adltF.418395	TAAGCGCAGCAC	s_5_1_withindex_sequence	29	-67.646	78	7/25/11	Run_559_lane_5	female	DaughterAdlt	GAZ:Venezuela	n	850:ggs261	ggs261	Amz7adltF	559	29	5.425833	5	yatsunenko_global_gut
+AmzC9adltF.418726	GTGACTGCGGAT	s_6_1_withindex_sequence	29	-67.609	77	7/25/11	Run_559_lane_6	female	Daughter	GAZ:Venezuela	n	850:ggs305	ggs305	AmzC9adltF	559	29	5.410833	6	yatsunenko_global_gut
+USchp3Mom.418727	GTCTTCGTCGCT	s_2_1_withindex_sequence	29	-75.164	39	7/25/11	Run_559_lane_2	female	Mother	GAZ:United States of America	n	850:ggs156	ggs156	USchp3Mom	559	29	39.95234	2	yatsunenko_global_gut
+TS194.418607	GTGCACATTATC	s_1_1_withindex_sequence	30	-90.225	169	7/25/11	Run_559_lane_1	female	Twin2	GAZ:United States of America	y	850:ggs135	ggs135	TS194	559	30	38.64699	1	yatsunenko_global_gut
+USygt2.M.418457	GTGAGGTCGCTA	s_12_1_withindex_sequence	30	-90.225	169	8/1/11	Run_565_lane_2	female	Mother	GAZ:United States of America	n	850:ggs324	ggs324	USygt2.M	565	30	38.64699	12	yatsunenko_global_gut
+TS193.418750	GTCTACACACAT	s_1_1_withindex_sequence	30	-90.225	169	7/25/11	Run_559_lane_1	female	Twin1	GAZ:United States of America	y	850:ggs134	ggs134	TS193	559	30	38.64699	1	yatsunenko_global_gut
+AmzC4adltF.418372	TACGATGACCAC	s_6_1_withindex_sequence	31	-67.609	77	7/25/11	Run_559_lane_6	female	Mother	GAZ:Venezuela	n	850:ggs307	ggs307	AmzC4adltF	559	31	5.410833	6	yatsunenko_global_gut
+h273M.1.418507	TAGCTGAGTCCA	s_7_1_withindex_sequence	32	35.1	2889	7/25/11	Run_559_lane_7	female	Mother	GAZ:Malawi	n	850:ggs68	ggs68	h273M.1	559	32	-16.183	7	yatsunenko_global_gut
+h186M.1.418788	GTATGCGCTGTA	s_7_1_withindex_sequence	32	35.3	2991	7/25/11	Run_559_lane_7	female	Mother	GAZ:Malawi	n	850:ggs40	ggs40	h186M.1	559	32	-15.38	7	yatsunenko_global_gut
+h146M.1.418838	GTGCACATTATC	s_7_1_withindex_sequence	33	35.3	2991	7/25/11	Run_559_lane_7	female	Mother	GAZ:Malawi	n	850:ggs24	ggs24	h146M.1	559	33	-15.38	7	yatsunenko_global_gut
+h235M.1.418489	TAGTCGTCTAGT	s_3_1_withindex_sequence	33	35.3	2991	7/25/11	Run_559_lane_3	female	Mother	GAZ:Malawi	n	850:ggs54	ggs54	h235M.1	559	33	-15.38	3	yatsunenko_global_gut
+USchp60Mom.418566	TACGATGACCAC	s_11_1_withindex_sequence	33	-75.164	39	8/1/11	Run_565_lane_1	female	Mother	GAZ:United States of America	n	850:ggs206	ggs206	USchp60Mom	565	33	39.95234	11	yatsunenko_global_gut
+USBldAdlt6.418795	GTGCAATCGACG	s_11_1_withindex_sequence	33	-105.27	1629	8/1/11	Run_565_lane_1	female	Mother	GAZ:United States of America	n	850:ggs212	ggs212	USBldAdlt6	565	33	40.01499	11	yatsunenko_global_gut
+AmzC3adltF.418561	GTCTGGATAGCG	s_6_1_withindex_sequence	33	-67.609	77	7/25/11	Run_559_lane_6	female	Mother	GAZ:Venezuela	n	850:ggs315	ggs315	AmzC3adltF	559	33	5.410833	6	yatsunenko_global_gut
+h165M.1.418394	GTACTCTAGACT	s_7_1_withindex_sequence	34	35.3	2243	7/25/11	Run_559_lane_7	female	Mother	GAZ:Malawi	n	850:ggs30	ggs30	h165M.1	559	34	-16.002	7	yatsunenko_global_gut
+USchp25Mom.418780	GTAGCGCGAGTT	s_11_1_withindex_sequence	34	-75.164	39	8/1/11	Run_565_lane_1	female	Mother	GAZ:United States of America	n	850:ggs195	ggs195	USchp25Mom	565	34	39.95234	11	yatsunenko_global_gut
+USygt8.M.418616	TACGTGTACGTG	s_12_1_withindex_sequence	35	-90.225	169	8/1/11	Run_565_lane_2	female	Mother	GAZ:United States of America	n	850:ggs334	ggs334	USygt8.M	565	35	38.64699	12	yatsunenko_global_gut
+USygt32.M.418562	GTCTCTCTACGC	s_16_1_withindex_sequence	35	-90.225	169	8/1/11	Run_565_lane_6	female	Mother	GAZ:United States of America	n	850:ggs489	ggs489	USygt32.M	565	35	38.64699	16	yatsunenko_global_gut
+USchp4Mom.418666	TACATCACCACA	s_11_1_withindex_sequence	35	-75.164	39	8/1/11	Run_565_lane_1	female	Mother	GAZ:United States of America	n	850:ggs191	ggs191	USchp4Mom	565	35	39.95234	11	yatsunenko_global_gut
+Amz2adltF.418633	TAGCATCGTGGT	s_4_1_withindex_sequence	35	-67.646	78	7/25/11	Run_559_lane_4	female	Mother	GAZ:Venezuela	n	850:ggs239	ggs239	Amz2adltF	559	35	5.425833	4	yatsunenko_global_gut
+USygt34.M.418823	GTAGCGCGAGTT	s_14_1_withindex_sequence	36	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs390	ggs390	USygt34.M	565	36	38.64699	14	yatsunenko_global_gut
+USchp36Mom.418718	TAGCCTCTCTGC	s_1_1_withindex_sequence	36	-75.164	39	7/25/11	Run_559_lane_1	female	Mother	GAZ:United States of America	n	850:ggs138	ggs138	USchp36Mom	559	36	39.95234	1	yatsunenko_global_gut
+AmzC11adltF1.418359	GTTCGCGTATAG	s_6_1_withindex_sequence	37	-67.609	77	7/25/11	Run_559_lane_6	female	SisterAdlt	GAZ:Venezuela	n	850:ggs306	ggs306	AmzC11adltF1	559	37	5.410833	6	yatsunenko_global_gut
+USygt8.F.418739	TAGCATCGTGGT	s_13_1_withindex_sequence	37	-90.225	169	8/1/11	Run_565_lane_3	male	Father	GAZ:United States of America	n	850:ggs351	ggs351	USygt8.F	565	37	38.64699	13	yatsunenko_global_gut
+AmzC30adltF.418737	GTAGATGCTTCG	s_6_1_withindex_sequence	38	-67.609	77	7/25/11	Run_559_lane_6	female	None	GAZ:Venezuela	n	850:ggs313	ggs313	AmzC30adltF	559	38	5.410833	6	yatsunenko_global_gut
+h122M.1.418534	TAGTGCTGCGTA	s_12_1_withindex_sequence	38	35.4	2564	8/1/11	Run_565_lane_2	female	Mother	GAZ:Malawi	n	850:ggs10	ggs10	h122M.1	565	38	-15.3	12	yatsunenko_global_gut
+AmzC7adltF.418582	GGCGACATGTAC	s_6_1_withindex_sequence	38	-67.609	77	7/25/11	Run_559_lane_6	female	Mother	GAZ:Venezuela	n	850:ggs312	ggs312	AmzC7adltF	559	38	5.410833	6	yatsunenko_global_gut
+AmzC29adltF.418659	TAGATAGCAGGA	s_6_1_withindex_sequence	38	-67.609	77	7/25/11	Run_559_lane_6	female	None	GAZ:Venezuela	n	850:ggs308	ggs308	AmzC29adltF	559	38	5.410833	6	yatsunenko_global_gut
+USygt21.M.418797	GTCACGACTATT	s_13_1_withindex_sequence	39	-90.225	169	8/1/11	Run_565_lane_3	female	Mother	GAZ:United States of America	n	850:ggs378	ggs378	USygt21.M	565	39	38.64699	13	yatsunenko_global_gut
+Amz29adlt.418370	TACGGTATGTCT	s_5_1_withindex_sequence	39	-67.646	78	7/25/11	Run_559_lane_5	male	None	GAZ:Venezuela	n	850:ggs254	ggs254	Amz29adlt	559	39	5.425833	5	yatsunenko_global_gut
+USygt35.M.418364	GTGACCTGATGT	s_14_1_withindex_sequence	39	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs392	ggs392	USygt35.M	565	39	38.64699	14	yatsunenko_global_gut
+AmzC12adltF.418473	GTCTTCGTCGCT	s_6_1_withindex_sequence	40	-67.609	77	7/25/11	Run_559_lane_6	female	Mother	GAZ:Venezuela	n	850:ggs289	ggs289	AmzC12adltF	559	40	5.410833	6	yatsunenko_global_gut
+USchp18Mom.418783	TAGTCGTCTAGT	s_11_1_withindex_sequence	40	-75.164	39	8/1/11	Run_565_lane_1	female	Mother	GAZ:United States of America	n	850:ggs193	ggs193	USchp18Mom	565	40	39.95234	11	yatsunenko_global_gut
+USygt34.F.418402	TACACGATCTAC	s_16_1_withindex_sequence	40	-90.225	169	8/1/11	Run_565_lane_6	male	Father	GAZ:United States of America	n	850:ggs491	ggs491	USygt34.F	565	40	38.64699	16	yatsunenko_global_gut
+USygt31.M.418440	TAGACTGTACTC	s_14_1_withindex_sequence	41	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs387	ggs387	USygt31.M	565	41	38.64699	14	yatsunenko_global_gut
+USygt48.F.418551	TACATCACCACA	s_17_1_withindex_sequence	41	-90.225	169	8/1/11	Run_565_lane_7	male	Father	GAZ:United States of America	n	850:ggs499	ggs499	USygt48.F	565	41	38.64699	17	yatsunenko_global_gut
+USygt21.F.418579	GTACGGCATACG	s_16_1_withindex_sequence	41	-90.225	169	8/1/11	Run_565_lane_6	male	Father	GAZ:United States of America	n	850:ggs471	ggs471	USygt21.F	565	41	38.64699	16	yatsunenko_global_gut
+USygt48.M.418794	GTGTTGCAGCAT	s_17_1_withindex_sequence	41	-90.225	169	8/1/11	Run_565_lane_7	female	Mother	GAZ:United States of America	n	850:ggs498	ggs498	USygt48.M	565	41	38.64699	17	yatsunenko_global_gut
+USygt5.M.418357	GTTGTATACTCG	s_13_1_withindex_sequence	41	-90.225	169	8/1/11	Run_565_lane_3	female	Mother	GAZ:United States of America	n	850:ggs348	ggs348	USygt5.M	565	41	38.64699	13	yatsunenko_global_gut
+USygt3.M.418496	TACGCGCTGAGA	s_12_1_withindex_sequence	41	-90.225	169	8/1/11	Run_565_lane_2	female	Mother	GAZ:United States of America	n	850:ggs326	ggs326	USygt3.M	565	41	38.64699	12	yatsunenko_global_gut
+USygt36.M.418734	TACCGCTAGTAG	s_14_1_withindex_sequence	42	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs394	ggs394	USygt36.M	565	42	38.64699	14	yatsunenko_global_gut
+USygt16.M.418462	TAGCCTCTCTGC	s_16_1_withindex_sequence	42	-90.225	169	8/1/11	Run_565_lane_6	female	Mother	GAZ:United States of America	n	850:ggs469	ggs469	USygt16.M	565	42	38.64699	16	yatsunenko_global_gut
+USygt44.M.418360	GTATGCGCTGTA	s_15_1_withindex_sequence	42	-90.225	169	8/1/11	Run_565_lane_5	female	Mother	GAZ:United States of America	n	850:ggs444	ggs444	USygt44.M	565	42	38.64699	15	yatsunenko_global_gut
+USygt41.M.418492	GTGACTGCGGAT	s_14_1_withindex_sequence	42	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs400	ggs400	USygt41.M	565	42	38.64699	14	yatsunenko_global_gut
+USygt52.M.418736	GTAGCTGACGCA	s_17_1_withindex_sequence	43	-90.225	169	8/1/11	Run_565_lane_7	female	Mother	GAZ:United States of America	n	850:ggs511	ggs511	USygt52.M	565	43	38.64699	17	yatsunenko_global_gut
+USygt12.M.418543	GCTTGCGAGACA	s_12_1_withindex_sequence	43	-90.225	169	8/1/11	Run_565_lane_2	female	Mother	GAZ:United States of America	n	850:ggs335	ggs335	USygt12.M	565	43	38.64699	12	yatsunenko_global_gut
+USygt19.M.418397	GTCTCTCTACGC	s_13_1_withindex_sequence	43	-90.225	169	8/1/11	Run_565_lane_3	female	Mother	GAZ:United States of America	n	850:ggs371	ggs371	USygt19.M	565	43	38.64699	13	yatsunenko_global_gut
+USygt11.F.418661	GGTGCGTGTATG	s_16_1_withindex_sequence	43	-90.225	169	8/1/11	Run_565_lane_6	male	Father	GAZ:United States of America	n	850:ggs458	ggs458	USygt11.F	565	43	38.64699	16	yatsunenko_global_gut
+USygt17.M.418444	TACACACATGGC	s_13_1_withindex_sequence	43	-90.225	169	8/1/11	Run_565_lane_3	female	Mother	GAZ:United States of America	n	850:ggs365	ggs365	USygt17.M	565	43	38.64699	13	yatsunenko_global_gut
+USygt20.M.418572	TAGCTCGTAACT	s_13_1_withindex_sequence	43	-90.225	169	8/1/11	Run_565_lane_3	female	Mother	GAZ:United States of America	n	850:ggs375	ggs375	USygt20.M	565	43	38.64699	13	yatsunenko_global_gut
+USygt24.M.418730	GTCTGGATAGCG	s_14_1_withindex_sequence	43	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs414	ggs414	USygt24.M	565	43	38.64699	14	yatsunenko_global_gut
+USchp35Mom.418515	TAGAGAGAGTGG	s_11_1_withindex_sequence	44	-75.164	39	8/1/11	Run_565_lane_1	female	Mother	GAZ:United States of America	n	850:ggs200	ggs200	USchp35Mom	565	44	39.95234	11	yatsunenko_global_gut
+USygt44.F.418709	TACTTCGCTCGC	s_17_1_withindex_sequence	44	-90.225	169	8/1/11	Run_565_lane_7	male	Father	GAZ:United States of America	n	850:ggs529	ggs529	USygt44.F	565	44	38.64699	17	yatsunenko_global_gut
+USygt6.M.418593	TAGCACACCTAT	s_13_1_withindex_sequence	44	-90.225	169	8/1/11	Run_565_lane_3	female	Mother	GAZ:United States of America	n	850:ggs350	ggs350	USygt6.M	565	44	38.64699	13	yatsunenko_global_gut
+USygt25.F.418747	GTGGCGATACAC	s_16_1_withindex_sequence	44	-90.225	169	8/1/11	Run_565_lane_6	male	Father	GAZ:United States of America	n	850:ggs474	ggs474	USygt25.F	565	44	38.64699	16	yatsunenko_global_gut
+USygt25.M.418835	TACTTCGCTCGC	s_14_1_withindex_sequence	44	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs417	ggs417	USygt25.M	565	44	38.64699	14	yatsunenko_global_gut
+USygt38.F.418465	GGTATACGCAGC	s_14_1_withindex_sequence	44	-90.225	169	8/1/11	Run_565_lane_4	male	Father	GAZ:United States of America	n	850:ggs397	ggs397	USygt38.F	565	44	38.64699	14	yatsunenko_global_gut
+USygt49.F.418818	GGCTATGACATC	s_17_1_withindex_sequence	44	-90.225	169	8/1/11	Run_565_lane_7	male	Father	GAZ:United States of America	n	850:ggs502	ggs502	USygt49.F	565	44	38.64699	17	yatsunenko_global_gut
+USygt41.F.418802	GGCGACATGTAC	s_17_1_withindex_sequence	44	-90.225	169	8/1/11	Run_565_lane_7	male	Father	GAZ:United States of America	n	850:ggs523	ggs523	USygt41.F	565	44	38.64699	17	yatsunenko_global_gut
+h264M.1.418377	GTGTGCTATCAG	s_7_1_withindex_sequence	44	35.3	2991	7/25/11	Run_559_lane_7	female	Mother	GAZ:Malawi	n	850:ggs65	ggs65	h264M.1	559	44	-15.38	7	yatsunenko_global_gut
+USygt49.M.418347	TAGTCGTCTAGT	s_17_1_withindex_sequence	44	-90.225	169	8/1/11	Run_565_lane_7	female	Mother	GAZ:United States of America	n	850:ggs501	ggs501	USygt49.M	565	44	38.64699	17	yatsunenko_global_gut
+USchp33Mom.418698	GTTAGAGCACTC	s_11_1_withindex_sequence	45	-75.164	39	8/1/11	Run_565_lane_1	female	Mother	GAZ:United States of America	n	850:ggs198	ggs198	USchp33Mom	565	45	39.95234	11	yatsunenko_global_gut
+USygt5.F.418630	TACGGTATGTCT	s_13_1_withindex_sequence	45	-90.225	169	8/1/11	Run_565_lane_3	male	Father	GAZ:United States of America	n	850:ggs349	ggs349	USygt5.F	565	45	38.64699	13	yatsunenko_global_gut
+Amz30adlt.418837	TACTAATCTGCG	s_4_1_withindex_sequence	45	-67.646	78	7/25/11	Run_559_lane_4	unknown	None	GAZ:Venezuela	n	850:ggs246	ggs246	Amz30adlt	559	45	5.425833	4	yatsunenko_global_gut
+USygt42.M.418663	TACGATGACCAC	s_14_1_withindex_sequence	45	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs402	ggs402	USygt42.M	565	45	38.64699	14	yatsunenko_global_gut
+USygt43.F.418760	GTGTGTGTCAGG	s_17_1_withindex_sequence	45	-90.225	169	8/1/11	Run_565_lane_7	male	Father	GAZ:United States of America	n	850:ggs527	ggs527	USygt43.F	565	45	38.64699	17	yatsunenko_global_gut
+USygt38.M.418740	TAGTGCTGCGTA	s_14_1_withindex_sequence	45	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs396	ggs396	USygt38.M	565	45	38.64699	14	yatsunenko_global_gut
+USygt12.F.418502	GTACGGCATACG	s_12_1_withindex_sequence	45	-90.225	169	8/1/11	Run_565_lane_2	male	Father	GAZ:United States of America	n	850:ggs336	ggs336	USygt12.F	565	45	38.64699	12	yatsunenko_global_gut
+USygt9.M.418560	GTACAAGAGTGA	s_13_1_withindex_sequence	46	-90.225	169	8/1/11	Run_565_lane_3	female	Mother	GAZ:United States of America	n	850:ggs353	ggs353	USygt9.M	565	46	38.64699	13	yatsunenko_global_gut
+USygt16.F.418383	GTATGTTGCTCA	s_13_1_withindex_sequence	46	-90.225	169	8/1/11	Run_565_lane_3	male	Father	GAZ:United States of America	n	850:ggs362	ggs362	USygt16.F	565	46	38.64699	13	yatsunenko_global_gut
+USygt54.F.418487	TACTGCGACAGT	s_15_1_withindex_sequence	46	-90.225	169	8/1/11	Run_565_lane_5	male	Father	GAZ:United States of America	n	850:ggs456	ggs456	USygt54.F	565	46	38.64699	15	yatsunenko_global_gut
+USygt11.M.418479	GCTTCATAGTGT	s_16_1_withindex_sequence	46	-90.225	169	8/1/11	Run_565_lane_6	female	Mother	GAZ:United States of America	n	850:ggs462	ggs462	USygt11.M	565	46	38.64699	16	yatsunenko_global_gut
+USygt39.F.418756	GTCGACTCCTCT	s_14_1_withindex_sequence	46	-90.225	169	8/1/11	Run_565_lane_4	male	Father	GAZ:United States of America	n	850:ggs399	ggs399	USygt39.F	565	46	38.64699	14	yatsunenko_global_gut
+USygt9.F.418438	TAGCACACCTAT	s_15_1_withindex_sequence	46	-90.225	169	8/1/11	Run_565_lane_5	male	Father	GAZ:United States of America	n	850:ggs431	ggs431	USygt9.F	565	46	38.64699	15	yatsunenko_global_gut
+USygt10.M.418687	GTGCACATTATC	s_13_1_withindex_sequence	46	-90.225	169	8/1/11	Run_565_lane_3	female	Mother	GAZ:United States of America	n	850:ggs356	ggs356	USygt10.M	565	46	38.64699	13	yatsunenko_global_gut
+USygt27.M.418861	TAGCGACATCTG	s_16_1_withindex_sequence	46	-90.225	169	8/1/11	Run_565_lane_6	female	Mother	GAZ:United States of America	n	850:ggs477	ggs477	USygt27.M	565	46	38.64699	16	yatsunenko_global_gut
+USygt42.F.418628	TAGATAGCAGGA	s_14_1_withindex_sequence	46	-90.225	169	8/1/11	Run_565_lane_4	male	Father	GAZ:United States of America	n	850:ggs403	ggs403	USygt42.F	565	46	38.64699	14	yatsunenko_global_gut
+USygt28.M.418808	GTATGTTGCTCA	s_16_1_withindex_sequence	47	-90.225	169	8/1/11	Run_565_lane_6	female	Mother	GAZ:United States of America	n	850:ggs480	ggs480	USygt28.M	565	47	38.64699	16	yatsunenko_global_gut
+USygt33.M.418638	GTGTCTACATTG	s_16_1_withindex_sequence	47	-90.225	169	8/1/11	Run_565_lane_6	female	Mother	GAZ:United States of America	n	850:ggs490	ggs490	USygt33.M	565	47	38.64699	16	yatsunenko_global_gut
+USygt27.F.418639	TACGTGTACGTG	s_15_1_withindex_sequence	47	-90.225	169	8/1/11	Run_565_lane_5	male	Father	GAZ:United States of America	n	850:ggs433	ggs433	USygt27.F	565	47	38.64699	15	yatsunenko_global_gut
+USygt30.M.418398	TACATCACCACA	s_14_1_withindex_sequence	47	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs386	ggs386	USygt30.M	565	47	38.64699	14	yatsunenko_global_gut
+USygt4.M.418367	GGTCGTAGCGTA	s_13_1_withindex_sequence	47	-90.225	169	8/1/11	Run_565_lane_3	female	Mother	GAZ:United States of America	n	850:ggs344	ggs344	USygt4.M	565	47	38.64699	13	yatsunenko_global_gut
+USygt7.M.418598	GTCGTGTGTCAA	s_12_1_withindex_sequence	47	-90.225	169	8/1/11	Run_565_lane_2	female	Mother	GAZ:United States of America	n	850:ggs331	ggs331	USygt7.M	565	47	38.64699	12	yatsunenko_global_gut
+USygt52.F.418555	GCTGTGTAGGAC	s_15_1_withindex_sequence	47	-90.225	169	8/1/11	Run_565_lane_5	male	Father	GAZ:United States of America	n	850:ggs424	ggs424	USygt52.F	565	47	38.64699	15	yatsunenko_global_gut
+USygt13.M.418644	GTATCCATGCGA	s_16_1_withindex_sequence	47	-90.225	169	8/1/11	Run_565_lane_6	female	Mother	GAZ:United States of America	n	850:ggs459	ggs459	USygt13.M	565	47	38.64699	16	yatsunenko_global_gut
+USygt53.M.418452	GTCGACTCCTCT	s_17_1_withindex_sequence	47	-90.225	169	8/1/11	Run_565_lane_7	female	Mother	GAZ:United States of America	n	850:ggs512	ggs512	USygt53.M	565	47	38.64699	17	yatsunenko_global_gut
+USygt53.F.418830	GTCTCATGTAGG	s_15_1_withindex_sequence	48	-90.225	169	8/1/11	Run_565_lane_5	male	Father	GAZ:United States of America	n	850:ggs453	ggs453	USygt53.F	565	48	38.64699	15	yatsunenko_global_gut
+USygt43.M.418520	GTCTGGATAGCG	s_17_1_withindex_sequence	48	-90.225	169	8/1/11	Run_565_lane_7	female	Mother	GAZ:United States of America	n	850:ggs526	ggs526	USygt43.M	565	48	38.64699	17	yatsunenko_global_gut
+USygt47.M.418401	TACTACATGGTC	s_15_1_withindex_sequence	48	-90.225	169	8/1/11	Run_565_lane_5	female	Mother	GAZ:United States of America	n	850:ggs448	ggs448	USygt47.M	565	48	38.64699	15	yatsunenko_global_gut
+USygt15.F.418688	TAACTCTGATGC	s_16_1_withindex_sequence	48	-90.225	169	8/1/11	Run_565_lane_6	male	Father	GAZ:United States of America	n	850:ggs467	ggs467	USygt15.F	565	48	38.64699	16	yatsunenko_global_gut
+USygt13.F.418411	GTGGCGATACAC	s_12_1_withindex_sequence	48	-90.225	169	8/1/11	Run_565_lane_2	male	Father	GAZ:United States of America	n	850:ggs339	ggs339	USygt13.F	565	48	38.64699	12	yatsunenko_global_gut
+USygt40.F.418369	TACAGATGGCTC	s_17_1_withindex_sequence	49	-90.225	169	8/1/11	Run_565_lane_7	male	Father	GAZ:United States of America	n	850:ggs520	ggs520	USygt40.F	565	49	38.64699	17	yatsunenko_global_gut
+USygt23.M.418612	GGCGACATGTAC	s_14_1_withindex_sequence	49	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs411	ggs411	USygt23.M	565	49	38.64699	14	yatsunenko_global_gut
+Amz31adlt.418759	GGTCGTAGCGTA	s_5_1_withindex_sequence	49	-67.646	78	7/25/11	Run_559_lane_5	unknown	None	GAZ:Venezuela	n	850:ggs249	ggs249	Amz31adlt	559	49	5.425833	5	yatsunenko_global_gut
+USygt20.F.418339	GCTTGCGAGACA	s_16_1_withindex_sequence	49	-90.225	169	8/1/11	Run_565_lane_6	male	Father	GAZ:United States of America	n	850:ggs470	ggs470	USygt20.F	565	49	38.64699	16	yatsunenko_global_gut
+USygt14.M.418857	TACTACATGGTC	s_12_1_withindex_sequence	49	-90.225	169	8/1/11	Run_565_lane_2	female	Mother	GAZ:United States of America	n	850:ggs341	ggs341	USygt14.M	565	49	38.64699	12	yatsunenko_global_gut
+USygt54.M.418445	TACACACATGGC	s_15_1_withindex_sequence	49	-90.225	169	8/1/11	Run_565_lane_5	female	Mother	GAZ:United States of America	n	850:ggs455	ggs455	USygt54.M	565	49	38.64699	15	yatsunenko_global_gut
+USygt40.M.418504	GTGTGCTATCAG	s_17_1_withindex_sequence	49	-90.225	169	8/1/11	Run_565_lane_7	female	Mother	GAZ:United States of America	n	850:ggs519	ggs519	USygt40.M	565	49	38.64699	17	yatsunenko_global_gut
+USygt15.M.418634	GGACGTCACAGT	s_13_1_withindex_sequence	49	-90.225	169	8/1/11	Run_565_lane_3	female	Mother	GAZ:United States of America	n	850:ggs360	ggs360	USygt15.M	565	49	38.64699	13	yatsunenko_global_gut
+USygt22.M.418388	TACTTACTGCAG	s_14_1_withindex_sequence	50	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs409	ggs409	USygt22.M	565	50	38.64699	14	yatsunenko_global_gut
+USygt22.F.418477	GTATGCGCTGTA	s_16_1_withindex_sequence	50	-90.225	169	8/1/11	Run_565_lane_6	male	Father	GAZ:United States of America	n	850:ggs472	ggs472	USygt22.F	565	50	38.64699	16	yatsunenko_global_gut
+USygt26.M.418352	GTAGCAACGTCT	s_14_1_withindex_sequence	50	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs382	ggs382	USygt26.M	565	50	38.64699	14	yatsunenko_global_gut
+USygt30.F.418729	TAGCGGATCACG	s_16_1_withindex_sequence	50	-90.225	169	8/1/11	Run_565_lane_6	male	Father	GAZ:United States of America	n	850:ggs485	ggs485	USygt30.F	565	50	38.64699	16	yatsunenko_global_gut
+USygt18.M.418867	GGATCGCAGATC	s_13_1_withindex_sequence	50	-90.225	169	8/1/11	Run_565_lane_3	female	Mother	GAZ:United States of America	n	850:ggs368	ggs368	USygt18.M	565	50	38.64699	13	yatsunenko_global_gut
+USygt23.F.418490	GTGCAATCGACG	s_16_1_withindex_sequence	50	-90.225	169	8/1/11	Run_565_lane_6	male	Father	GAZ:United States of America	n	850:ggs461	ggs461	USygt23.F	565	50	38.64699	16	yatsunenko_global_gut
+USygt46.M.418453	GGCGTACTGATG	s_17_1_withindex_sequence	50	-90.225	169	8/1/11	Run_565_lane_7	female	Mother	GAZ:United States of America	n	850:ggs494	ggs494	USygt46.M	565	50	38.64699	17	yatsunenko_global_gut
+USygt50.M.418681	GTGACCTGATGT	s_17_1_withindex_sequence	50	-90.225	169	8/1/11	Run_565_lane_7	female	Mother	GAZ:United States of America	n	850:ggs505	ggs505	USygt50.M	565	50	38.64699	17	yatsunenko_global_gut
+USygt37.M.418793	GTTCGCGTATAG	s_17_1_withindex_sequence	51	-90.225	169	8/1/11	Run_565_lane_7	female	Mother	GAZ:United States of America	n	850:ggs514	ggs514	USygt37.M	565	51	38.64699	17	yatsunenko_global_gut
+USygt14.F.418375	GTCTACACACAT	s_16_1_withindex_sequence	51	-90.225	169	8/1/11	Run_565_lane_6	male	Father	GAZ:United States of America	n	850:ggs465	ggs465	USygt14.F	565	51	38.64699	16	yatsunenko_global_gut
+USygt29.M.418603	GTGTTGCAGCAT	s_14_1_withindex_sequence	52	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs385	ggs385	USygt29.M	565	52	38.64699	14	yatsunenko_global_gut
+USygt37.F.418676	TACTAATCTGCG	s_15_1_withindex_sequence	52	-90.225	169	8/1/11	Run_565_lane_5	male	Father	GAZ:United States of America	n	850:ggs440	ggs440	USygt37.F	565	52	38.64699	15	yatsunenko_global_gut
+USygt45.F.418753	GTCTATCGGAGT	s_15_1_withindex_sequence	52	-90.225	169	8/1/11	Run_565_lane_5	male	Father	GAZ:United States of America	n	850:ggs445	ggs445	USygt45.F	565	52	38.64699	15	yatsunenko_global_gut
+USygt45.M.418662	GTGAGGTCGCTA	s_15_1_withindex_sequence	53	-90.225	169	8/1/11	Run_565_lane_5	female	Mother	GAZ:United States of America	n	850:ggs420	ggs420	USygt45.M	565	53	38.64699	15	yatsunenko_global_gut
+USygt47.F.418643	TAGCGACATCTG	s_15_1_withindex_sequence	53	-90.225	169	8/1/11	Run_565_lane_5	male	Father	GAZ:United States of America	n	850:ggs449	ggs449	USygt47.F	565	53	38.64699	15	yatsunenko_global_gut
+TS129.418618	GTGCAATCGACG	s_1_1_withindex_sequence	53	-90.225	169	7/25/11	Run_559_lane_1	female	Mother	GAZ:United States of America	y	850:ggs127	ggs127	TS129	559	53	38.64699	1	yatsunenko_global_gut
+Amz7eldM.418423	GCTGTAGTATGC	s_4_1_withindex_sequence	53	-67.646	78	7/25/11	Run_559_lane_4	male	FatherAdlt	GAZ:Venezuela	n	850:ggs224	ggs224	Amz7eldM	559	53	5.425833	4	yatsunenko_global_gut
+USygt4.F.418451	GTATATCCGCAG	s_13_1_withindex_sequence	54	-90.225	169	8/1/11	Run_565_lane_3	male	Father	GAZ:United States of America	n	850:ggs345	ggs345	USygt4.F	565	54	38.64699	13	yatsunenko_global_gut
+USygt1.M.418373	GTAGTGTCTAGC	s_12_1_withindex_sequence	54	-90.225	169	8/1/11	Run_565_lane_2	female	Mother	GAZ:United States of America	n	850:ggs322	ggs322	USygt1.M	565	54	38.64699	12	yatsunenko_global_gut
+USygt50.F.418499	TACGCGCTGAGA	s_15_1_withindex_sequence	54	-90.225	169	8/1/11	Run_565_lane_5	male	Father	GAZ:United States of America	n	850:ggs422	ggs422	USygt50.F	565	54	38.64699	15	yatsunenko_global_gut
+USygt39.M.418483	GTAGCTGACGCA	s_14_1_withindex_sequence	54	-90.225	169	8/1/11	Run_565_lane_4	female	Mother	GAZ:United States of America	n	850:ggs398	ggs398	USygt39.M	565	54	38.64699	14	yatsunenko_global_gut
+USygt51.M.418844	TAGAGAGAGTGG	s_17_1_withindex_sequence	55	-90.225	169	8/1/11	Run_565_lane_7	female	Mother	GAZ:United States of America	n	850:ggs508	ggs508	USygt51.M	565	55	38.64699	17	yatsunenko_global_gut
+Amz32eldF.418511	GCTTGCGAGACA	s_5_1_withindex_sequence	56	-67.646	78	7/25/11	Run_559_lane_5	female	None	GAZ:Venezuela	n	850:ggs256	ggs256	Amz32eldF	559	56	5.425833	5	yatsunenko_global_gut
+TS195.418848	TAACTCTGATGC	s_1_1_withindex_sequence	56	-90.225	169	7/25/11	Run_559_lane_1	female	Mother	GAZ:United States of America	y	850:ggs136	ggs136	TS195	559	56	38.64699	1	yatsunenko_global_gut
+USygt46.F.418450	GTGGCGATACAC	s_15_1_withindex_sequence	57	-90.225	169	8/1/11	Run_565_lane_5	male	Father	GAZ:United States of America	n	850:ggs446	ggs446	USygt46.F	565	57	38.64699	15	yatsunenko_global_gut
+USygt51.F.418349	TAGTGCTGCGTA	s_17_1_withindex_sequence	57	-90.225	169	8/1/11	Run_565_lane_7	male	Father	GAZ:United States of America	n	850:ggs509	ggs509	USygt51.F	565	57	38.64699	17	yatsunenko_global_gut
+TS111.418684	GGTGCGTGTATG	s_1_1_withindex_sequence	57	-90.225	169	7/25/11	Run_559_lane_1	female	Mother	GAZ:United States of America	y	850:ggs124	ggs124	TS111	559	57	38.64699	1	yatsunenko_global_gut
+USygt1.F.418592	GTCGCTGTCTTC	s_12_1_withindex_sequence	57	-90.225	169	8/1/11	Run_565_lane_2	male	Father	GAZ:United States of America	n	850:ggs323	ggs323	USygt1.F	565	57	38.64699	12	yatsunenko_global_gut
+AmzC9adltM.418480	TAGGTATCTCAC	s_6_1_withindex_sequence	60	-67.609	77	7/25/11	Run_559_lane_6	male	Father	GAZ:Venezuela	n	850:ggs319	ggs319	AmzC9adltM	559	60	5.410833	6	yatsunenko_global_gut
+AmzC11adltF3.418391	GGCGTACTGATG	s_6_1_withindex_sequence	60	-67.609	77	7/25/11	Run_559_lane_6	female	Mother	GAZ:Venezuela	n	850:ggs286	ggs286	AmzC11adltF3	559	60	5.410833	6	yatsunenko_global_gut
+Amz6eldF.418597	GTGAGGTCGCTA	s_4_1_withindex_sequence	60	-67.646	78	7/25/11	Run_559_lane_4	female	Grandmother	GAZ:Venezuela	n	850:ggs228	ggs228	Amz6eldF	559	60	5.425833	4	yatsunenko_global_gut
+AmzC3adltM.418849	GTAGCAACGTCT	s_6_1_withindex_sequence	66	-67.609	77	7/25/11	Run_559_lane_6	male	Grandfather	GAZ:Venezuela	n	850:ggs287	ggs287	AmzC3adltM	559	66	5.410833	6	yatsunenko_global_gut
+Amz33eld.418866	GTACGGCATACG	s_5_1_withindex_sequence	66	-67.646	78	7/25/11	Run_559_lane_5	female	None	GAZ:Venezuela	n	850:ggs257	ggs257	Amz33eld	559	66	5.425833	5	yatsunenko_global_gut
+Amz5eldF.418421	GTGTACCTATCA	s_5_1_withindex_sequence	73	-67.646	78	7/25/11	Run_559_lane_5	female	Grandmother	GAZ:Venezuela	n	850:ggs268	ggs268	Amz5eldF	559	73	5.425833	5	yatsunenko_global_gut
+Amz34eld.418382	TACTGCGACAGT	s_5_1_withindex_sequence	74	-67.646	78	7/25/11	Run_559_lane_5	male	None	GAZ:Venezuela	n	850:ggs270	ggs270	Amz34eld	559	74	5.425833	5	yatsunenko_global_gut
+Amz6eldM.418356	GCTGTGTAGGAC	s_5_1_withindex_sequence	80	-67.646	78	7/25/11	Run_559_lane_5	male	Father	GAZ:Venezuela	n	850:ggs248	ggs248	Amz6eldM	559	80	5.425833	5	yatsunenko_global_gut
+AmzC8adltM.418389	GTCATATCGTAC	s_6_1_withindex_sequence	83.2	-67.609	77	7/25/11	Run_559_lane_6	male	Father	GAZ:Venezuela	n	850:ggs314	ggs314	AmzC8adltM	559	83.2	5.410833	6	yatsunenko_global_gut
