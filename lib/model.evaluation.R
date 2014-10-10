@@ -25,7 +25,7 @@
   evalobj <- list()
   evalobj$prediction <- predicted
   
-  is.binary <- 
+  is.binary <- length(level(predicted))
   if exists("desired"){ 
     # if desired response is known, then evaluate the classifier model
     # else output the predicted labels
