@@ -5,9 +5,9 @@
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/gradients.r',sep=''))
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/util.r',sep=''))
 
-library('RColorBrewer')
-library('optparse')
-library('vegan')
+require('RColorBrewer')
+require('optparse')
+require('vegan')
 
 # make option list and parse command line
 option_list <- list(

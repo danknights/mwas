@@ -20,8 +20,8 @@
 "make.heatmap" <- function(x,category,column.color.by=NULL,filename='heatmap.pdf')
 {
 	require(vegan)
-	library(RColorBrewer)
-	library(gplots)
+	require(RColorBrewer)
+	require(gplots)
 	
 	# Cluster the taxa/pathways all together
 	data.dist <- vegdist(t(x), method = "bray")
