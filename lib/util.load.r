@@ -1,6 +1,4 @@
 "read.qiime.table" <- function(filepath, as.data.frame=FALSE){
-<<<<<<< HEAD
-=======
     f <- file(filepath,'r')
     if (grep(".biom",f)) {
 		biom_table <- read_biom(f)          		 # OTU table - biom format
@@ -32,7 +30,6 @@
 }
 
 "read.qiime.table.old" <- function(filepath, as.data.frame=FALSE){
->>>>>>> FETCH_HEAD
     header.index <- get.header.index(filepath)
     # read the header
     f <- file(filepath,'r')
