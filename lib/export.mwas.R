@@ -9,7 +9,7 @@
 #------ ouput
 #     export the required results to the designated directory (opts$outdir)
 #
-"export.mwas" <- function(trained.model, feat.set, test.results, opts){
+"export.mwas" <- function(trained.model, feat.set, test.results, opts, ...){
   if(exists(trained.model)) {
     # save trained model and selected feature vector
     if(exists(feat.set)){
@@ -36,7 +36,7 @@
     # save AUC, if there is any
     # save MCC, if there is any
     # save Cohen's Kappa, if there is any
-    save.results.svm(test.results$prediction, opts)
+    save.results.svm(test.results$prediction, opts, ...)
   }  
 
 }
@@ -50,7 +50,8 @@
 #   save predicted labels, likelihood. 
 #   If the desired response is given, then also output confusion matrix and AUC, MCC and Kappa
 # 
-"save.results.svm" <- function(pred.obj, opts){
+"save.results.svm" <- function(pred.obj, opts, desired){
+  if (exists("desired"))
   filepath <- sprintf('%s/svm_prediction_labels_likelihood.txt', opts$outdir)
   results.table <- merge(pred.obj$predicted, attr(pred.obj$predicted, "probabilities"))
   sink(filepath)
