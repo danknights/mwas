@@ -33,7 +33,7 @@
     validation.labels <- y[!sampl_ind %in% idx]
     
     candidate.model[[cv.ind]] <- cross.validation(train.set, train.labels, nfolds, classifier, ...)
-    candidate.rocobj[[cv.ind]] <- roc(validation.set, candidate.model[cv.ind], validation.labels)
+    candidate.rocobj[[cv.ind]] <- roc.mwas(validation.set, model = candidate.model[cv.ind], response = validation.labels)
   }
   best.ind <- which.max(candidate.rocobj$auc) #### find the best auc index?
   best.model <- candidate.model[best.ind]
@@ -45,7 +45,7 @@
 
 
 # Jackknife 
-# i) parameters estimated from the whole sample data
+# 1) parameters estimated from the whole sample data
 # 2) each element is, in turn, dropped from the sample 
 #    and the parameter of interest is estimated from this smaller sample.
 # 3) the difference between the whole sample estimation and the partial estimate 
@@ -77,5 +77,4 @@
   #
   
   return(model.estimate)
-}
 }
