@@ -4,12 +4,15 @@
 #  1. OTU table - BIOM or classic format (required)
 #  2. map file   (required)
 #  3. category name(s) (required)
-#  4. method - classifier method (optional); if omitted then need to specify a trained model file
-#  5. trained model file (optional) - requried if no method specified
-#  6. SVM kernel type (optional) - only for SVM classification method
+#  4. mode - "train", "test", "plot", "statistics"
+#  5. method - classifier method (optional); if omitted then need to specify a trained model file 
+#  6. classifier parameters- kernel function only for SVM classification method
 #  7. number of folds in cross-validation [default: 10]
 #  8. output directory: save classification model, model evaluation results, visualization file etc.
-#
+#  9. plot type - heatmap, beeswarm, violin, gradient
+#  10. feature selection option - TRUE or FALSE
+#  11. statistical parameters
+#  12. 
 #
 
 source("../lib/I-methods.r") # for OTUs, mapping files operation
