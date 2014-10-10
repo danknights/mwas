@@ -7,7 +7,7 @@
     f <- file(filepath,'r')
     if (grep(".biom",f)) {
 		biom_table <- read_biom(f)          		 # OTU table - biom format
-		otus <- t(as.matrix(biom_data(biom_table)))  # OTU table - classic format
+		otus <- as.matrix(biom_data(biom_table))  # OTU table - classic format
 	}
 	else {
 		trycatch(otus <- read.old.qiime()),error = function(err) 
