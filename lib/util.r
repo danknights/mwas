@@ -257,3 +257,20 @@ qqplot.pvals	 = function(pvector, main=NULL, ...) {
     if(all(ret)) ret <- !ret # don't call all outliers
     return(ret)
 }
+
+"factor.to.numeric"<-function(x)
+{
+	x <- factor(x)
+   	levels(x) <- 1:length(levels(x))
+   	x <- as.numeric(x)
+   	return(x)
+}
+
+PARAMETERS <<- NULL
+# used for parsing the params file. read into global var to avoid rereading too many times.
+parse.params<-function(function, parameter)
+{
+	if(PARAMETERS == NULL)
+		PARAMETERS <- read.table("../config/params",sep=" ",row=1)
+	return PARAMETERS[paste(function,parameter,sep=":")]
+}
