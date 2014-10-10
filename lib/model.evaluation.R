@@ -1,6 +1,9 @@
 "model.evaluation.mwas" <- function(x, model, desired){
+  # If the desired response is known, then evaluate the model, 
+  # otherwise output the predicted labels.
+  # --------------------------------------------
   # Model evaluation with different criteria. 
-  #
+  # 
   # 1. classification accuracy
   # 2. area under the ROC (AUC)
   # 3. Matthew's correlation coefficients (MCC)
@@ -9,14 +12,17 @@
   # --- input: 
   #         x: feature vector
   #     model: trained model
-  #   desired: desired output
-  #  binaryClass: two-class classification or multiclass problem
+  #   desired: desired output (response)
   #
   # --- output:
   #   evalobj: evaluation object - $error, $accuracy, $auc, $mcc, $kappa
   #
   
-    predicted <- predict(model, x)  # predicted output
+  predicted <- predict(model, x)  # predicted output
+  
+  if exists("desired"){ 
+    # if desired response is known, then evaluate the classifier model
+    # else output the predicted labels
     
     sample.num <- length(desired)
     
@@ -44,6 +50,8 @@
     Pr.e <- (c.matrix[1,1]+c.matrix[1,2])/sum(c.matrix)*(c.matrix[1,1]*c.matrix[2,1])/sum(c.matrix)+
       (c.matrix[2,1]*c.matrix[2,2])/sum(c.matrix)*(c.matrix[1,2]*c.matrix[2,2])/sum(c.matrix)
     evalobj$kappa <- (evalobj$acc - Pr.e)/(1 - Pr.e)
-    
-    return(evalobj)
   }
+  else evalobj <- predicted    
+  
+  return(evalobj)
+}
