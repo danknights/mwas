@@ -4,13 +4,12 @@
 #   trained.model : trained claissifier model and other parameters
 #        feat.set : selected feature vector index
 #     test.results: output from predict.mwas.R, it's an model.evaluation object
-#    resutls.plot : parameters for plotting
 #            opts : options from keyboard
 #
 #------ ouput
 #     export the required results to the designated directory (opts$outdir)
 #
-"export.mwas" <- function(trained.model, feat.set, test.results, results.plot, opts){
+"export.mwas" <- function(trained.model, feat.set, test.results, opts){
   if(exists(trained.model)) {
     # save trained model and selected feature vector
     if(exists(feat.set)){
@@ -39,21 +38,74 @@
     # save Cohen's Kappa, if there is any
     save.results.svm(test.results$prediction, opts)
   }  
-  if (exists(results.plot)){
-    # save plots required by users (opts$visualize)
-    # 
-    #
-    #
-    #
-    #
-  }
+
 }
 
 #
-#
+# save results from SVM prediction object
+# input: 
+#    pred.obj : prediction object
+#        opts : options from keyboard
+# output:
+#   save predicted labels, likelihood. 
+#   If the desired response is given, then also output confusion matrix and AUC, MCC and Kappa
 # 
 "save.results.svm" <- function(pred.obj, opts){
-  filepath <- sprintf('%s/prediction_labels_likelihood.txt', opts$outdir)
+  filepath <- sprintf('%s/svm_prediction_labels_likelihood.txt', opts$outdir)
+  results.table <- merge(pred.obj$predicted, attr(pred.obj$predicted, "probabilities"))
+  sink(filepath)
+  cat('#SampleIndex\t')
+  write.table(results.table,sep='\t',quote=F)
+  sink(NULL)
+}
+
+#
+# save results from MLR prediction object
+# input: 
+#    pred.obj : prediction object
+#        opts : options from keyboard
+# output:
+#   save predicted labels, likelihood. 
+#   If the desired response is given, then also output confusion matrix and AUC, MCC and Kappa
+# 
+"save.results.rf" <- function(pred.obj, opts){
+  filepath <- sprintf('%s/rf_prediction_labels_likelihood.txt', opts$outdir)
+  results.table <- merge(pred.obj$predicted, attr(pred.obj$predicted, "probabilities"))
+  sink(filepath)
+  cat('#SampleIndex\t')
+  write.table(results.table,sep='\t',quote=F)
+  sink(NULL)
+}
+
+#
+# save results from MLR prediction object
+# input: 
+#    pred.obj : prediction object
+#        opts : options from keyboard
+# output:
+#   save predicted labels, likelihood. 
+#   If the desired response is given, then also output confusion matrix and AUC, MCC and Kappa
+# 
+"save.results.mlr" <- function(pred.obj, opts){
+  filepath <- sprintf('%s/MLR_prediction_labels_likelihood.txt', opts$outdir)
+  results.table <- merge(pred.obj$predicted, attr(pred.obj$predicted, "probabilities"))
+  sink(filepath)
+  cat('#SampleIndex\t')
+  write.table(results.table,sep='\t',quote=F)
+  sink(NULL)
+}
+
+#
+# save results from knn prediction object
+# input: 
+#    pred.obj : prediction object
+#        opts : options from keyboard
+# output:
+#   save predicted labels, likelihood. 
+#   If the desired response is given, then also output confusion matrix and AUC, MCC and Kappa
+# 
+"save.results.knn" <- function(pred.obj, opts){
+  filepath <- sprintf('%s/knn_prediction_labels_likelihood.txt', opts$outdir)
   results.table <- merge(pred.obj$predicted, attr(pred.obj$predicted, "probabilities"))
   sink(filepath)
   cat('#SampleIndex\t')
