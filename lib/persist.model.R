@@ -34,8 +34,18 @@
     candidate.model[[cv.ind]] <- cross.validation(train.set, train.labels, nfolds, classifier, ...)
     candidate.rocobj[[cv.ind]] <- roc.mwas(validation.set, model = candidate.model[cv.ind], response = validation.labels)
   }
-  best.ind <- which.max(candidate.rocobj$auc) #### find the best auc index?
-  best.model <- candidate.model[best.ind]
+  
+  ####### ISSUE: train final model on whole data set
+  #best.ind <- which.max(candidate.rocobj$auc) #### find the best auc index?
+  #best.model <- candidate.model[best.ind]
+  best.model <- cross.validation(x, y, nfolds, classifier, ...)
+  
+  
+  ####### ISSUE: Calculate mean and std of error/AUC, MCC, Kappa
+  # using candidate.rocobj
+  #
+  
+  
   
   # if (savefile) save(best.model, file = paste(opts$outdir,"/trained.model", collapse='', sep=''))
   # Saving file is integrated into export.mwas.R
