@@ -7,10 +7,10 @@
     f <- file(filepath,'r')
     if (grep(".biom",f)) {
 		biom_table <- read_biom(f)          		 # OTU table - biom format
-		otus <- as.matrix(biom_data(biom_table))  # OTU table - classic format
+		datatable <- as.matrix(biom_data(biom_table))  # OTU table - classic format
 	}
 	else {
-		trycatch(otus <- read.old.qiime()),error = function(err) 
+		trycatch(datatable <- read.old.qiime(), error = function(err) 
 			print("Couldn't parse OTU table. If BIOM format, use .biom extension"))
 	}
 	
