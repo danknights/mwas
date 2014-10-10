@@ -38,7 +38,8 @@
   best.ind <- which.max(candidate.rocobj$auc) #### find the best auc index?
   best.model <- candidate.model[best.ind]
   
-  if (savefile) save(best.model, file = paste(opts$outdir,"/trained.model", collapse='', sep=''))
+  # if (savefile) save(best.model, file = paste(opts$outdir,"/trained.model", collapse='', sep=''))
+  # Saving file is integrated into export.mwas.R
   
   return(best.model)
 }
