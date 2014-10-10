@@ -61,6 +61,7 @@
       evalobj$mcc <- NULL
       evalobj$kappa <- NULL
     }
+  }
       
   return(evalobj)
 }
