@@ -106,6 +106,16 @@
     return(d)
 }
 
+"load.qiime.pcoa.file" <- function(filepath){
+	d <- as.matrix(read.table(filepath,sep='\t',head=T,row.names=1,check=FALSE,quote='"'))
+	return(d)
+}
+
+"load.qiime.feature.stats" <- function(filepath){
+	d < - as.matrix(read.table(filepath,sep='\t',head=T,row.names=1,check=FALSE,quote='"'))
+	return(d)
+}
+
 # ensure map, data table, etc., contain the same samples in the same order
 "remove.nonoverlapping.samples" <- function(map=NULL,otus=NULL,taxa=NULL,distmat=NULL){
     IDs <- NULL

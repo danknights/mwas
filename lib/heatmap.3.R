@@ -1,4 +1,3 @@
-# CODE
 # modified heatmap.2 that allows for: multiple row/col side colors, and colored row labels
 heatmap.3 <- function(x,
                       Rowv = TRUE, Colv = if (symm) "Rowv" else TRUE,
