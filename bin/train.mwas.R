@@ -26,6 +26,7 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
 
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/gradients.r',sep=''))
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/util.r',sep=''))
+source(paste(Sys.getenv('MWAS_DIR'),'/lib/train.r',sep=''))
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/util.load.r',sep=''))
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/stats.r',sep=''))
 
@@ -58,6 +59,9 @@ opts <- parse_args(OptionParser(option_list=option_list),
 # create output directory if needed
 if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
 
+######################## Input validation #######
+# check for valid params, etc.
+
 ######################## Load data #######
 mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
 
@@ -79,7 +83,8 @@ response <- droplevels(factor(data.list$map[[opts$category]])) # desired labels
 print(dim(feat.Data))
 print(response)
 
-# model.obj <- cross.validation.mwas(feat.Data, desired.labels, nfold=opts$fold, classifier=opts$method, savefile=TRUE, opts)
+######################## Train and evaluation model #######
+model.obj <- cross.validation.mwas(feat.Data, response, nfold=opts$nfolds, classifier=opts$method, savefile=TRUE, opts)
 # results <- model.evaluation.mwas(testing.set, opts$model)
 
 ### save results ###
