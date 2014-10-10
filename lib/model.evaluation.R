@@ -19,10 +19,13 @@
   #
 
   predicted <- predict(model, x, decision.values = TRUE, probablity=TRUE)  # predicted output
-  
+  # for svm - predicted --> labels
+  #           attr(predicted, "probabilities") --> likelihood
+  #
   evalobj <- list()
   evalobj$prediction <- predicted
   
+  is.binary <- 
   if exists("desired"){ 
     # if desired response is known, then evaluate the classifier model
     # else output the predicted labels

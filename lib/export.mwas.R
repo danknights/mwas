@@ -4,6 +4,7 @@
 #   trained.model : trained claissifier model and other parameters
 #        feat.set : selected feature vector index
 #     test.results: output from predict.mwas.R, it's an model.evaluation object
+#                   if there is no desired labels are given then it only contains 
 #            opts : options from keyboard
 #
 #------ ouput
@@ -50,7 +51,7 @@
 #   save predicted labels, likelihood. 
 #   If the desired response is given, then also output confusion matrix and AUC, MCC and Kappa
 # 
-"save.results.svm" <- function(pred.obj, opts, desired){
+"save.results.svm" <- function(pred.obj, opts){
   if (exists("desired"))
   filepath <- sprintf('%s/svm_prediction_labels_likelihood.txt', opts$outdir)
   results.table <- merge(pred.obj$predicted, attr(pred.obj$predicted, "probabilities"))
