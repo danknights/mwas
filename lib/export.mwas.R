@@ -3,7 +3,7 @@
 # --- input:
 #   trained.model : trained claissifier model and other parameters
 #        feat.set : selected feature vector index
-#     test.results: output from model.evaluation
+#     test.results: output from predict.mwas.R, it's an model.evaluation object
 #    resutls.plot : parameters for plotting
 #            opts : options from keyboard
 #
