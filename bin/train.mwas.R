@@ -20,6 +20,6 @@
   
   best.model <- persist.model.mwas(train.set, y, nfolds=10, classifier=method, ...)
   
-  export.mwas(trained.model = best.model, feat = feat.set)
+  export.mwas(trained.model = best.model, feat.set = feat.set)
   return()
 }
