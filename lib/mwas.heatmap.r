@@ -1,15 +1,3 @@
-# tests each column (taxa/pathway) of the otu table for differentiating response values (both ordered)
-# returns differential features and adjusted pvalues
-test.otu.features<-function(otu, response)
-{
-	pvals <- apply(otu, 2, function(feature) 
-				(kruskal.test(feature~response, data.frame(feature=feature, response=response)))$p.value)
-	adj.pvals <- p.adjust(pvals, "fdr")
-	
-	diff.features <- names(adj.pvals)[adj.pvals <= .05 & !is.na(adj.pvals)]
-	list(features=diff.features, pvals=adj.pvals)
-}
-
 # hclusts the columns of an OTU table according to groupings of samples
 cluster.columns<-function(otu, distfun, new.treatments)
 {
@@ -80,20 +68,6 @@ create.color.bars<-function(map, color.var, color.list)
 
 }
 
-# combines cluster variable values to create new groupings to cluster by
-create.new.treatments<-function(map, cluster.var)
-{
-	if(length(cluster.var) > 1){
-		new.treatments <- as.factor(apply(map[,cluster.var], 1, paste0, collapse="."))
-	} else {
-		new.treatments <- map[,cluster.var]
-		# cluster.var must be a factor in order to cluster properly, apply original levels
-		new.treatments <- as.factor(new.treatments)
-		levels(new.treatments) <- names(color.list[[cluster.var]])
-	}
-	names(new.treatments) <- rownames(map)	
-	new.treatments
-}
 
 # Creates a heatmap to display differentiated kegg pathways, with additional color bars at the top
 # NOTE: uses pearson's correlation as distance function due to inherent limitations with Bray-Curtis
@@ -107,31 +81,20 @@ create.new.treatments<-function(map, cluster.var)
 # kegg_pathways: vector of pathways, useful for highlighting different levels
 # heatmap.title: title to display on the heatmap 
 # outputfile: heatmap output file name 
-mwas.heatmap <- function(otu, map, cluster.var, color.var, color.list, 
-kegg_pathways, heatmap.title="", outputfile
+mwas.heatmap <- function(otu, map, diff.features, cluster.var, color.var, color.list, kegg_pathways, heatmap.title="", outputfile)
 #TODO add some extra formatting parameters here
 # OPTIONAL: distance matrix
-)
 {
-	source(paste(Sys.getenv("MWAS.HEATMAP"),"lib","collapse-features.r",sep="/"))
-	source(paste(Sys.getenv("MWAS.HEATMAP"),"lib","heatmap.3.r",sep="/"))
+	source("heatmap.3.r")
+	source("util.r")
 	
 	require(vegan)
 	require(RColorBrewer)
 	require(gplots) 
 	
-	use.kegg <- length(kegg_pathways) > 0
-
-	# combine cluster variable values to form groups to cluster samples by
-	new.treatments <- create.new.treatments(map, cluster.var)
+	use.kegg <- as.logical(length(kegg_pathways))
 	
-	# select features that are statistically different
-	if(use.kegg)
-	{
-		otu=otu[,names(kegg_pathways)]
-	}
-	ret <- test.otu.features(otu, response=new.treatments)
-	otu <- otu[,ret$features]	
+	otu <- otu[,diff.features]	
 	
 	# use pearson's correlation for the distance function (bray-curtis has scaling issues)
 	distfun <- function(x) as.dist((1-cor(t(x)))/2)
@@ -206,7 +169,6 @@ kegg_pathways, heatmap.title="", outputfile
 	legend(x=legend1.x, y=legend1.y,legend=unname(unlist(lapply(color.list, names))), 
 	fill=unlist(color.list),border=FALSE, bty="n", y.intersp = 0.8, cex=0.7, ncol=3, text.width=c(0, .04, .06 ) )#
 																						#= strwidth("1,000")
-
 	if(use.kegg) # add the legend for the row axis colors
 	{
 		legend(x=.59, y=.12,legend=names(lookup), 
