@@ -79,7 +79,7 @@
 # TRUE if last column is "Consensus Lineage" or "OTU Metadata"
 "otu.table.has.metadata" <- function(headers){
     C <- length(headers)
-    has.metadata <- grepl('consensus[ ]lineage|otu[ ]*metadata|taxonomy',
+    has.metadata <- grepl('consensus[ ]lineage|otu[ ]*metadata|taxonomy|kegg_pathways',
                           headers[C], ignore.case=TRUE)
     return(has.metadata)
 }

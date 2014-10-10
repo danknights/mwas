@@ -10,33 +10,22 @@
 # constraints: optional. list of vectors, each named after a map column; vector values represent values to keep
 "run.heatmap" <- function(otufile, mapfile)
 {
-	source("I-methods.r")
+	source("util.load.r")
 	source("pj.preprocess.r")
 		
 	# read in data files	
 	map <-  load.qiime.mapping.file(mapfile)   # mapping file
-	if (grep(".biom",mapfile)) {
-		biom_table <- read_biom(otufile)         # OTU table - biom format
-		otus <- t(as.matrix(biom_data(biom_table)))        # OTU table - classic format
-	}
-	else {
-		trycatch(otus <- read.delim(otufile, sep='\t',
-		comment='',head=T,row.names=1,check.names=F),error = function(err) 
-			print("Couldn't parse OTU table. If BIOM format, use .biom extension"))
-	}
+	results <- load.qiime.otu.table(otufile, include.lineages=TRUE) # flag to save kegg column
+	otu <- results$otu
+	kegg <- setNames(results$lineages, rownames(otu))
 
-	# intersect, filter, and transform
+	# intersect, filter, and transform (AND filter kegg pathways here)
 	# *** TODO replace this chunk with the real preprocess function when it's available
-	otu <- preprocess(map=map, otu=otus)
+	otu <- preprocess(map=map, otu=otu, filter.kegg=TRUE)
 	
-	#TODO figure out kegg stuff later
-
-
 	# burden the user with some custom subsetting 
 	map <- subset(map, !is.na(Diabetes) & Location=="fecal" & Week==6 & Sex %in% c("M") & Treatment %in% c("Control","PAT"))
 	otu <- otu[rownames(map),]
-
-	# prior to testing for differentiation make sure to filter KEGG features
 
 	# call the stats function to test for differentiated features
 	# offload to user: create extra variable for combination vars if > 1
@@ -48,20 +37,3 @@
 	# TODO: replace this with the parent plot function once it's ready
 	mwas.heatmap(otu, map, diff.features, cluster.var=c("Sex", "Treatment"), color.var=names(color.list), color.list, kegg_pathways=kegg_pathways, heatmap.title=heatmap.title, outputfile=outputfile)
 }
-
-
-# combines cluster variable values to create new groupings to cluster by
-"create.new.treatments"<-function(map, cluster.var)
-{
-	if(length(cluster.var) > 1){
-		new.treatments <- as.factor(apply(map[,cluster.var], 1, paste0, collapse="."))
-	} else {
-		new.treatments <- map[,cluster.var]
-		# cluster.var must be a factor in order to cluster properly, apply original levels
-		new.treatments <- as.factor(new.treatments)
-		levels(new.treatments) <- names(color.list[[cluster.var]])
-	}
-	names(new.treatments) <- rownames(map)	
-	new.treatments
-}
-
