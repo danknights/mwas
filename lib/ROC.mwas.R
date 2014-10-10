@@ -3,7 +3,7 @@
   # ----- input:
   #         x: feature vector
   # predicted: predicted output using the trained model
-  #   desired: desired output 
+  #   response: desired response 
   #
   # ----- output:
   #  rocobj:  ROC object
