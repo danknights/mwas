@@ -10,6 +10,7 @@
 #  output:
 #   export training results as a file, including train model and model evaluation
 # 
+#
 "train.mwas" <- function(x, y, is.feat = TRUE, 
                          method=c("RF","SVM", "knn", "MLR")[1], ...){
   if (is.feat){
@@ -181,6 +182,3 @@
   
   return(best.model)
 }
-
-
-
