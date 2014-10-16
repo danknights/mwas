@@ -1,17 +1,11 @@
-"visualize.mwas" <- function(data, params){
-  # Visualization
-  # - beeswarm
-  # - 
-  #
-  #
-  
-}
-
 "plot.beeswarm.dt" <- function(cols, x_axis_label, hit.ix, env, outdir) {
 	require(beeswarm)
 	cols <-  c(brewer.pal(9,'Set1'),brewer.pal(9,'Pastel1'),brewer.pal(8,'Dark2'),brewer.pal(8,'Accent'))[-6]
 	cols[1:2] <- cols[2:1]
 	cols <- sprintf('%sbb',cols)
+	if (!length(hit.ix)) hit.ix = seq(1,dim(x)[2])
+	print(x[,1])
+	print(env)
 	for(i in hit.ix){
 		taxon <- x[,i]
 		taxon.name <- colnames(x)[i]
