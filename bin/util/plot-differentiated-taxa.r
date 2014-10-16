@@ -10,6 +10,7 @@
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/gradients.r',sep=''))
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/util.r',sep=''))
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/stats.r',sep=''))
+source(paste(Sys.getenv('MWAS_DIR'),'/lib/visualization.R',sep=''))
 
 require('RColorBrewer')
 require('optparse')
@@ -77,7 +78,8 @@ if(!is.null(opts$map_fp)){
 }
 
 # remove rare features (do by minimum prevalence or average prevalence)
-x <- x[,colMeans(x > 0) >= opts$min_prevalence]
+print(dim(x))
+if (dim(x)[2] > 1) x <- x[,colMeans(x > 0) >= opts$min_prevalence, drop = FALSE]
 
 # data transform
 if(opts$transform_type == 'asin-sqrt'){
@@ -103,10 +105,15 @@ if(is.null(opts$which_taxa)){
 } 
 if(!is.element(opts$column,colnames(m))) stop(paste(opts$column,'not in mapping file.'))
 
+diff.tests = NULL;
 # identify differentiated features
-diff.tests <- differentiation.test(x, m[,opts$column], alpha=2, parametric=FALSE)
+print(dim(m))
+if (dim(m)[2] > 1)
+	try (diff.tests <- differentiation.test(x, m[,opts$column], alpha=2, parametric=FALSE),silent=T)
 
-if(is.null(opts$which_taxa)){
+
+#if(is.null(opts$which_taxa)){
+if (!is.null(diff.tests)) {
 	if(is.null(opts$nplot)){
 		hit.ix <- which(diff.tests$qvalues <= opts$alpha)
 	} else {
@@ -117,13 +124,13 @@ if(is.null(opts$which_taxa)){
 }
 
 if(length(hit.ix) == 0){
-	stop('No hits found.\n')
+	print('No hits found.')
 } else {
 	cat("There were",length(hit.ix),"taxa significant at FDR of",opts$alpha,'\n')
 }
 
 # save hits
-write.differentiation.test.results(diff.tests, filename=sprintf('%s/test_results.txt',opts$outdir))
+if (length(hit.ix)) write.differentiation.test.results(diff.tests, filename=sprintf('%s/test_results.txt',opts$outdir))
 
 # sort by relative abundance if requested
 if(opts$sort_by_abundance){
