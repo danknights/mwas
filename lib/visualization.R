@@ -19,6 +19,7 @@
 			col='#000000bb',
 			bg=cols,
 			pch=21,ylab=taxon.name,xlab=x_axis_label,cex.lab=cex.lab, cex.axis=cex.axis)
+		bxplot(taxon ~ env,add=TRUE)
 		dev.off()
 	}
 }
