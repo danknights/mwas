@@ -266,11 +266,11 @@ qqplot.pvals	 = function(pvector, main=NULL, ...) {
    	return(x)
 }
 
-PARAMETERS <<- NULL
+#PARAMETERS <<- NULL
 # used for parsing the params file. read into global var to avoid rereading too many times.
-parse.params<-function(function, parameter)
-{
-	if(PARAMETERS == NULL)
-		PARAMETERS <- read.table("../config/params",sep=" ",row=1)
-	return PARAMETERS[paste(function,parameter,sep=":")]
-}
+#parse.params<-function(function, parameter)
+#{
+#	if(PARAMETERS == NULL)
+#		PARAMETERS <- read.table("../config/params",sep=" ",row=1)
+#	return PARAMETERS[paste(function,parameter,sep=":")]
+#}
