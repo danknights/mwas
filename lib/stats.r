@@ -85,7 +85,7 @@
 		hits <- cbind(results$pvalues, results$qvalues)
 		hits <- cbind(hits, results$classwise.means)
 		colnames(hits)[1:2] <- c('pvalue','qvalue')
-		hits <- hits[!is.na(hits[,1]),]
+		hits <- hits[!is.na(hits[,1]),,drop=F]
 		hits <- hits[order(hits[,1]),]
 		sink(filename)
 		cat('Feature\t')
