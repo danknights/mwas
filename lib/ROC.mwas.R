@@ -1,20 +1,25 @@
+# Receiver operating characteristic - using package 'pROC' or 'ROCR'
+# Contributors: Hu
+# 
+# ----- input:
+#         x: feature vector
+#     model: trained model
+# predicted: predicted output using the trained model (if no model is specified as input)
+#   response: desired response 
+#
+# ----- output:
+#  rocobj:  ROC object
+#           $auc              class "auc" 
+#           $sensitivities    sensitivities defining the ROC curve
+#           $specificities    specificities defining the ROC curve         
+#           $response         response vector (desired)
+#           $predictor        the predictor vector converted to numeric as used to build the ROC curve
+# ----- 
+# Last update: 10/25/2014
+#
+
 "roc.mwas" <- function(x, model=NULL, predicted=NULL, response, is.plot=FALSE){
-  # Receiver operating characteristic - using package 'pROC' or 'ROCR'
-  # ----- input:
-  #         x: feature vector
-  #     model: trained model
-  # predicted: predicted output using the trained model (if no model is specified as input)
-  #   response: desired response 
-  #
-  # ----- output:
-  #  rocobj:  ROC object
-  #           $auc              class "auc" 
-  #           $sensitivities    sensitivities defining the ROC curve
-  #           $specificities    specificities defining the ROC curve         
-  #           $response         response vector (desired)
-  #           $predictor        the predictor vector converted to numeric as used to build the ROC curve
-  #
-  
+
   if (!is.null(model)&&is.null(predicted)) { 
     predicted <- predict(model, x) 
   }else if(is.null(model)&&is.null(predicted)){ 
