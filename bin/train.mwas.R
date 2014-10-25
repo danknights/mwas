@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
-## main function calling all testing, model training, model testing and visualization
+## Main function calling all testing, model training, model testing and visualization
+# Contributors: Hu, Dan
 # ------  
 #  input: 
 #  1. OTU table - BIOM or classic format (required)
@@ -14,6 +15,8 @@
 #  10. feature selection option - TRUE or FALSE
 #  11. feature selection parameter - threshold in RF
 #  12. statistical options
+# -------
+#  Last Update: 10/25/2014
 #
 
 #require(biom, quietly=TRUE, warn.conflicts=FALSE)
