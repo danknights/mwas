@@ -9,7 +9,7 @@
 # and comment lines can be anywhere in the file.
 # return value is a matrix unless as.data.frame is TRUE
 # --------------
-# Last Update: OCT. 25, 2014
+# Last Update: 10/25/2014
 #
 
 "read.qiime.table.mwas" <- function(filepath, as.data.frame=FALSE){
