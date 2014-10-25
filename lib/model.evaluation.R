@@ -1,22 +1,28 @@
+# If the desired response is known, then evaluate the model, 
+# otherwise output the predicted labels.
+#
+# Contributors: Hu, Dan
+# -------------------
+# Model evaluation with different criteria. 
+# 
+# 1. classification accuracy
+# 2. area under the ROC (AUC)
+# 3. Matthew's correlation coefficients (MCC)
+# 4. Cohen's Kappa (not yet implemented)
+#
+# --- input: 
+#         x: feature vector
+#     model: trained model
+#   desired: desired output (response)
+#
+# --- output:
+#   evalobj: evaluation object - $error, $accuracy, $auc, $mcc, $kappa
+#
+# --- 
+# Last Update: 10/25/2014
+#
+
 "model.evaluation.mwas" <- function(x, model, desired){
-  # If the desired response is known, then evaluate the model, 
-  # otherwise output the predicted labels.
-  # -------------------
-  # Model evaluation with different criteria. 
-  # 
-  # 1. classification accuracy
-  # 2. area under the ROC (AUC)
-  # 3. Matthew's correlation coefficients (MCC)
-  # 4. Cohen's Kappa (not yet implemented)
-  #
-  # --- input: 
-  #         x: feature vector
-  #     model: trained model
-  #   desired: desired output (response)
-  #
-  # --- output:
-  #   evalobj: evaluation object - $error, $accuracy, $auc, $mcc, $kappa
-  #
 
   predicted <- predict(model, x, decision.values = TRUE, probablity=TRUE)  # predicted output
   # for svm - predicted --> labels
