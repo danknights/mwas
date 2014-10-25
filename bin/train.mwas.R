@@ -16,7 +16,7 @@
 #  12. statistical options
 #
 
-require(biom, quietly=TRUE, warn.conflicts=FALSE)
+#require(biom, quietly=TRUE, warn.conflicts=FALSE)
 require(optparse, quietly=TRUE, warn.conflicts=FALSE) 
 require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
 require(kernlab, quietly=TRUE, warn.conflicts=FALSE)
@@ -64,7 +64,6 @@ if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE
 
 ######################## Load data #######
 mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
-
 
 if (grep(".biom$",opts$data_table)) {
 	biom_table <- read_biom(opts$data_table)         # OTU table - biom format
