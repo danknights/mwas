@@ -1,89 +1,62 @@
-"read.qiime.table.gabe" <- function(filepath, as.data.frame=FALSE){
-    f <- file(filepath,'r')
-    if (grep(".biom",f)) {
-		biom_table <- read_biom(f)          		 # OTU table - biom format
-		datatable <- as.matrix(biom_data(biom_table))  # OTU table - classic format
-	}
-	else {
-		trycatch(datatable <- read.old.qiime(), error = function(err) 
-			print("Couldn't parse OTU table. If BIOM format, use .biom extension"))
-	}
-	read.old.qiime <- function() {
-		header.index <- get.header.index(filepath)
-    	# read the header
+# This file is adapted from QIIME I/O module for R 
+# (https://github.com/qiime/qiime.io/blob/master/R/I-methods.r)
+# Contributors: Gabe, PJ, Hu
+# --------------
+# Functions:
+# reads a QIIME otu/metadata/taxon/distance table.
+# Support legacy formats, where
+# the header may or may not start with '#', 
+# and comment lines can be anywhere in the file.
+# return value is a matrix unless as.data.frame is TRUE
+# 
 
-	    header <- scan(filepath, what='character', sep='\t',comment='',skip=header.index-1,quote='"',
-	                    nlines=1,quiet=TRUE)
-	    close(f)
-	    # read the rest of the table
-	    datatable <- read.table(filepath,sep='\t',skip=header.index, comment='#',quote='"',
-	                        head=F,row.names=1,check=FALSE,strip.white=TRUE)
-	    
-	    # set column names using header
-	    colnames(datatable) <- header[-1]
-	    return(datatable);
-	}
+"read.qiime.table.mwas" <- function(filepath, as.data.frame=FALSE){
+  #f <- file(filepath,'r')
+  #if (grep(".biom",f)) {  # it's not a logical value, length is zero. Not working! 
+  #if (file_ext(filepath) == "biom"){ # Need additonal pacakage: Tools
+  
+  if (tolower(tail(strsplit(filepath, "[.]")[[1]],n = 1)) == "biom"){ 
+    # extract the file extension, if it's a BIOM format, then use BIOM package
+    require(biom, quietly=TRUE, warn.conflicts=FALSE)
     
-    if(!as.data.frame) datatable <- as.matrix(datatable)
-    return(datatable)
+    biom_table <- read_biom(filepath)          	   # OTU table - biom format
+    datatable <- as.matrix(biom_data(biom_table))  # OTU table - classic format
+  }
+  else {
+    # otherwise, the file could be a classic OTU table/mapping file etc.
+    tryCatch(datatable <- read.qiime.classic.table(filepath), error = function(err) 
+      print("Co. If BIOM format, use .biom extension"))
+  }
+  
+  if(!as.data.frame) datatable <- as.matrix(datatable)
+  return(datatable)
 }
 
-"read.qiime.table" <- function(filepath, as.data.frame=FALSE){
-    f <- file(filepath,'r')
-    if (grep(".biom",f)) {
-		biom_table <- read_biom(f)          		 # OTU table - biom format
-		datatable <- as.matrix(biom_data(biom_table))  # OTU table - classic format
-	}
-	else {
-		trycatch(datatable <- read.old.qiime(), error = function(err) 
-			print("Couldn't parse OTU table. If BIOM format, use .biom extension"))
-	}
-	
-	read.old.qiime <- function() {
-		header.index <- get.header.index(filepath)
-    	# read the header
-
-	    header <- scan(filepath, what='character', sep='\t',comment='',skip=header.index-1,quote='"',
-	                    nlines=1,quiet=TRUE)
-	    close(f)
-	    # read the rest of the table
-	    datatable <- read.table(filepath,sep='\t',skip=header.index, comment='#',quote='"',
-	                        head=F,row.names=1,check=FALSE,strip.white=TRUE)
-	    
-	    # set column names using header
-	    colnames(datatable) <- header[-1]
-	    return(datatable);
-	}
-    
-    if(!as.data.frame) datatable <- as.matrix(datatable)
-    return(datatable)
-}
-
-"read.qiime.table.old" <- function(filepath, as.data.frame=FALSE){
-    header.index <- get.header.index(filepath)
-    # read the header
-    f <- file(filepath,'r')
-    header <- scan(filepath, what='character', sep='\t',comment='',skip=header.index-1,quote='"',
-                    nlines=1,quiet=TRUE)
-    close(f)
-    # read the rest of the table
-    datatable <- read.table(filepath,sep='\t',skip=header.index, comment='#',quote='"',
-                        head=F,row.names=1,check=FALSE,strip.white=TRUE)
-    
-    # set column names using header
-    colnames(datatable) <- header[-1]
-    
-    if(!as.data.frame) datatable <- as.matrix(datatable)
-    return(datatable)
+"read.qiime.classic.table" <- function(filepath, as.data.frame=FALSE){
+  header.index <- get.header.index(filepath)
+  # read the header
+  f <- file(filepath,'r')
+  header <- scan(filepath, what='character', sep='\t',comment='',skip=header.index-1,quote='"',
+                 nlines=1,quiet=TRUE)
+  close(f)
+  # read the rest of the table
+  datatable <- read.table(filepath,sep='\t',skip=header.index, comment='#',quote='"',
+                          head=F,row.names=1,check=FALSE,strip.white=TRUE)
+  
+  # set column names using header
+  colnames(datatable) <- header[-1]
+  
+  if(!as.data.frame) datatable <- as.matrix(datatable)
+  return(datatable)
 }
 
 
 "load.qiime.mapping.file" <- function(filepath){
-    return(read.qiime.table(filepath, as.data.frame=TRUE))
+    return(read.qiime.table.mwas(filepath, as.data.frame=TRUE))
 }
 
 "load.qiime.otu.table" <- function(filepath,include.lineages=FALSE){
-    otus <- read.qiime.table(filepath, as.data.frame=TRUE)
+    otus <- read.qiime.table.mwas(filepath, as.data.frame=TRUE)
 
     # drop "Consensus Lineage" column if present
     if(otu.table.has.metadata(colnames(otus))){
