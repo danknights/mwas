@@ -37,22 +37,25 @@
 #  best.model : model parameters
 
 "persist.model.mwas" <- function(x, y, nfolds=10, 
-                               classifier=c("RF","SVM", "knn", "MLR")[1],...){
+                               classifier=c("RF","SVM", "knn", "MLR")[1],
+                               valid_type=c("kfold", "jackknife")[1],...){
   # x - feature set (observation * features)
   # y - desried response
-  cv.ind <- sample(dim(x)[1])
+  cv.ind <- sample(dim(x)[1])   # permutate the index
   cv.samp.num <- floor(length(cv.ind)/nfolds)
   sampl_ind <- seq(1, dim(x)[1], by=1)
   candidate.model <- list()
   candidate.rocobj <- list()
   
   # nested cross-validation
+  if (valid_type=="kfold"){
   for (cv.id in 1:nfolds){
+    # fold index that is being hold out
     if(cv.id < nfolds)
       idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, cv.id*cv.samp.num, by=1)]
-    else
-      idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, length(cv.ind), by=1)]
-    
+    else # the last fold could contain less than cv.samp.num of observations
+      idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, length(cv.ind), by=1)] 
+     
     train.set <- x[idx,]
     train.labels <- y[idx]
     
@@ -62,6 +65,9 @@
     candidate.model[[cv.ind]] <- cross.validation(train.set, train.labels, nfolds, classifier, ...)
     candidate.rocobj[[cv.ind]] <- roc.mwas(validation.set, model = candidate.model[cv.ind], response = validation.labels)
   }
+  }
+  else if(valid_type=="jackknife") candidate.model <- jackknife.mwas(x, y, nfolds, classifier, ...)
+    
   
   ####### ISSUE: train final model on whole data set
   #best.ind <- which.max(candidate.rocobj$auc) #### find the best auc index?
@@ -69,7 +75,7 @@
   best.model <- cross.validation(x, y, nfolds, classifier, ...)
   
   
-  ####### ISSUE: Calculate mean and std of error/AUC, MCC, Kappa
+  ####### ISSUE: Calculate mean and std of error
   # using candidate.rocobj
   #
   
@@ -83,14 +89,6 @@
 
 
 # Jackknife 
-# 1) parameters estimated from the whole sample data
-# 2) each element is, in turn, dropped from the sample 
-#    and the parameter of interest is estimated from this smaller sample.
-# 3) the difference between the whole sample estimation and the partial estimate 
-#    is computed --- called pseudo-values
-# 4) The pseudo-values are used in lieu of the original values to estimate the 
-#    parameter of interest and their standard deviation is used to estimate the 
-#    parameter standard error.
 # --------
 # -- input
 #          x : feature vector
@@ -104,19 +102,30 @@
                                 classifier=c("RF","SVM", "knn", "MLR")[1],...){
   # x - feature set (observation * features)
   # y - desried response
-  cv.ind <- sample(dim(x)[1])
-  cv.samp.num <- floor(length(cv.ind)/nfolds)
-  sampl_ind <- seq(1, dim(x)[1], by=1)
+  jk.ind <- seq(1, dim(x)[1], by=1)
+  jk.samp.num <- floor(length(cv.ind)/nfolds)
+  
   candidate.model <- list()
   candidate.rocobj <- list()
   
   # jackknife function here
-  #
+  # 
+  for (jk.fold in 1:nfolds){
+    # fold index that is being hold out
+    if(jk.fold < nfolds)
+      idx <- jk.ind[seq((jk.fold-1)*jk.samp.num + 1, jk.fold*jk.samp.num, by=1)]
+    else # the last fold could contain less than jk.samp.num
+      idx <- jk.ind[seq((jk.fold-1)*jk.samp.num + 1, length(jk.fold), by=1)]
+    
+    train.set <- x[idx,]
+    train.labels <- y[idx]
+    
+    candidate.model[[jk.ind]] <- cross.validation(train.set, train.labels, nfolds=1 , classifier, ...)
+    candidate.rocobj[[jk.ind]] <- roc.mwas(validation.set, model = candidate.model[cv.ind], response = validation.labels)
+  }
   
-  return(model.estimate)
+  return(candidate.model)
 }
-
-
 
 # cross-validation 
 # -- input

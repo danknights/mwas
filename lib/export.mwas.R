@@ -51,8 +51,9 @@
 #   save predicted labels, likelihood. 
 #   If the desired response is given, then also output confusion matrix and AUC, MCC and Kappa
 # 
-"save.results.svm" <- function(pred.obj, opts){
-  if (exists("desired"))
+"save.results.svm" <- function(test.results, opts){
+  test.resutls
+    
   filepath <- sprintf('%s/svm_prediction_labels_likelihood.txt', opts$outdir)
   results.table <- merge(pred.obj$predicted, attr(pred.obj$predicted, "probabilities"))
   sink(filepath)
