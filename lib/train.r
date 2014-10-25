@@ -1,5 +1,5 @@
 # training function
-# 
+# Contributors: Hu, Dan
 # -----
 # input:
 #       x : feature vector
@@ -10,6 +10,8 @@
 #  output:
 #   export training results as a file, including train model and model evaluation
 # 
+# ------
+#  Last update: 10/25/2014
 #
 "train.mwas" <- function(x, y, is.feat = TRUE, 
                          method=c("RF","SVM", "knn", "MLR")[1], ...){
