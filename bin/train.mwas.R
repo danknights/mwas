@@ -21,10 +21,10 @@
 
 #require(biom, quietly=TRUE, warn.conflicts=FALSE)
 require(optparse, quietly=TRUE, warn.conflicts=FALSE) 
-require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
+#require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
 require(kernlab, quietly=TRUE, warn.conflicts=FALSE)
 require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
-require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
+#require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
 require(pROC, quietly=TRUE, warn.conflicts=FALSE)
 
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/gradients.r',sep=''))
@@ -70,15 +70,14 @@ mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
 
 if (grep(".biom$",opts$data_table)) {
 	biom_table <- read_biom(opts$data_table)         # OTU table - biom format
-	otus <- t(as.matrix(biom_data(biom_table)))        # OTU table - classic format
+	otus <- t(as.matrix(biom_data(biom_table)))      # OTU table - classic format
 } else {
 	trycatch(otus <- read.delim(opts$OTU_table_fp, sep='\t',
 	comment='',head=T,row.names=1,check.names=F),error = function(err) 
 		print("Couldn't parse OTU table. If BIOM format, use .biom extension"))
 }
 
-data.list <- remove.nonoverlapping.samples(map = mapping, otus = otus)
-feat.Data <- data.list$otus # feature data for training
+feat.Data <- otus # feature data for training
 
 response <- droplevels(factor(data.list$map[[opts$category]])) # desired labels 
 

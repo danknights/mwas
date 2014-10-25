@@ -25,8 +25,8 @@
   evalobj <- list()
   evalobj$prediction <- predicted
   
-  is.binary <- length(level(predicted))
-  if exists("desired"){ 
+  is.binary <- length(levels(predicted)) == 2
+  if (!is.null("desired")){ 
     # if desired response is known, then evaluate the classifier model
     # else output the predicted labels
     
@@ -35,7 +35,7 @@
     # confusion matrix
     c.matrix <- t(sapply(levels(desired), function(level) table(predicted[desired==level])))
     
-    rocobj <- roc.mwas(x, predicted, desired)
+    rocobj <- roc.mwas(x, predicted = predicted, response = desired)
     
     evalobj$error <- sum(as.numeric(predicted != desired))/sample.num
     evalobj$acc <- (c.matrix[1,1]+c.matrix[2,2])/sum(c.matrix) # == 1 - evalobj$error 
@@ -59,8 +59,7 @@
     Pr.e <- (c.matrix[1,1]+c.matrix[1,2])/sum(c.matrix)*(c.matrix[1,1]*c.matrix[2,1])/sum(c.matrix)+
       (c.matrix[2,1]*c.matrix[2,2])/sum(c.matrix)*(c.matrix[1,2]*c.matrix[2,2])/sum(c.matrix)
     evalobj$kappa <- (evalobj$acc - Pr.e)/(1 - Pr.e)
-    }
-    else {
+    } else {
       evalobj$mcc <- NULL
       evalobj$kappa <- NULL
     }

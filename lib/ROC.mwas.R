@@ -1,4 +1,4 @@
-"roc.mwas" <- function(x, model, predicted, response, is.plot=FALSE){
+"roc.mwas" <- function(x, model=NULL, predicted=NULL, response, is.plot=FALSE){
   # Receiver operating characteristic - using package 'pROC' or 'ROCR'
   # ----- input:
   #         x: feature vector
@@ -14,14 +14,19 @@
   #           $response         response vector (desired)
   #           $predictor        the predictor vector converted to numeric as used to build the ROC curve
   #
-  #
   
-  if exists('model') predicted <- predict(model, x) # if model si
+  if (!is.null(model)&&is.null(predicted)) { 
+    predicted <- predict(model, x) 
+  }else if(is.null(model)&&is.null(predicted)){ 
+    # if both model and predicted values are not provided, then informm the user and stop.
+    stop("ROC fucntion needs at least one of the following values: trained model or predicted values!")
+  }
   
-  if (length(levels(response)) == 2)  # binary classification
-    rocobj <- roc(response, as.numeric(predicted), percent=TRUE, ci=TRUE, plot=is.plot)
-  else    # multi-class classification
-    rocobj <- multiclass.roc(response, as.numeric(predicted), percent=TRUE, ci=TRUE, plot=is.plot)
+  if (length(levels(response)) == 2)  { # binary classification
+    rocobj <- roc(response, as.numeric(predicted), percent=TRUE, ci=TRUE, plot=is.plot) 
+    } else # multi-class classification
+    rocobj <- multiclass.roc(response, as.numeric(predicted), percent=TRUE, plot=is.plot)
   
   return(rocobj)
 }
+
