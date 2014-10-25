@@ -4,7 +4,7 @@
 # Returns an object with the processed objects. Note that feature stats table
 # is ordered/subset based on the result of the final feature list, not vice versa.
 
-"load.inputs" = function(featureTable=NULL, mapFile=NULL, labelCols=NULL, distMat=NULL, PCoAfile=NULL, featureStats=NULL, dropEmpty=T) {
+"load.inputs" <- function(featureTable=NULL, mapFile=NULL, labelCols=NULL, distMat=NULL, PCoAfile=NULL, featureStats=NULL, dropEmpty=T) {
 	# Read in all specified files
 	fTab = ifelse(is.null(featureTable), NULL, read.qiime.table(featureTable));
 	map = ifelse(is.null(mapFile), NULL, load.qiime.mapping.file(mapFile));
