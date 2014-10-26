@@ -26,6 +26,7 @@ require(kernlab, quietly=TRUE, warn.conflicts=FALSE)
 require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
 #require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
 require(pROC, quietly=TRUE, warn.conflicts=FALSE)
+require(class, quietly=TRUE, warn.conflicts=FALSE) # for knn
 
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/gradients.r',sep=''))
 source(paste(Sys.getenv('MWAS_DIR'),'/lib/util.r',sep=''))

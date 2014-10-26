@@ -8,7 +8,7 @@
 # 1. classification accuracy
 # 2. area under the ROC (AUC)
 # 3. Matthew's correlation coefficients (MCC)
-# 4. Cohen's Kappa (not yet implemented)
+# 4. Cohen's Kappa
 #
 # --- input: 
 #         x: feature vector
@@ -16,7 +16,8 @@
 #   desired: desired output (response)
 #
 # --- output:
-#   evalobj: evaluation object - $error, $accuracy, $auc, $mcc, $kappa
+#   evalobj: evaluation object - $error, $accuracy, $auc, $mcc, $kappa, 
+#                                $probabilities, $confusion
 #
 # --- 
 # Last Update: 10/25/2014
@@ -24,12 +25,31 @@
 
 "model.evaluation.mwas" <- function(x, model, desired){
 
-  predicted <- predict(model, x, decision.values = TRUE, probablity=TRUE)  # predicted output
-  # for svm - predicted --> labels
-  #           attr(predicted, "probabilities") --> likelihood
-  #
-  evalobj <- list()
-  evalobj$prediction <- predicted
+  evalobj <- list() # resutls object
+  
+  if (class(model) == "randomForest"){
+    
+    evalobj$probabilities <- predict(model, x, type="prob")
+    evalobj$prediction <- predict(model, x, type="response")
+    
+  }else if(class(model)=="svm"){
+    predicted <- predict(model, x, decision.values = TRUE, probablity=TRUE)
+    
+    evalobj$probabilities <- attr(predicted, "probabilities")
+    evalobj$prediction <- attr(predicted, "decision.values")
+    
+  }else if(class(model)=='mlr'){
+    
+    evalobj$prediction <- predict(model, x, type="link") # gives the linear predictors
+    evalobj$probabilities <- predict(model, x, type="response") # gives the fitted probabilities
+    
+  }else if(class(model)=='knn'){
+    predicted <- predict(model, x)
+    evalobj$prediction <- predicted
+    evalobj$probabilities <- attr(predicted, "prob")
+  }
+  
+  #evalobj$prediction <- predicted
   
   is.binary <- length(levels(predicted)) == 2
   if (!is.null("desired")){ 
@@ -43,8 +63,9 @@
     
     rocobj <- roc.mwas(x, predicted = predicted, response = desired)
     
-    evalobj$error <- sum(as.numeric(predicted != desired))/sample.num
-    evalobj$acc <- (c.matrix[1,1]+c.matrix[2,2])/sum(c.matrix) # == 1 - evalobj$error 
+    evalobj$confusion <- c.matrix
+    evalobj$error <- sum(as.numeric(predicted) != as.numeric(desired))/sample.num
+    evalobj$acc <- sum(diag(c.matrix))/sum(c.matrix)  # == 1 - evalobj$error 
     evalobj$auc <- rocobj$auc
     
     # MCC =  Pearson's correlation of y, yhat
@@ -72,4 +93,11 @@
   }
       
   return(evalobj)
+}
+
+# S3 method of predict.knn
+"predict.knn" <- function(model, test){
+  require(class)
+  prediction <- knn(model$train, test, model$cl, k=model$k, l=model$l, prob=TRUE, use.all=TRUE)
+  return(prediction)
 }

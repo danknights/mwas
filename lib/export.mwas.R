@@ -1,43 +1,50 @@
 # Export results to files
 #
+# Contributors: Hu
 # --- input:
-#   trained.model : trained claissifier model and other parameters
-#        feat.set : selected feature vector index
-#     test.results: output from predict.mwas.R, it's an model.evaluation object
-#                   if there is no desired labels are given then it only contains 
-#            opts : options from keyboard
-#
-#------ ouput
+#     trained.model : trained claissifier model and other parameters
+# trained.model.eval: model evaluation on the training set by using the trained model 
+#                     (error, confusion matrix, AUC, MCC, Kappa)
+#     model.perform : model performance estimation (mean +/- std error/auc)
+#          feat.set : selected feature vector index
+#       test.results: output from predict.mwas.R, it's an model.evaluation object
+#                     if there is no desired labels are given then it only contains 
+#              opts : options from users
+#  
+# ------ ouput
 #     export the required results to the designated directory (opts$outdir)
+# ------ 
+# Last update: 10/25/2014
 #
-"export.mwas" <- function(trained.model, feat.set, test.results, opts, ...){
-  if(exists(trained.model)) {
+
+"export.mwas" <- function(trained.model=NULL, trained.model.eval=NULL, model.perform=NULL,
+                          feat.set=NULL, opts, ...){
+  if(!is.null(trained.model)) {
     # save trained model and selected feature vector
-    if(exists(feat.set)){
+    if(!is.null(feat.set)){
       # save feautre scores for each feature
       # save selected feature vector with names (OTU ID etc.)
       #
       
       best.model<-list()
       best.model$trained.model <- trained.model
-      best.model$features <- feat.set.ix # feature row names or index
-    }
-    else {
+      best.model$features <- feat.set.ix        # feature row names or index
+    } else {
       best.model<-list()
       best.model$trained.model <- trained.model
     }
    # should save as rdt format
-    save(best.model, file = paste(opts$outdir,"/trained.model", collapse='', sep=''))    
+    saveRDS(best.model, file = paste(opts$outdir,"/trained_model.rds", collapse='', sep='')) 
   }
   
-  if (exists(test.results)){
+  if (!is.null(trained.model.eval)){
     # save predicted labels and/or likelihood probabilities
     # save classification accuracy, if there is acc 
     # save likelihood probabilities, if there is any
     # save AUC, if there is any
     # save MCC, if there is any
     # save Cohen's Kappa, if there is any
-    save.results(test.results, opts, ...)
+    save.results(trained.model.eval, opts, ...)
   }  
 
 }
