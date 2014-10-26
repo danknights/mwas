@@ -1,8 +1,7 @@
-
-"feature.selection.mwas" <- function(x, y, feature.ids, selection_thres = 1, filename='feature_importance_scores.txt', outdir='.'){
-
 # Feature selection using randomForest
-# ---
+# This function is adapted from randomForest module in QIIME pipeline
+# Contributors: Hu, Gabe, Dan
+#---
 #  input:
 #     x : feature vector
 #     y : response
@@ -12,19 +11,36 @@
 #   list of feature vector
 #   $feautres: selected feature vector
 #   $ix      : selected feautre index in the feature vector
+# --- 
+# Last update: 10/25/2014
 #
-  result <- rf.out.of.bag(x, y)
 
-  imp <- varimp(result$rf.model, mode=1, scale=T) # scaled is great for feature picking
-  print(imp) # just to make sure the table looks as expected
-  features <- imp[order(imp[:,1],decreasing=T),:]
+"feature.selection.rf.mwas" <- function(x, y, selection_thres = 1, 
+                                     outdir){
+  require(caret, quietly=TRUE, warn.conflicts=FALSE)
+  
+  rf.model <- randomForest(x,y,keep.inbag=TRUE,importance=TRUE)
+  
+  features.scores <- importance(rf.model, type=1, scale=FALSE)
+  
+  ff <- varImp(rf.model, mode =1)
+  importances <- rf.model$importance[,'MeanDecreaseAccuracy']
+  varImpPlot(rf.model)
+  # a matrix with nclass + 2 (for classification) or two (for regression) columns. 
+  # For classification, the first nclass columns are the class-specific measures 
+  # computed as mean descrease in accuracy. The nclass + 1st column is the mean 
+  # descrease in accuracy over all classes. The last column is the mean decrease 
+  # in Gini index. For Regression, the first column is the mean decrease in accuracy 
+  # and the second the mean decrease in MSE. If importance=FALSE, the last measure is 
+  # still returned as a vector.
+  features.scores <- importances[order(importances, decreasing=T)]
   
   # Loop through the features in order of importance, and keep grabbing them until
   # they are no longer important (threshold > 1)
   i <- 0
   endFeatures = NULL;
   
-  while (features[i,1] >= selection_threshold) { # features over threshold importance are kept
+  while (features.scores[i,1] >= selection_threshold) { # features over threshold importance are kept
   	endFeatures <- rbind(endFeatures,features[i,:])
   	i <- i + 1
   }
@@ -32,3 +48,4 @@
   
   return(list(features = endFeatures, ix = endIx))
 }
+
