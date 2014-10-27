@@ -207,7 +207,7 @@
 # See http://gettinggeneticsdone.blogspot.com/p/copyright.html
  
 # Define the function
-qqplot.pvals	 = function(pvector, main=NULL, ...) {
+"qqplot.pvals"	 <- function(pvector, main=NULL, ...) {
     o = -log10(sort(pvector,decreasing=F))
     e = -log10( 1:length(o)/length(o) )
     plot(e,o,pch=19,cex=1, main=main, ...,
