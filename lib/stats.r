@@ -84,28 +84,9 @@
 		colnames(result$subset) <- annotations[keep.ix]
 	}
 	
-	
 	return(result)
 }
 
-
-# saves list of results from differentiation.test to file (or prints)
-"write.differentiation.test.results" <- function(results, filename='differentiated.features.txt'){
-	if(!is.null(filename)){
-		scipen.save <- options('scipen')
-		options(scipen=20)
-		hits <- cbind(results$pvalues, results$qvalues)
-		hits <- cbind(hits, results$classwise.means)
-		colnames(hits)[1:2] <- c('pvalue','qvalue')
-		hits <- hits[!is.na(hits[,1]),,drop=F]
-		hits <- hits[order(hits[,1]),]
-		sink(filename)
-		cat('Feature\t')
-		write.table(hits,quote=F,sep='\t')
-		sink(NULL)
-		options(scipen=scipen.save)
-	}
-}
 
 # linear test
 "linear.test" <- function(x, y, covariates=NULL){

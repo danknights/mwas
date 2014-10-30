@@ -69,8 +69,6 @@
 # Last update: 10/25/2014
 #
 
-source('~/DKpostdoc/src/mwas/lib/util.r')
-
 "run.scatterplot" <- function(m,x, filename=NULL, ...){
     x <- x[order(row.names(x)),]
     m <- m[order(row.names(m)),]
