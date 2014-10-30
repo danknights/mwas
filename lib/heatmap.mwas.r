@@ -1,3 +1,26 @@
+# Creates a heatmap to display differentiated kegg pathways, with additional color bars at the top
+# NOTE: uses pearson's correlation as distance function due to inherent limitations with Bray-Curtis
+# -------------
+# Contributor: PJ
+# -------------
+# Input:
+#         otu: normalized and filtered otu table
+#         map: mapping table that has already been subsetted to include samples of interest
+# cluster.var: vector of column names to cluster samples by (e.g. can be a single column for 
+#              simple heatmaps, such as Treatment)
+#   color.var: vector of column names, color bars added to top of heatmap (suggested usage: 
+#              set color.var=cluster.var) note that factors will be treated as distinct colors, 
+#              and numerics will be transformed into gradients
+#  color.list: list of color vectors, one vector per color.var to specify the colors used
+# kegg_pathways: vector of pathways, useful for highlighting different levels
+# heatmap.title: title to display on the heatmap 
+# -------------
+# Output:
+#   outputfile: heatmap output file name 
+# -------------
+# Last update:10/29/2014
+#
+
 # hclusts the columns of an OTU table according to groupings of samples
 cluster.columns<-function(otu, distfun, new.treatments)
 {

@@ -1,3 +1,4 @@
+# Statistical testing function.
 # returns p-values, q-values, 
 # indices of those below alpha, and renamed features with '*' etc.
 # and subset of data if requested
