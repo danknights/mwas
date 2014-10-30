@@ -1,4 +1,10 @@
-# modified heatmap.2 that allows for: multiple row/col side colors, and colored row labels
+#
+# Adapted from heatmap.2 that allows for: multiple row/col side colors, and colored row labels
+# --------------
+# Contributor: PJ
+# --------------
+# Last update: 10/25/2014
+#
 heatmap.3 <- function(x,
                       Rowv = TRUE, Colv = if (symm) "Rowv" else TRUE,
                       distfun = dist,
