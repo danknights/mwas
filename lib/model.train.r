@@ -19,10 +19,16 @@
   if (class(data.set)=="mwas") {
     x <- data.set$features 
     y <- data.set$response
+    
     is.feat <- data.set$is.feat
+    if(is.null(is.feat)) is.feat=FALSE
+    
     method <- data.set$method
+    
     valid_type <- data.set$valid_type
-  }else if(is.null(y){
+    if(is.null(valid_type)) valid_type <- "cv"
+    
+  }else if(is.null(y)){
     stop("Response vector is missing for the model training!")
   }else x <- data.set
   
@@ -32,8 +38,7 @@
   if (is.feat){
     feat.set <- feature.scores.mwas(x, y, selection_threshold = 0)
     train.set <- x[,feat.set$ix]
-  }
-  else train.set <- x
+  }else train.set <- x
   
   best.model <- persist.model.mwas(train.set, y, nfolds=10, classifier=method, valid_type)
   
@@ -65,10 +70,9 @@
   if (tolower(valid_type)=="cv"){ # case insensitive
     for (cv.id in 1:nfolds){
       # fold index that is being hold out
-      if(cv.id < nfolds)
-        idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, cv.id*cv.samp.num, by=1)]
-      else # the last fold could contain less than cv.samp.num of observations
-        idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, length(cv.ind), by=1)] 
+      if(cv.id < nfolds) {idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, cv.id*cv.samp.num, by=1)]
+      }else {# the last fold could contain less than cv.samp.num of observations
+        idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, length(cv.ind), by=1)] }
       
       validation.set <- x[idx,]
       validation.labels <- y[idx]
@@ -95,10 +99,10 @@
     
     for (jk.fold in 1:nfolds){
       # fold index that is being hold out
-      if(jk.fold < nfolds)
-        idx <- jk.ind[seq((jk.fold-1)*jk.samp.num + 1, jk.fold*jk.samp.num, by=1)]
-      else # the last fold could contain less than jk.samp.num
-        idx <- jk.ind[seq((jk.fold-1)*jk.samp.num + 1, length(jk.fold), by=1)]
+      if(jk.fold < nfolds){
+        idx <- jk.ind[seq((jk.fold-1)*jk.samp.num + 1, jk.fold*jk.samp.num, by=1)] 
+      }else {# the last fold could contain less than jk.samp.num
+        idx <- jk.ind[seq((jk.fold-1)*jk.samp.num + 1, length(jk.fold), by=1)]}
       
       train.set <- x[!sampl_ind %in% idx,]
       train.labels <- y[!sampl_ind %in% idx]
@@ -169,16 +173,14 @@
            #   -- $forest          a list that contains the entire forest
            #   -- $y               the desired labels for the training set
            #   -- $inbag, $test
-         },
-         svm={
+         }, svm={
            best.model <- tune.svm(x, y, tunecontrol = tune.control(random=TRUE, sampling="cross", cross = nfolds))
            # $best.model         the model trained on the complete training data using the best parameter combination.
            # $best.parameters    a 1 x k data frame, k number of parameters
            # $best.performance   best achieved performance
            # $performances       a data frame with all parametere combinations along with the corresponding performance results
            # $train.ind          list of index vectors used for splits into training and validation sets
-         }, 
-         mlr = {
+         }, mlr = {
            y <- as.numeric(y)  # for regression, response should be numeric
            best.model <- cv.glmnet(x, y, nfolds = nfolds, family="multinomial")
            # $glmnet.fit   a fitted glmnet object for the full data
@@ -192,8 +194,7 @@
            # $lambda.1se   largest value of lambda such that error is within 1 standard error of the minimum
            # $fit.preval, $foldid
            
-         },
-         knn = {
+         }, knn = {
            best.model <- tune.knn(x, y, k = seq(from=1, to=min(dim(x)[1]/nfolds*(nfolds-1), 25), by =2), 
                                   l= 1, sampling="cross", cross = nfolds, prob = TRUE) 
            class(best.model$best.model) <- 'knn'

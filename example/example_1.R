@@ -23,7 +23,7 @@ otus <- biom_table[rownames(mapping),]
 feat.Data <- otus
 response <- as.factor(mapping[,"COUNTRY"])
 
-source('~/Documents/R/mwas_git/lib/train.r')
+source('~/Documents/R/mwas_git/lib/model.train.r')
 
 best.model <- train.mwas(feat.Data, response, is.feat = FALSE)
 ###################
@@ -33,9 +33,10 @@ opts$OTU_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
 opts$map_fp <- "test/data/gg-map-adults.txt"
 opts$category <- "COUNTRY"
 opts$outdir <- "example/"
+opts$method <- "svm"
 
 case.mode <- tolower(opts$mode)
 
-mwas.obj <- import.train.mwas(opts, type="train")
-train.mwas(mwas.obj)
+mwas.obj <- import.train.params(opts)
+model.obj <- train.mwas(mwas.obj)
 print("Training a model is finished!")
