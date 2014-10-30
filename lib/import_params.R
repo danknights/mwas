@@ -68,7 +68,8 @@
 }
 
 "import.plot.params" <- function(opts){
-  mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
+  mapping <-  load.qiime.mapping.file(opts$map_fp)         # mapping file
+  dist.matrix <- load.qiime.distance.matrix(opts$param_fp) # distance matrix
   
   if (grep(".biom$",opts$OTU_fp)) {
     biom_table <- read_biom(opts$OTU_fp)         # OTU table - biom format
@@ -85,7 +86,7 @@
   
   #print(dim(feat.Data))
   #print(response)
-  param.list <- list(features=feat.Data, response=response, is.feat=opts$feat, method=opts$method, 
+  param.list <- list(features=feat.Data, response=response, dist.matrix=opts$feat, method=opts$method, 
                      c.params=opts$param, valid_type=opts$validType)
   class(param.list) <- "mwas"
   
