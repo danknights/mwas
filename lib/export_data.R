@@ -49,6 +49,28 @@
 
 }
 
+# save data tabel in a Excel workbook.
+# The original code is by Rob Kabacoff 
+# from: http://www.r-bloggers.com/quickly-export-multiple-r-objects-to-an-excel-workbook/
+# 
+save.xlsx <- function (filename='model_evaluation.xlsx', out.dir, objects)
+{
+  require(xlsx, quietly = TRUE, warn.conflicts=FALSE)
+  
+  file <- sprintf('%s%s', out.dir, filename)
+  #objects <- list(...)
+  #fargs <- as.list(match.call(expand.dots = TRUE))
+  #objnames <- as.character(fargs)[-c(1, 2)]
+  objnames <- names(objects)
+  nobjects <- length(objects)
+  for (i in 1:nobjects) {
+    if (i == 1) {
+      write.xlsx(objects[[i]], file, sheetName = objnames[i])
+    }else write.xlsx(objects[[i]], file, sheetName = objnames[i], append = TRUE)
+  }
+  print(paste("Workbook", file, "has", nobjects, "worksheets."))
+}
+
 #
 # save results from SVM prediction object
 # input: 

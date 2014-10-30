@@ -20,6 +20,8 @@
 
 "roc.mwas" <- function(x, model=NULL, predicted=NULL, response, is.plot=FALSE){
 
+  require(pROC, quietly=TRUE, warn.conflicts=FALSE)
+  
   if (!is.null(model)&&is.null(predicted)) { 
     predicted <- predict(model, x) 
   }else if(is.null(model)&&is.null(predicted)){ 

@@ -54,7 +54,7 @@
                                  classifier=c("RF","SVM", "knn", "MLR")[1],
                                  valid_type=c("cv", "jk")[1],  out.dir=NULL){
   
-  require(pROC, quietly=TRUE, warn.conflicts=FALSE)
+  #require(pROC, quietly=TRUE, warn.conflicts=FALSE)
   
   # x - feature set (observation * features)
   # y - desried response
