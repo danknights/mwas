@@ -19,54 +19,6 @@
 #  Last Update: 10/25/2014
 #
 
-#require(biom, quietly=TRUE, warn.conflicts=FALSE)
-require(optparse, quietly=TRUE, warn.conflicts=FALSE) 
-#require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
-require(kernlab, quietly=TRUE, warn.conflicts=FALSE)
-require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
-#require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
-require(pROC, quietly=TRUE, warn.conflicts=FALSE)
-require(class, quietly=TRUE, warn.conflicts=FALSE) # for knn
-require(caret, quietly=TRUE, warn.conflicts=FALSE) # for varImp
-
-source(paste(Sys.getenv('MWAS_DIR'),'/lib/gradients.r',sep=''))
-source(paste(Sys.getenv('MWAS_DIR'),'/lib/util.r',sep=''))
-source(paste(Sys.getenv('MWAS_DIR'),'/lib/train.r',sep=''))
-source(paste(Sys.getenv('MWAS_DIR'),'/lib/util.load.r',sep=''))
-source(paste(Sys.getenv('MWAS_DIR'),'/lib/stats.r',sep=''))
-
-####################### Parse INPUT options #####
-
-# make option list and parse command line
-option_list <- list(
-  make_option(c("-i","--data_table"), type="character",
-              help="OTU table (BIOM or classic format), taxon table, other feature table [requried]."),
-  make_option(c("-m","--map_fp"), type="character",
-              help="Mapping file  [required]."),
-  make_option(c("-c","--category"), type="character",
-              help="Column name in the mapping file for classification/regression. If column is numeric, assumes regression [required]"),
-  make_option(c("-t", "--method"),type='character', default="RF",
-              help="Classifier type: RF, SVM, KNN [default %default]"),
-  make_option(c("-p", "--param"),type='character',default="SVM-kernel:radial,RF-ntree:1000",
-              help="Comma-separated list of classifier parameters, e.g. SVM kernel type [default: %default]"),
-  make_option(c("-f", "--nfolds"),type='numeric',default=10,
-              help="Number of folds in cross-validation used for modeling evaluation (-1 means leave-one-out) [default: %default]"),
-  make_option(c("-s", "--feat"),type='logical',default=TRUE,
-              help="Option for feature selection [default: %default]"),
-  make_option(c("-b", "--feat_param"),type='numeric',default=0,
-              help="Parameter for feature selection [default: %default]"),
-  make_option(c("-o", "--outdir"),type='character',default=".",
-              help="Output directory [default: %default]")
-)
-opts <- parse_args(OptionParser(option_list=option_list),
-                   args=commandArgs(trailing=TRUE))
-
-# create output directory if needed
-if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
-
-######################## Input validation #######
-# check for valid params, etc.
-
 ######################## Load data #######
 mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
 
