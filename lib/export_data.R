@@ -44,7 +44,8 @@
     # save AUC, if there is any
     # save MCC, if there is any
     # save Cohen's Kappa, if there is any
-    #save.results(trained.model.eval, out.dir, ...)
+    filename <- sprintf('%smodel_evaluation.xlsx', out.dir)
+    save.xlsx(objects=trained.model.eval, filename=filename)
   }  
 
 }
@@ -53,11 +54,10 @@
 # The original code is by Rob Kabacoff 
 # from: http://www.r-bloggers.com/quickly-export-multiple-r-objects-to-an-excel-workbook/
 # 
-save.xlsx <- function (filename='model_evaluation.xlsx', out.dir, objects)
+save.xlsx <- function (objects, filename)
 {
   require(xlsx, quietly = TRUE, warn.conflicts=FALSE)
   
-  file <- sprintf('%s%s', out.dir, filename)
   #objects <- list(...)
   #fargs <- as.list(match.call(expand.dots = TRUE))
   #objnames <- as.character(fargs)[-c(1, 2)]

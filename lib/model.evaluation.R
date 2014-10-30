@@ -73,17 +73,17 @@
     
     rocobj <- roc.mwas(x, predicted = evalobj$prediction, response = as.numeric(desired))
     
-    evalobj$confusion <- c.matrix
-    evalobj$error <- sum(as.numeric(evalobj$prediction) != as.numeric(desired))/sample.num
-    evalobj$acc <- sum(diag(c.matrix))/sum(c.matrix)  # == 1 - evalobj$error 
-    evalobj$auc <- rocobj$auc
+    evalobj$confusion.matrix <- c.matrix
+    error <- sum(as.numeric(evalobj$prediction) != as.numeric(desired))/sample.num
+    accuracy <- sum(diag(c.matrix))/sum(c.matrix)  # == 1 - evalobj$error 
+    AUC <- rocobj$auc
     
     # MCC =  Pearson's correlation of y, yhat
     # MCC and Kappa for binary classification only
     if(is.binary){
       
     # MCC =  (TP*TN - FP*FN)/(sqrt((TP+FP)(TP+FN)(TN+FP)(TN+FN)))
-    evalobj$mcc <- (c.matrix[1,1]*c.matrix[2,2])/(
+    MCC <- (c.matrix[1,1]*c.matrix[2,2])/(
       sqrt((c.matrix[1,1]+c.matrix[1,2])*
              (c.matrix[1,1]*c.matrix[2,1])*
              (c.matrix[2,2]*c.matrix[1,2])*
@@ -95,13 +95,16 @@
     #        = ((TP+FP)/(P+N)*(TP+FP)/(P+N)+(FN+TN)/(P+N)*(FP+TN)/(P+N))
     Pr.e <- (c.matrix[1,1]+c.matrix[1,2])/sum(c.matrix)*(c.matrix[1,1]*c.matrix[2,1])/sum(c.matrix)+
       (c.matrix[2,1]*c.matrix[2,2])/sum(c.matrix)*(c.matrix[1,2]*c.matrix[2,2])/sum(c.matrix)
-    evalobj$kappa <- (evalobj$acc - Pr.e)/(1 - Pr.e)
+    Kappa <- (evalobj$acc - Pr.e)/(1 - Pr.e)
     } else {
-      evalobj$mcc <- NULL
-      evalobj$kappa <- NULL
+      MCC <- NULL
+      Kappa <- NULL
     }
   }
-      
+  evalobj$performance = c(error, accuracy, AUC, MCC, Kappa)
+  if (length(evalobj$performance)==3) { names(evalobj$performance) <- c("error", "accuracy", "AUC") 
+  }else names(evalobj$performance) <- c("error", "accuracy", "AUC", " Matthews_corr_coeff","Cohens_Kappa")
+
   return(evalobj)
 }
 
