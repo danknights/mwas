@@ -34,8 +34,9 @@
   
   response <- droplevels(factor(data.list$map[[opts$category]])) # desired labels 
   
-  print(dim(feat.Data))
-  print(response)
+  #print(dim(feat.Data))
+  #print(response)
+  return(list(features=feat.Data, response=response, is.feat=opts$feat, method=opts$method, ))
 }
 
 # Universal input reader and parser. Reads in all types of input files supported by 
