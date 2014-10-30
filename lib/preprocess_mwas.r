@@ -1,3 +1,15 @@
+# Preprocessing the original OTU table 
+#
+# Contributors: PJ
+# -----
+# Input: 
+#      otu : OTU table 
+#
+#
+#
+# ----- 
+# Last update: 10/27/2014
+
 # temporary place holder for use by PJ until the real preprocess function is written
 preprocess(otu, minOTUInSamples=.001, filter.kegg=FALSE)
 {
