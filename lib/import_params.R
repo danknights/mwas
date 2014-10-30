@@ -11,8 +11,11 @@
 # ------
 #  Last update: 10/27/2014
 #
-"import.mwas" <- function(opts){
-  
+"import.mwas" <- function(opts, type=NULL){
+  switch(type,
+         train = {
+           param.list <- import.train.params(opts)
+         })
 }
 
 "import.train.params" <- function(opts){
@@ -22,7 +25,7 @@
     biom_table <- read_biom(opts$data_table)         # OTU table - biom format
     otus <- t(as.matrix(biom_data(biom_table)))      # OTU table - classic format
   } else {
-    trycatch(otus <- read.delim(opts$OTU_table_fp, sep='\t',
+    tryCatch(otus <- read.delim(opts$OTU_table_fp, sep='\t',
                                 comment='',head=T,row.names=1,check.names=F),error = function(err) 
                                   print("Couldn't parse OTU table. If BIOM format, use .biom extension"))
   }

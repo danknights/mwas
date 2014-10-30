@@ -91,7 +91,7 @@ case.mode <- tolower(opts$mode) # case insensitive
 switch(case.mode, 
        train = {
          ########################    Load data     #######
-         table.data <- import.mwas(opts)
+         table.data <- import.mwas(opts, type="train")
        }, 
        predict = {
          
