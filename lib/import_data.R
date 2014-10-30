@@ -1,7 +1,7 @@
-# Function: import parameters 
-#
+# Function: import parameters for different functional modules
+# -----------------
 # Contributors: Hu
-# -----
+# -----------------
 # input:
 #       opts : options from the user
 # 
