@@ -17,8 +17,9 @@
 #   9. f - number of folds in cross-validation [default: 10]
 #  10. s - feature selection option - TRUE or FALSE
 #  11. b - feature selection parameter - threshold in RF
-#  <plot>
-#  12. p - plot type - heatmap, beeswarm, violin, gradient
+#  <plot> (options are capital)
+#  12. T - plot type - heatmap, beeswarm, violin, gradient
+#  13.
 #  <statistical testing>
 #  13. a - statistical options
 #
