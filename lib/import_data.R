@@ -4,11 +4,11 @@
 # -----------------
 # input:
 #       opts : options from the user
-# 
+# --------
 # output:
 #   param.list : a table of parameters that needed in each corresponding fucntion
 # 
-# ------
+# -------------
 #  Last update: 10/27/2014
 #
 
