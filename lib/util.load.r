@@ -1,5 +1,6 @@
 # This file is adapted from QIIME I/O module for R 
 # (https://github.com/qiime/qiime.io/blob/master/R/I-methods.r)
+# --------------
 # Contributors: Dan, Gabe, PJ, Hu
 # --------------
 # Functions:

@@ -1,3 +1,16 @@
+# Visualization function: including heatmaps, beeswarm, violin, boxplots, etc
+# 
+# ------------
+# Contributors: Dan, PJ, Emmanuel, Gabe, Hu
+# ------------
+# Input:
+#
+# -------
+# Output:
+#
+# -------
+# Last update: 10/28/2014
+#
 
 #QQ plot
 # http://GettingGeneticsDone.blogspot.com/

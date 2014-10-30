@@ -1,7 +1,7 @@
 # Preprocessing the original OTU table 
-#
+# ----------------
 # Contributors: PJ
-# -----
+# ----------------
 # Input: 
 #               otu : OTU table 
 #   minOTUInSamples : 

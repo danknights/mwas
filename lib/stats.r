@@ -4,6 +4,17 @@
 # add.stars adds stars to the column names that are significant at .05, .01, .001, .0001
 # if filename is provided, saves result of statistical test to file
 # if parametric, uses t-test/ANOVA; else uses mann-whitney U/Kruskal-wallis
+# -------------
+# Contributors: Dan
+# -------------
+# Input:
+#     
+# ------
+# Output:
+#   
+# ------
+#  Last update: 10/28/2014
+
 "differentiation.test" <- function (x,category, alpha=0.05, parametric=TRUE,
 		include.subset=FALSE){
 	category <- as.factor(as.character(category))

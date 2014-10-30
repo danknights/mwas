@@ -1,6 +1,6 @@
 # If the desired response is known, then evaluate the model, 
 # otherwise output the predicted labels.
-#
+# -------------------
 # Contributors: Hu, Dan
 # -------------------
 # Model evaluation with different criteria. 
