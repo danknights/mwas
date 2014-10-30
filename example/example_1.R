@@ -19,7 +19,11 @@ make_option(c("-o", "--outdir"),type='character',default=".",
             help="Output directory [default: %default]")
 )
 
-
+opts$mode <- "train"
+opts$OTU_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
+opts$map_fp <- "test/data/gg-map-adults.txt"
+opts$category <- "COUNTRY"
+opts$
 
 mapping <- load.qiime.mapping.file('test/data/gg-map-adults.txt')
 dim(mapping)

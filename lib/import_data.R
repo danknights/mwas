@@ -38,7 +38,7 @@
 }
 
 "import.predict.params" <- function(opts){
-  if(!is.null(opts$map_fp) {
+  if(!is.null(opts$map_fp)) {
     mapping <-  load.qiime.mapping.file(opts$map_fp)         # mapping file
     response <- droplevels(factor(mapping[[opts$category]])) # desired labels 
   } else{
