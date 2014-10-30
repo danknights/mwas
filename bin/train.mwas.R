@@ -1,20 +1,9 @@
-#!/usr/bin/env Rscript
-## Main function calling all testing, model training, model testing and visualization
+# Training wrapper function
 # Contributors: Hu, Dan
 # ------  
 #  input: 
-#  1. OTU table - BIOM or classic format (required)
-#  2. map file   (required)
-#  3. category name(s) (required)
-#  4. mode - "train", "test", "plot", "statistics"
-#  5. method - classifier method (optional); if omitted then need to specify a trained model file 
-#  6. classifier parameters- kernel function only for SVM classification method
-#  7. number of folds in cross-validation [default: 10]
-#  8. output directory: save classification model, model evaluation results, visualization file etc.
-#  9. plot type - heatmap, beeswarm, violin, gradient
-#  10. feature selection option - TRUE or FALSE
-#  11. feature selection parameter - threshold in RF
-#  12. statistical options
+#     opts : options from the user
+
 # -------
 #  Last Update: 10/25/2014
 #
