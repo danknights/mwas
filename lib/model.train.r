@@ -14,7 +14,7 @@
 #  Last update: 10/25/2014
 #
 "train.mwas" <- function(data.set, y=NULL, is.feat = TRUE, 
-                         method=c("RF","SVM", "knn", "MLR")[1], valid_type = c("cv", "jk")[1]){
+                         method=c("RF","SVM", "knn", "MLR")[1], valid_type = c("cv", "jk")[1], out.dir=NULL){
   
   if (class(data.set)=="mwas") {
     x <- data.set$features 
@@ -40,7 +40,7 @@
     train.set <- x[,feat.set$ix]
   }else train.set <- x
   
-  best.model <- persist.model.mwas(train.set, y, nfolds=10, classifier=method, valid_type)
+  best.model <- persist.model.mwas(train.set, y, nfolds=10, classifier=method, valid_type,  out.dir=NULL)
   
   #export.mwas(trained.model = best.model, feat.set = feat.set)
   return(best.model)
@@ -52,7 +52,7 @@
 
 "persist.model.mwas" <- function(x, y, nfolds=10, 
                                  classifier=c("RF","SVM", "knn", "MLR")[1],
-                                 valid_type=c("cv", "jk")[1]){
+                                 valid_type=c("cv", "jk")[1],  out.dir=NULL){
   
   require(pROC, quietly=TRUE, warn.conflicts=FALSE)
   
@@ -128,11 +128,12 @@
   best.model.obj <- cross.validation.mwas(x, y, nfolds, classifier)
   best.model <- best.model.obj$best.model
   best.model.eval <- model.evaluation.mwas(x, best.model, y)
+  class(best.model.eval) <- class(best.model)
   
   # if (savefile) save(best.model, file = paste(opts$outdir,"/trained.model", collapse='', sep=''))
   # Saving file is integrated into export.mwas.R
   
-  export.mwas(trained.model=best.model, trained.model.eval=best.model.eval, model.perform=model.perform)
+  export.mwas(trained.model=best.model, trained.model.eval=best.model.eval, model.perform=model.perform,  out.dir=out.dir)
   
   # class(best.model) <- "mwas"
   return(best.model)

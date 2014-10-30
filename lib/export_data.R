@@ -18,7 +18,7 @@
 #
 
 "export.mwas" <- function(trained.model=NULL, trained.model.eval=NULL, model.perform=NULL,
-                          feat.set=NULL, outdir, ...){
+                          feat.set=NULL,  out.dir=NULL){
   if(!is.null(trained.model)) {
     # save trained model and selected feature vector
     if(!is.null(feat.set)){
@@ -33,8 +33,8 @@
       best.model<-list()
       best.model$trained.model <- trained.model
     }
-   # should save as rdt format
-    saveRDS(best.model, file = paste(outdir,"/trained_model.rds", collapse='', sep='')) 
+   # should save as rds format
+    saveRDS(best.model, file = paste(out.dir,"/trained_model.rds", collapse='', sep='')) 
   }
   
   if (!is.null(trained.model.eval)){
@@ -44,7 +44,7 @@
     # save AUC, if there is any
     # save MCC, if there is any
     # save Cohen's Kappa, if there is any
-    save.results(trained.model.eval, opts, ...)
+    #save.results(trained.model.eval, out.dir, ...)
   }  
 
 }
