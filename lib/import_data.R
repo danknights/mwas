@@ -31,7 +31,7 @@
   #print(dim(feat.Data))
   #print(response)
   param.list <- list(features=feat.Data, response=response, is.feat=opts$feat, method=opts$method, 
-                     c.params=opts$param, valid_type=opts$validType)
+                     c.params=opts$param, valid_type=opts$validType, outdir=opts$outdir)
                     # c.params is parameter sets for the classifier
   class(param.list) <- "mwas"
   

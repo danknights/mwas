@@ -28,6 +28,7 @@
     valid_type <- data.set$valid_type
     if(is.null(valid_type)) valid_type <- "cv"
     
+    out.dir <- data.set$outdir
   }else if(is.null(y)){
     stop("Response vector is missing for the model training!")
   }else x <- data.set
@@ -40,7 +41,7 @@
     train.set <- x[,feat.set$ix]
   }else train.set <- x
   
-  best.model <- persist.model.mwas(train.set, y, nfolds=10, classifier=method, valid_type,  out.dir=NULL)
+  best.model <- persist.model.mwas(train.set, y, nfolds=10, classifier=method, valid_type,  out.dir=out.dir)
   
   #export.mwas(trained.model = best.model, feat.set = feat.set)
   return(best.model)
@@ -84,8 +85,8 @@
       candidate.eval <- model.evaluation.mwas(validation.set, candidate$best.model, validation.labels)
       
       candidate.model <- c(candidate.model, list(candidate))
-      candidate.error[cv.id] <- candidate.eval$error
-      candidate.auc[cv.id] <- candidate.eval$auc
+      candidate.error[cv.id] <- candidate.eval$performance["error"]
+      candidate.auc[cv.id] <- candidate.eval$performance["auc"]
       
     }
   }else if(valid_type=="jk") { # jackknife function 

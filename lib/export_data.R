@@ -54,8 +54,7 @@
 # The original code is by Rob Kabacoff 
 # from: http://www.r-bloggers.com/quickly-export-multiple-r-objects-to-an-excel-workbook/
 # 
-save.xlsx <- function (objects, filename)
-{
+save.xlsx <- function (objects, filename){
   require(xlsx, quietly = TRUE, warn.conflicts=FALSE)
   
   #objects <- list(...)
