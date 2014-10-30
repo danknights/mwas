@@ -1,3 +1,20 @@
+
+#QQ plot
+# http://GettingGeneticsDone.blogspot.com/
+# See http://gettinggeneticsdone.blogspot.com/p/copyright.html
+
+# Define the function
+"qqplot.pvals"   <- function(pvector, main=NULL, ...) {
+  o = -log10(sort(pvector,decreasing=F))
+  e = -log10( 1:length(o)/length(o) )
+  plot(e,o,pch=19,cex=1, main=main, ...,
+       xlab=expression(Expected~~-log[10](italic(p))),
+       ylab=expression(Observed~~-log[10](italic(p))),
+       xlim=c(0,max(e)), ylim=c(0,max(o)))
+  lines(e,e,col="red")
+}
+
+
 "plot.beeswarm.dt" <- function(cols, x_axis_label, hit.ix, env, outdir) {
 	require(beeswarm)
 	cols <-  c(brewer.pal(9,'Set1'),brewer.pal(9,'Pastel1'),brewer.pal(8,'Dark2'),brewer.pal(8,'Accent'))[-6]

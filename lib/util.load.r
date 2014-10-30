@@ -273,30 +273,6 @@
 }
 
 
-
-# linear test
-"linear.test" <- function(x, y, covariates=NULL){
-  if(!is.null(covariates)){
-    covariates <- as.data.frame(covariates)
-    covariates <- cbind(y, covariates)
-    covariates <- droplevels(covariates)
-    design <- model.matrix(~ ., data=covariates)		
-  } else {
-    design <- model.matrix(~y)
-  }
-  pvals <- apply(x, 2, function(xx) summary(lm(xx ~ ., data=covariates))[[4]][2,4])
-  return(pvals)
-}
-
-"t.test.wrapper" <- function(x, y, use.fdr=TRUE){
-  y <- as.factor(y)
-  ix1 <- y == levels(y)[1]
-  pvals <- apply(x,2,function(xx) t.test(xx[ix1],xx[!ix1])$p.value)
-  if(use.fdr) pvals <- p.adjust(pvals,'fdr')
-  return(pvals)
-}
-
-
 # returns vector of cluster ids for clusters with internal
 # complete-linkage correlation of min.cor
 "cluster.by.correlation" <- function(x, min.cor=.5){
@@ -383,23 +359,6 @@
   
   return(newids)
 }
-
-#QQ plot
-# http://GettingGeneticsDone.blogspot.com/
-# See http://gettinggeneticsdone.blogspot.com/p/copyright.html
-
-# Define the function
-"qqplot.pvals"	 <- function(pvector, main=NULL, ...) {
-  o = -log10(sort(pvector,decreasing=F))
-  e = -log10( 1:length(o)/length(o) )
-  plot(e,o,pch=19,cex=1, main=main, ...,
-       xlab=expression(Expected~~-log[10](italic(p))),
-       ylab=expression(Observed~~-log[10](italic(p))),
-       xlim=c(0,max(e)), ylim=c(0,max(o)))
-  lines(e,e,col="red")
-}
-
-
 
 # Get balanced folds where each fold has close to overall class ratio
 "balanced.folds" <- function(y, nfolds=10){

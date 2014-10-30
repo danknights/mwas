@@ -95,3 +95,25 @@
 	}
 }
 
+# linear test
+"linear.test" <- function(x, y, covariates=NULL){
+  if(!is.null(covariates)){
+    covariates <- as.data.frame(covariates)
+    covariates <- cbind(y, covariates)
+    covariates <- droplevels(covariates)
+    design <- model.matrix(~ ., data=covariates)  	
+  } else {
+    design <- model.matrix(~y)
+  }
+  pvals <- apply(x, 2, function(xx) summary(lm(xx ~ ., data=covariates))[[4]][2,4])
+  return(pvals)
+}
+
+"t.test.wrapper" <- function(x, y, use.fdr=TRUE){
+  y <- as.factor(y)
+  ix1 <- y == levels(y)[1]
+  pvals <- apply(x,2,function(xx) t.test(xx[ix1],xx[!ix1])$p.value)
+  if(use.fdr) pvals <- p.adjust(pvals,'fdr')
+  return(pvals)
+}
+

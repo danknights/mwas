@@ -11,7 +11,7 @@
 "run.heatmap" <- function(otufile, mapfile)
 {
 	source("util.load.r")
-	source("pj.preprocess.r")
+	source("preprocess_mwas.r")
 		
 	# read in data files	
 	map <-  load.qiime.mapping.file(mapfile)   # mapping file
