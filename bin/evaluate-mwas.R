@@ -49,8 +49,8 @@ require(pROC)
 option_list <- list(
   make_option(c("-w", "--mode"),type='character',
               help="Function mode [required]"),
-  make_option(c("-i","--OTU_table_fp"), type="character",
-              help="BIOM format or classic format of OTU table [requried]."),
+  make_option(c("-i","--input_fp"), type="character",
+              help="BIOM format or classic format of OTU table or other matrix [requried]"),
   make_option(c("-m","--map_fp"), type="character",
               help="Mapping file  [required]."),
   make_option(c("-c","--category"), type="character",
@@ -88,7 +88,7 @@ if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE
 #  4. statistics
 case.mode <- tolower(opts$mode) # case insensitive
 
-switch(opts$mode, 
+switch(case.mode, 
        train = {
          ########################    Load data     #######
          table.data <- import.mwas(opts)
