@@ -2,7 +2,7 @@
 # Contributors: Hu, Dan
 # -----
 # input:
-#       x : feature vector
+#    data : feature vector or a MWAS class object including all the parameters (the output of import.mwas)
 #       y : desired response - should be a factor for classification problem
 #  is.feat: whether feature selection is required. [default: TRUE] 
 #  method : classifier type
@@ -13,8 +13,18 @@
 # ------
 #  Last update: 10/25/2014
 #
-"train.mwas" <- function(x, y, is.feat = TRUE, 
+"train.mwas" <- function(data.set, y=NULL, is.feat = TRUE, 
                          method=c("RF","SVM", "knn", "MLR")[1], valid_type = c("cv", "jk")[1]){
+  
+  if (class(data.set)=="mwas") {
+    x <- data.set$features 
+    y <- data.set$response
+    is.feat <- data.set$is.feat
+    method <- data.set$method
+    valid_type <- data.set$valid_type
+  }else if(is.null(y){
+    stop("Response vector is missing for the model training!")
+  }else x <- data.set
   
   require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
   require(glmnet, quietly=TRUE, warn.conflicts=FALSE)

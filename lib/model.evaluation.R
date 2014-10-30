@@ -23,8 +23,14 @@
 # Last Update: 10/25/2014
 #
 
-"model.evaluation.mwas" <- function(x, model, desired){
-
+"model.evaluation.mwas" <- function(data.set, model, desired){
+  
+  if (class(data.set)=="mwas"){
+    x <- data.set$features
+    model <- data.set$trained.model
+    desired <- data.set$response
+  }else x <- data.set
+  
   evalobj <- list() # resutls object
   
   if (class(model) == "randomForest"){

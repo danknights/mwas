@@ -18,7 +18,7 @@
 #
 
 "export.mwas" <- function(trained.model=NULL, trained.model.eval=NULL, model.perform=NULL,
-                          feat.set=NULL, opts, ...){
+                          feat.set=NULL, outdir, ...){
   if(!is.null(trained.model)) {
     # save trained model and selected feature vector
     if(!is.null(feat.set)){
@@ -34,7 +34,7 @@
       best.model$trained.model <- trained.model
     }
    # should save as rdt format
-    saveRDS(best.model, file = paste(opts$outdir,"/trained_model.rds", collapse='', sep='')) 
+    saveRDS(best.model, file = paste(outdir,"/trained_model.rds", collapse='', sep='')) 
   }
   
   if (!is.null(trained.model.eval)){

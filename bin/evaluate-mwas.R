@@ -49,7 +49,7 @@ require(pROC)
 option_list <- list(
   make_option(c("-w", "--mode"),type='character',
               help="Function mode [required]"),
-  make_option(c("-i","--input_fp"), type="character",
+  make_option(c("-i","--OTU_fp"), type="character",
               help="BIOM format or classic format of OTU table or other matrix [requried]"),
   make_option(c("-m","--map_fp"), type="character",
               help="Mapping file  [required]."),
@@ -57,8 +57,10 @@ option_list <- list(
               help="Column name in the mapping file [requried]"),
   make_option(c("-t", "--method"),type='character',     #default="RF",
               help="Classifier type [required for model training]"),
-  make_option(c("-k", "--param"),type='character',default="radial",
-              help="Classifier parameter, e.g. SVM kernel type [default: %default]"),
+  make_option(c("-k", "--param_fp"),type='character',default="radial",
+              help="For training: classifier parameter, e.g. SVM kernel type [default: %default]; 
+              For predicting: the directory of the trained model.
+              For plotting: distance matrix file."),
   make_option(c("-e", "--validType"),type='character',default="cv",
               help="Validation type (k-fold cross-validation [cv] or Jackknifing [jk]) [default: %default]"),
   make_option(c("-f", "--fold"),type='numeric',default=10,
@@ -91,10 +93,14 @@ case.mode <- tolower(opts$mode) # case insensitive
 switch(case.mode, 
        train = {
          ########################    Load data     #######
-         table.data <- import.mwas(opts, type="train")
+         mwas.obj <- import.train.mwas(opts, type="train")
+         train.mwas(mwas.obj)
+         print("Training a model is finished!")
        }, 
        predict = {
-         
+         mwas.obj <- import.predict.params(opts)
+         results <- model.evaluation.mwas(mwas.obj)
+         export.mwas(results)
        },
        plot = {
          
