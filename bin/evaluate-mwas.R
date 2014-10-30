@@ -80,9 +80,6 @@ opts <- parse_args(OptionParser(option_list=option_list),
 # create output directory if needed
 if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
 
-########################    Load data     #######
-table.data <- import.mwas(opts)
- 
 ######################## Mode selection   #######
 # Four available modes:
 #  1. train
@@ -92,7 +89,22 @@ table.data <- import.mwas(opts)
 case.mode <- tolower(opts$mode) # case insensitive
 
 switch(opts$mode, 
-       train = )
+       train = {
+         ########################    Load data     #######
+         table.data <- import.mwas(opts)
+       }, 
+       predict = {
+         
+       },
+       plot = {
+         
+       },
+       statistics = {
+         
+       },
+       stop("Please specify a function mode: train, predict, plot, statistics.")
+       )
 
 ######################## 
-
+########################    Load data     #######
+table.data <- import.mwas(opts)

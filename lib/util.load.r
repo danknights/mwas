@@ -185,6 +185,7 @@
 # min.presence is the fraction of samples in which a feature must be present to keep
 # set collapse.threshold 0..1 to collapse taxa/otus by correlation (lower threshold
 #   means more collapsing)
+#########
 "load.experiment" <- function(map.fp, otu.fp=NULL, taxa.fp=NULL,
                               alpha.fp=NULL, beta.fp=NULL, min.presence=0.1, collapse.threshold=NULL){
   
