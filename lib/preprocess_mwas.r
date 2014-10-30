@@ -5,15 +5,15 @@
 # Input: 
 #      otu : OTU table 
 #
-#
-#
+# ----
+# Output:
+#      
 # ----- 
 # Last update: 10/27/2014
 
 # temporary place holder for use by PJ until the real preprocess function is written
 preprocess(otu, minOTUInSamples=.001, filter.kegg=FALSE)
 {
-	source("util.r") 
 	source("util.load.r")
 		
 	otu <- (remove.nonoverlapping.samples(map = map, otus = otus))$otus
