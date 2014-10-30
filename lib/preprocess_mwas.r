@@ -3,16 +3,17 @@
 # Contributors: PJ
 # -----
 # Input: 
-#      otu : OTU table 
-#
+#               otu : OTU table 
+#   minOTUInSamples : 
 # ----
 # Output:
-#      
+#      otu : filtered otu table
 # ----- 
 # Last update: 10/27/2014
+#
 
 # temporary place holder for use by PJ until the real preprocess function is written
-preprocess(otu, minOTUInSamples=.001, filter.kegg=FALSE)
+"preprocess" <- function(otu, minOTUInSamples=.001, filter.kegg=FALSE)
 {
 	source("util.load.r")
 		
@@ -42,7 +43,7 @@ preprocess(otu, minOTUInSamples=.001, filter.kegg=FALSE)
 # This function filters the kegg descriptions by a vector of unknown-level kegg pathways
 # kegg: vector of kegg descriptions named by current kegg level
 # TODO: mention we havent implemented specifying current level filtering
-filter.pathways <- function(kegg, keep.pathways.file)
+"filter.pathways" <- function(kegg, keep.pathways.file)
 {
 	#filter by comparing to the entire database
 #	kegg.db.file<- paste(Sys.getenv("MWAS.HEATMAP"),'/data/ko.to.pathways.txt', sep='')	
@@ -72,7 +73,7 @@ filter.pathways <- function(kegg, keep.pathways.file)
 
 # This function returns the next kegg level up from the current kegg level
 # kegg: vector of kegg description named by current kegg level
-get.next.kegg <- function(kegg)
+"get.next.kegg" <- function(kegg)
 {
 	# split the kegg descriptions of this pathway table into L1, L2, L3
 	keggsplit <- lapply(as.character(kegg), function(xx) unlist(strsplit(xx, split="; ", fixed=TRUE)))
