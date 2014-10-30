@@ -6,7 +6,7 @@
   
 source('~/DKpostdoc/src/mwas/lib/util.r')
 
-"run.scatterplot" <- function(m,x, filename='scatterplot_pre_postCT2.pdf'){
+"run.scatterplot" <- function(m,x, filename=NULL){
   x <- x[order(row.names(x)),]
   m <- m[order(row.names(m)),]
   x2scatterplot <- cbind(m,x)
@@ -40,13 +40,6 @@ source('~/DKpostdoc/src/mwas/lib/util.r')
   }
   if(!is.null(filename)) dev.off()
 }  
-
-
-
-
-
-
-
 
 # perform an unique scatterplot of all the bugs
 # and calculate spearman correlation

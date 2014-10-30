@@ -114,12 +114,13 @@
   best.model.obj <- cross.validation.mwas(x, y, nfolds, classifier)
   best.model <- best.model.obj$best.model
   best.model.eval <- model.evaluation.mwas(x, best.model, y)
-
+  
   # if (savefile) save(best.model, file = paste(opts$outdir,"/trained.model", collapse='', sep=''))
   # Saving file is integrated into export.mwas.R
   
   export.mwas(trained.model=best.model, trained.model.eval=best.model.eval, model.perform=model.perform)
   
+  # class(best.model) <- "mwas"
   return(best.model)
 }
 
@@ -193,5 +194,6 @@
   }
   else stop("Undefined classification method!")
   
+  class(best.model) <- "mwas"
   return(best.model)
 }

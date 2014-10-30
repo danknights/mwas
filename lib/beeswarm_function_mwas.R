@@ -1,14 +1,23 @@
-#beeswarm of several conditions included in the mapping file (here Treatment: preCT, postCT)
-#require m:  mapping file 
-# x: otu table 
+# Beeswarm of several conditions included in the mapping file
+# 
+# Contributors: Emmanuel
+# ------
+# input:
+#        m:  mapping file 
+#        x:  otu table 
+# ------
+# output:
+#     save the plot as PDF file
+# ------
+# Last update: 10/25/2014
+#
 
-source('~/DKpostdoc/src/mwas/lib/util.load.r')
+#source('~/DKpostdoc/src/mwas/lib/util.load.r')
 
-
-#do beeswarm 
-"run.beeswarm" <- function(m,x,filename='beeswarm_pre_postCT.pdf'){
+"run.beeswarm" <- function(x, map, filename='beeswarm_plot.pdf'){
   x <- x[order(row.names(x)),]
-  m <- m[order(row.names(m)),]
+  m <- map[order(row.names(m)),]
+  
   x2beeswarmfile <- cbind(m,x)
   x2beeswarmfile <- x2beeswarmfile[order(x2beeswarmfile$Treatment,decreasing = FALSE),]
   beeswarmfile <- x2beeswarmfile
@@ -34,12 +43,3 @@ source('~/DKpostdoc/src/mwas/lib/util.load.r')
   }
   if(!is.null(filename)) dev.off()
 }  
-
-
-
-
-
-
-
-
-
