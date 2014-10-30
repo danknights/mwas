@@ -1,12 +1,21 @@
-# scatterplot of 2 conditions included in the mapping file (here Treatment preCT, postCT)
+# Scatterplot of 2 conditions included in the mapping file (here Treatment preCT, postCT)
 # and perform spearman correlation for each taxon
-# require m:  mapping file 
+#
+# Contributors: Emmanuel
+# -------
+# Input: 
+#    m:  mapping file 
 # x: otu table 
-# require shorten.taxonomy function
-  
+# -------
+# Output:
+#   save plot as a PDF file
+# -------
+# Last update: 10/25/2014
+#
+
 source('~/DKpostdoc/src/mwas/lib/util.r')
 
-"run.scatterplot" <- function(m,x, filename=NULL){
+"run.scatterplot" <- function(m,x, filename=NULL, ...){
   x <- x[order(row.names(x)),]
   m <- m[order(row.names(m)),]
   x2scatterplot <- cbind(m,x)
@@ -42,7 +51,7 @@ source('~/DKpostdoc/src/mwas/lib/util.r')
 }  
 
 # perform an unique scatterplot of all the bugs
-# and calculate spearman correlation
+# and calculate Spearman correlation
 # require m:  mapping file 
 # x: otu table
 

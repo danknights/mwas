@@ -3,8 +3,8 @@
 # Contributors: Emmanuel
 # ------
 # input:
-#        m:  mapping file 
 #        x:  otu table 
+#      map:  mapping file 
 # ------
 # output:
 #     save the plot as PDF file

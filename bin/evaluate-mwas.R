@@ -1,20 +1,26 @@
+#!/usr/bin/env Rscript
 ## Command line function calling all testing, model training, model testing and visualization
 # 
 # Contributors: Hu
 # ------  
 #  input: 
-#   1. d - mode - "train", "test", "plot", "statistics"
+#   <general options>
+#   1. w - mode - "train", "predict", "plot", "statistics"
 #   2. i - OTU table - BIOM or classic format (required)
 #   3. m - map file   (required)
 #   4. c - category name(s) (required)
-#   5. t - method - classifier method (optional); if omitted then need to specify a trained model file 
-#   6. k - classifier parameters- kernel function only for SVM classification method
-#   7. f - number of folds in cross-validation [default: 10]
-#   8. o - output directory: save classification model, model evaluation results, visualization file etc.
-#   9. p - plot type - heatmap, beeswarm, violin, gradient
+#   5. o - output directory: save classification model, model evaluation results, visualization file etc.
+#   <classifier related>
+#   6. t - method - classifier method (optional); if omitted then need to specify a trained model file 
+#   7. k - classifier parameters- kernel function only for SVM classification method
+#   8. e - validation type (k-fold cross-validation - cv; jackknifing - jk)
+#   9. f - number of folds in cross-validation [default: 10]
 #  10. s - feature selection option - TRUE or FALSE
 #  11. b - feature selection parameter - threshold in RF
-#  12. a - statistical options
+#  <plot>
+#  12. p - plot type - heatmap, beeswarm, violin, gradient
+#  <statistical testing>
+#  13. a - statistical options
 #
 # ----
 # Last update: 10/25/2014
@@ -41,7 +47,7 @@ require(pROC)
 
 # make option list and parse command line
 option_list <- list(
-  make_option(c("-d", "--mode"),type='character',
+  make_option(c("-w", "--mode"),type='character',
               help="Function mode [required]"),
   make_option(c("-i","--OTU_table_fp"), type="character",
               help="BIOM format or classic format of OTU table [requried]."),
@@ -53,6 +59,8 @@ option_list <- list(
               help="Classifier type [required for model training]"),
   make_option(c("-k", "--param"),type='character',default="radial",
               help="Classifier parameter, e.g. SVM kernel type [default: %default]"),
+  make_option(c("-e", "--validType"),type='character',default="cv",
+              help="Validation type (k-fold cross-validation [cv] or Jackknifing [jk]) [default: %default]"),
   make_option(c("-f", "--fold"),type='numeric',default=10,
               help="Number of folds in cross-validation [default: %default]"),
   make_option(c("-o", "--outdir"),type='character',default=".",
@@ -72,7 +80,19 @@ opts <- parse_args(OptionParser(option_list=option_list),
 # create output directory if needed
 if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
 
-######################## Load data #######
+########################    Load data     #######
 table.data <- import.mwas(opts)
+ 
+######################## Mode selection   #######
+# Four available modes:
+#  1. train
+#  2. predict
+#  3. plot
+#  4. statistics
+case.mode <- tolower(opts$mode) # case insensitive
 
+switch(opts$mode, 
+       train = )
+
+######################## 
 
