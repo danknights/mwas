@@ -25,7 +25,7 @@ response <- as.factor(mapping[,"COUNTRY"])
 
 source('~/Documents/R/mwas_git/lib/model.train.r')
 
-best.model <- train.mwas(feat.Data, response, is.feat = FALSE)
+best.model <- train.mwas(feat.Data, response, is.feat = FALSE, method="svm")
 ###################
 opts <- list()
 opts$mode <- "train"
@@ -34,6 +34,7 @@ opts$map_fp <- "test/data/gg-map-adults.txt"
 opts$category <- "COUNTRY"
 opts$outdir <- "example/"
 opts$method <- "svm"
+opts$feat <- FALSE
 
 case.mode <- tolower(opts$mode)
 

@@ -33,44 +33,48 @@
   
   evalobj <- list() # resutls object
   
-  if (class(model) == "randomForest"){
-    
-    evalobj$probabilities <- predict(model, x, type="prob")
-    evalobj$prediction <- predict(model, x, type="response")
-    
-  }else if(class(model)=="svm"){
-    predicted <- predict(model, x, decision.values = TRUE, probablity=TRUE)
-    
-    evalobj$probabilities <- attr(predicted, "probabilities")
-    evalobj$prediction <- attr(predicted, "decision.values")
-    
-  }else if(class(model)=='mlr'){
-    
-    evalobj$prediction <- predict(model, x, type="link") # gives the linear predictors
-    evalobj$probabilities <- predict(model, x, type="response") # gives the fitted probabilities
-    
-  }else if(class(model)=='knn'){
-    predicted <- predict(model, x)
-    evalobj$prediction <- predicted
-    evalobj$probabilities <- attr(predicted, "prob")
-  }
+  model.class <- tolower(class(model))
+  #print(model.class)
+  switch(model.class, 
+         randomforest = {
+           
+           evalobj$probabilities <- predict(model, x, type="prob")
+           evalobj$prediction <- predict(model, x, type="response")
+           
+         }, svm={
+           predicted <- predict(model, x, decision.values = TRUE, probability=TRUE)
+           
+           evalobj$probabilities <- attr(predicted, "probabilities")
+           evalobj$prediction <- predict(model, x)
+           
+         }, mlr={
+           
+           evalobj$prediction <- predict(model, x, type="link") # gives the linear predictors
+           evalobj$probabilities <- predict(model, x, type="response") # gives the fitted probabilities
+           
+         }, knn={
+           predicted <- predict(model, x)
+           evalobj$prediction <- predicted
+           evalobj$probabilities <- attr(predicted, "prob")
+         }, stop('Please choose a classification method!')
+  )
   
   #evalobj$prediction <- predicted
   
   is.binary <- length(levels(evalobj$prediction)) == 2
-  if (!is.null("desired")){ 
+  if (!is.null(desired)){ 
     # if desired response is known, then evaluate the classifier model
     # else output the predicted labels
     
     sample.num <- length(desired)
 
     # confusion matrix
-    c.matrix <- t(sapply(levels(desired), function(level) table(predicted[desired==level])))
+    c.matrix <- t(sapply(levels(desired), function(level) table(evalobj$prediction[desired==level])))
     
-    rocobj <- roc.mwas(x, predicted = predicted, response = desired)
+    rocobj <- roc.mwas(x, predicted = evalobj$prediction, response = as.numeric(desired))
     
     evalobj$confusion <- c.matrix
-    evalobj$error <- sum(as.numeric(predicted) != as.numeric(desired))/sample.num
+    evalobj$error <- sum(as.numeric(evalobj$prediction) != as.numeric(desired))/sample.num
     evalobj$acc <- sum(diag(c.matrix))/sum(c.matrix)  # == 1 - evalobj$error 
     evalobj$auc <- rocobj$auc
     

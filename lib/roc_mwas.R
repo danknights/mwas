@@ -29,9 +29,9 @@
   
   if (length(levels(response)) == 2)  { # binary classification
     rocobj <- roc(response, as.numeric(predicted), percent=TRUE, ci=TRUE, plot=is.plot) 
-    } else # multi-class classification
+    } else {# multi-class classification
     rocobj <- multiclass.roc(response, as.numeric(predicted), percent=TRUE, plot=is.plot)
-  
+    }
   return(rocobj)
 }
 
