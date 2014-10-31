@@ -17,8 +17,8 @@
 # Last update: 10/25/2014
 #
 
-"export.mwas" <- function(trained.model=NULL, trained.model.eval=NULL, model.perform=NULL,
-                          feat.set=NULL,  out.dir=NULL){
+"export.mwas" <- function(trained.model=NULL, model.eval=NULL,
+                          feat.set=NULL,  out.dir=NULL, file.name="model_evaluation"){
   if(!is.null(trained.model)) {
     # save trained model and selected feature vector
     if(!is.null(feat.set)){
@@ -37,15 +37,15 @@
     saveRDS(best.model, file = paste(out.dir,"/trained_model.rds", collapse='', sep='')) 
   }
   
-  if (!is.null(trained.model.eval)){
+  if (!is.null(model.eval)){
     # save predicted labels and/or likelihood probabilities
     # save classification accuracy, if there is acc 
     # save likelihood probabilities, if there is any
     # save AUC, if there is any
     # save MCC, if there is any
     # save Cohen's Kappa, if there is any
-    filename <- sprintf('%smodel_evaluation.xlsx', out.dir)
-    save.xlsx(objects=trained.model.eval, filename=filename)
+    file.name <- sprintf('%s/%s.xlsx', out.dir, file.name)
+    save.xlsx(objects=model.eval, file.name=file.name)
   }  
 
 }
@@ -54,7 +54,7 @@
 # The original code is by Rob Kabacoff 
 # from: http://www.r-bloggers.com/quickly-export-multiple-r-objects-to-an-excel-workbook/
 # 
-save.xlsx <- function (objects, filename){
+save.xlsx <- function (objects, file.name){
   require(xlsx, quietly = TRUE, warn.conflicts=FALSE)
   
   #objects <- list(...)
@@ -64,10 +64,10 @@ save.xlsx <- function (objects, filename){
   nobjects <- length(objects)
   for (i in 1:nobjects) {
     if (i == 1) {
-      write.xlsx(objects[[i]], file, sheetName = objnames[i])
-    }else write.xlsx(objects[[i]], file, sheetName = objnames[i], append = TRUE)
+      write.xlsx(objects[[i]], file.name, sheetName = objnames[i])
+    }else write.xlsx(objects[[i]], file.name, sheetName = objnames[i], append = TRUE)
   }
-  print(paste("Workbook", file, "has", nobjects, "worksheets."))
+  print(paste("Workbook", file.name, "has", nobjects, "worksheets."))
 }
 
 #

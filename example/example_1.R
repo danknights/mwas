@@ -41,3 +41,15 @@ case.mode <- tolower(opts$mode)
 mwas.obj <- import.train.params(opts)
 model.obj <- train.mwas(mwas.obj)
 print("Training a model is finished!")
+
+################# predict
+pred_opts <- list()
+pred_opts$OTU_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
+pred_opts$map_fp <- "test/data/gg-map-adults.txt"
+pred_opts$category <- "COUNTRY"
+pred_opts$outdir <- "example/"
+pred_opts$param_fp <- "example/trained_model.rds"
+
+pred.obj <- import.predict.params(pred_opts)
+results <- model.evaluation.mwas(pred.obj)
+export.mwas(model.eval=results, out.dir=pred_opts$outdir, file.name="prediction")

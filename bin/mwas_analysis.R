@@ -101,7 +101,7 @@ switch(case.mode,
        predict = {
          mwas.obj <- import.predict.params(opts)
          results <- model.evaluation.mwas(mwas.obj)
-         export.mwas(results)
+         export.mwas(model.eval=results, out.dir=opts$outdir, file.name="prediction_results")
        },
        plot = {
          
@@ -111,7 +111,3 @@ switch(case.mode,
        },
        stop("Please specify a function mode: train, predict, plot, statistics.")
        )
-
-######################## 
-########################    Load data     #######
-table.data <- import.mwas(opts)

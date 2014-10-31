@@ -1,4 +1,4 @@
-# training function
+# Training function
 # Contributors: Hu, Dan
 # -----
 # input:
@@ -28,9 +28,9 @@
     valid_type <- data.set$valid_type
     if(is.null(valid_type)) valid_type <- "cv"
     
-    out.dir <- data.set$outdir
+    out.dir <- data.set$out.dir
   }else if(is.null(y)){
-    stop("Response vector is missing for the model training!")
+    stop("Response values are missing for the model training!")
   }else x <- data.set
   
   require(e1071, quietly=TRUE, warn.conflicts=FALSE) 

@@ -31,7 +31,7 @@
   #print(dim(feat.Data))
   #print(response)
   param.list <- list(features=feat.Data, response=response, is.feat=opts$feat, method=opts$method, 
-                     c.params=opts$param, valid_type=opts$validType, outdir=opts$outdir)
+                     c.params=opts$param, valid_type=opts$validType, out.dir=opts$outdir)
                     # c.params is parameter sets for the classifier
   class(param.list) <- "mwas"
   
@@ -61,8 +61,8 @@
   if("feat.set" %in% best.model) feat.Data <- otus[, best.model$feat.set]
   else feat.Data <- otus
   
-  
-  param.list <- list(features=feat.Data, trained.model=best.model$trained.model, response=response)
+  param.list <- list(features=feat.Data, trained.model=best.model$trained.model, response=response, 
+                     out.dir=opts$outdir)
   class(param.list) <- "mwas"
   
   return(param.list)
