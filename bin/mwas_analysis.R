@@ -30,7 +30,7 @@
 # Source files
 #file.sources = list.files(c("C:/folder1", "C:/folder2"),
 #file.sources = list.files("../lib", pattern="*.R$",
-file.sources = list.files(paste(Sys.getenv('MWAS_DIR'),'/lib',sep=''), pattern="*.R$", 
+file.sources = list.files(paste(Sys.getenv('MWAS_DIR'),'/lib',sep=''), pattern="*.R$",
                           full.names=TRUE, ignore.case=TRUE)
 invisible(sapply(file.sources, source, .GlobalEnv))
 
@@ -76,7 +76,7 @@ option_list <- list(
               help="Comma-separated list of taxa to plot [default: plot top --nplot taxa]"),
   make_option(c("-S", "--shorten_taxa"),action='store_true',default=FALSE,
               help="Shorten taxonomy names to lowest defined level. [default: %default]"),
-  make_option(c("-X", "--multiple_axes"),action='store_true',default=FALSE,
+  make_option(c("-M", "--multiple_axes"),action='store_true',default=FALSE,
               help="Show PC1 v PC2, PC1 v PC3, PC2 v PC3 in 3 separate plots. [default: %default]"),
   make_option(c("-N", "--nplot"), type="numeric", default=10,
               help="Number of taxa to plot (in order of decreasing mean). Ignored if --which_taxa exists [default: %default]"),
