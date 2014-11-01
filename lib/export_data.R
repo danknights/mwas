@@ -54,7 +54,7 @@
 # The original code is by Rob Kabacoff 
 # from: http://www.r-bloggers.com/quickly-export-multiple-r-objects-to-an-excel-workbook/
 # 
-save.xlsx <- function (objects, file.name){
+"save.xlsx" <- function (objects, file.name){
   require(xlsx, quietly = TRUE, warn.conflicts=FALSE)
   
   #objects <- list(...)
@@ -68,80 +68,6 @@ save.xlsx <- function (objects, file.name){
     }else write.xlsx(objects[[i]], file.name, sheetName = objnames[i], append = TRUE)
   }
   print(paste("Workbook", file.name, "has", nobjects, "worksheets."))
-}
-
-#
-# save results from SVM prediction object
-# input: 
-#    pred.obj : prediction object
-#        opts : options from keyboard
-# output:
-#   save predicted labels, likelihood. 
-#   If the desired response is given, then also output confusion matrix and AUC, MCC and Kappa
-# 
-"save.results.svm" <- function(test.results, opts){
-  test.resutls
-    
-  filepath <- sprintf('%s/svm_prediction_labels_likelihood.txt', opts$outdir)
-  results.table <- merge(pred.obj$predicted, attr(pred.obj$predicted, "probabilities"))
-  sink(filepath)
-  cat('#SampleIndex\t')
-  write.table(results.table,sep='\t',quote=F)
-  sink(NULL)
-}
-
-#
-# save results from MLR prediction object
-# input: 
-#    pred.obj : prediction object
-#        opts : options from keyboard
-# output:
-#   save predicted labels, likelihood. 
-#   If the desired response is given, then also output confusion matrix and AUC, MCC and Kappa
-# 
-"save.results.rf" <- function(pred.obj, opts){
-  filepath <- sprintf('%s/rf_prediction_labels_likelihood.txt', opts$outdir)
-  results.table <- merge(pred.obj$predicted, attr(pred.obj$predicted, "probabilities"))
-  sink(filepath)
-  cat('#SampleIndex\t')
-  write.table(results.table,sep='\t',quote=F)
-  sink(NULL)
-}
-
-#
-# save results from MLR prediction object
-# input: 
-#    pred.obj : prediction object
-#        opts : options from keyboard
-# output:
-#   save predicted labels, likelihood. 
-#   If the desired response is given, then also output confusion matrix and AUC, MCC and Kappa
-# 
-"save.results.mlr" <- function(pred.obj, opts){
-  filepath <- sprintf('%s/MLR_prediction_labels_likelihood.txt', opts$outdir)
-  results.table <- merge(pred.obj$predicted, attr(pred.obj$predicted, "probabilities"))
-  sink(filepath)
-  cat('#SampleIndex\t')
-  write.table(results.table,sep='\t',quote=F)
-  sink(NULL)
-}
-
-#
-# save results from knn prediction object
-# input: 
-#    pred.obj : prediction object
-#        opts : options from keyboard
-# output:
-#   save predicted labels, likelihood. 
-#   If the desired response is given, then also output confusion matrix and AUC, MCC and Kappa
-# 
-"save.results.knn" <- function(pred.obj, opts){
-  filepath <- sprintf('%s/knn_prediction_labels_likelihood.txt', opts$outdir)
-  results.table <- merge(pred.obj$predicted, attr(pred.obj$predicted, "probabilities"))
-  sink(filepath)
-  cat('#SampleIndex\t')
-  write.table(results.table,sep='\t',quote=F)
-  sink(NULL)
 }
 
 
