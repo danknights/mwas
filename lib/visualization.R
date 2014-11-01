@@ -88,7 +88,7 @@
   }
 }
 
-"plot.gradients" <- function(x, pc, , fp, m=NULL, taxon.names=NULL, category=NULL,
+"plot.gradients" <- function(x, pc,fp, m=NULL, taxon.names=NULL, category=NULL,
                              is.multiple_axes=FALSE){
 
   if(is.multiple_axes){
