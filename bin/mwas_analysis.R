@@ -122,7 +122,7 @@ switch(case_mode,
          #print("Prediction is finished!")
        }, 
        plot = { mwas.obj <- import.plot.params(opts)
-                visualization(mwas.obj)
+                plot(mwas.obj)
          #print("Visualization")
        }, 
        statistics = { mwas.obj <- import.stats.params(opts)
