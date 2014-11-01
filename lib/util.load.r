@@ -13,6 +13,7 @@
 # Last Update: 10/25/2014
 #
 
+# Read both BIOM format and classic OTU table
 "read.qiime.table.mwas" <- function(filepath, as.data.frame=FALSE){
   #f <- file(filepath,'r')
   #if (grep(".biom",f)) {  # it's not a logical value, length is zero. Not working! 
@@ -20,7 +21,7 @@
   
   if (tolower(tail(strsplit(filepath, "[.]")[[1]],n = 1)) == "biom"){ 
     # extract the file extension, if it's a BIOM format, then use BIOM package
-    require(biom, quietly=TRUE, warn.conflicts=FALSE)
+    # require(biom, quietly=TRUE, warn.conflicts=FALSE)
     
     biom_table <- read_biom(filepath)          	   # OTU table - biom format
     datatable <- as.matrix(biom_data(biom_table))  # OTU table - classic format
@@ -28,7 +29,7 @@
   else {
     # otherwise, the file could be a classic OTU table/mapping file etc.
     tryCatch(datatable <- read.qiime.classic.table(filepath), error = function(err) 
-      print("Co. If BIOM format, use .biom extension"))
+      print("If BIOM format, use .biom extension"))
   }
   
   if(!as.data.frame) datatable <- as.matrix(datatable)
@@ -69,7 +70,9 @@
     } else {
         lineages <- NULL
     }
-    otus <- as.matrix(t(otus))
+    
+    otus <- as.matrix(t(otus)) # need to check
+    
     if(include.lineages){
         return(list(otus=otus,lineages=lineages))
     } else {

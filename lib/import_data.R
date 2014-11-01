@@ -18,17 +18,8 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
 
   mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
   
-  if (grep(".biom$",opts$OTU_fp)) {
-    biom_table <- read_biom(opts$OTU_fp)         # OTU table - biom format
-    otus <- t(as.matrix(biom_data(biom_table)))      # OTU table - classic format
-  } else {
-    tryCatch(otus <- read.delim(opts$OTU_fp, sep='\t',
-                                comment='',head=T,row.names=1,check.names=F),error = function(err) 
-                                  print("Couldn't parse OTU table. If BIOM format, use .biom extension"))
-  }
-  
-  feat.Data <- otus # feature data for training
-  
+  feat.Data <- load.qiime.otu.table(opts$OTU_fp)  # OTU table - feature data for training
+
   response <- droplevels(factor(mapping[, opts$category])) # desired labels 
   
   #print(dim(feat.Data))
@@ -50,14 +41,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
     response <- NULL
   }
   
-  if (grep(".biom$",opts$OTU_fp)) {
-    biom_table <- read_biom(opts$OTU_fp)           # OTU table - biom format
-    otus <- t(as.matrix(biom_data(biom_table)))      # OTU table - classic format
-  } else {
-    tryCatch(otus <- read.delim(opts$OTU_fp, sep='\t',
-                                comment='',head=T,row.names=1,check.names=F),error = function(err) 
-                                  print("Couldn't parse OTU table. If BIOM format, use .biom extension"))
-  }
+  otus <- load.qiime.otu.table(opts$OTU_fp)  # OTU table
   
   best.model <- readRDS(opts$param_fp)
   
@@ -77,19 +61,12 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   require('optparse', quietly=TRUE, warn.conflicts=FALSE)
   require('vegan', quietly=TRUE, warn.conflicts=FALSE)
   
-  if (grep(".biom$",opts$OTU_fp)) {
-    biom_table <- read_biom(opts$OTU_fp)         # OTU table - biom format
-    x <- t(as.matrix(biom_data(biom_table)))      # OTU table - classic format
-  } else {
-    tryCatch(x <- read.delim(opts$OTU_fp, sep='\t',
-                                comment='',head=T,row.names=1,check.names=F),error = function(err) 
-                                  print("Couldn't parse OTU table. If BIOM format, use .biom extension"))
-  }
+  otu_table <- load.qiime.otu.table(opts$OTU_fp, include.lineages=TRUE)  # OTU table - feature data for training
+  x <- otu_table$otu
+  kegg <- setNames(otu_table$lineages, rownames(x))
   
-  # LOAD DATA
-  x <- t(read.table(opts$input_fp,sep='\t',head=T,row=1,check=F,quote='"'))
   if(!is.null(opts$map_fp)){
-    m <- read.table(opts$map_fp,sep='\t',head=T,row=1,check=F,comment='',quote='"')
+    m <-  load.qiime.mapping.file(opts$map_fp)         # mapping file
     # check rownames in mapping file matrix
     missing.taxa.samples <- setdiff(rownames(x), rownames(m))
     missing.map.samples <- setdiff(rownames(m), rownames(x))
@@ -98,7 +75,6 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
                    paste(sort(missing.taxa.samples)[1:5],collapse=', '),
                    paste(sort(missing.map.samples)[1:5],collapse=', ')))
     }
-    
     x <- x[intersect(rownames(x),rownames(m)),,drop=F]
     m <- droplevels(m[rownames(x),,drop=F])
   }else m <- NULL
@@ -109,7 +85,6 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
     taxon.names <- taxon.names[1:min(opts$nplot, length(taxon.names))]
   } else {
     taxon.names <- strsplit(opts$which_taxa,',')[[1]]
-    
     if(!all(taxon.names %in% colnames(x))){
       stop(paste('The following taxa are not present in the taxon table:',
                  paste(taxon.names[!(taxon.names %in% colnames(x))],collapse=', '),
@@ -167,11 +142,14 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
                      category_order = opts$category_order,
                      is.sort_by_abundance = opts$sort_by_abundance, 
                      num_taxa = opts$nplot,
-                     alpha = opts$alpha
-                     x_axis_label = opts$x_axis_label
-                     out.dir = opts$outdir
-                     plot.type = opts$plottype
-                     )
+                     alpha = opts$alpha,
+                     x_axis_label = opts$x_axis_label,
+                     out.dir = opts$outdir,
+                     plot.type = opts$plottype,
+                     min_prevalence = opts$min_prevalence, 
+                     transform_type = opts$transform_type,
+                     suppress_relative_abundance_conversion = opts$suppress_relative_abundance_conversion,
+                     kegg = kegg)
   class(param.list) <- "mwas"
   
   return(param.list)
@@ -179,16 +157,9 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
 
 "import.stats.params" <- function(opts){
   
-  if (grep(".biom$",opts$OTU_fp)) {
-    biom_table <- read_biom(opts$OTU_fp)         # OTU table - biom format
-    otus <- t(as.matrix(biom_data(biom_table)))      # OTU table - classic format
-  } else {
-    tryCatch(otus <- read.delim(opts$OTU_fp, sep='\t',
-                                comment='',head=T,row.names=1,check.names=F),error = function(err) 
-                                  print("Couldn't parse OTU table. If BIOM format, use .biom extension"))
-  }
+  # mapping <-  load.qiime.mapping.file(opts$map_fp)         # mapping file
   
-  feat.Data <- otus # feature data for training
+  feat.Data <- load.qiime.otu.table(opts$OTU_fp)  # OTU table 
   
   param.list <- list(features=feat.Data, response=response, is.feat=opts$feat, method=opts$method, 
                      c.params=opts$param, valid_type=opts$validType)

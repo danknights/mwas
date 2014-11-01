@@ -81,21 +81,33 @@ option_list <- list(
   make_option(c("-a", "--statistcs"),type='character',default="linear",
               help="Statistical testing options [default: %default]"),
   # plot parameters
-  make_option(c("-v", "--plot_type"),type='character', default="heatmap",
+  make_option(c("-V", "--plot_type"),type='character', default="heatmap",
               help="Plot type [default: %default]"),
   make_option(c("-D","--distance_fp"), type="character",default=NULL,
               help="QIIME-formatted distance table file (optional). If omitted, the script uses Bray-Curtis distance."),
   make_option(c("-P","--pcoa_fp"), type="character",default=NULL,
               help="QIIME-formatted pcoa table file (optional). If omitted, the script uses Bray-Curtis distance. If included, takes priority over --distance_fp."),
-  make_option(c("-T", "--which_taxa"), type="character", default=NULL,
+  make_option(c("-W", "--which_taxa"), type="character", default=NULL,
               help="Comma-separated list of taxa to plot [default: plot top --nplot taxa]"),
   make_option(c("-S", "--shorten_taxa"),action='store_true',default=FALSE,
               help="Shorten taxonomy names to lowest defined level. [default: %default]"),
   make_option(c("-X", "--multiple_axes"),action='store_true',default=FALSE,
               help="Show PC1 v PC2, PC1 v PC3, PC2 v PC3 in 3 separate plots. [default: %default]"),
   make_option(c("-N", "--nplot"), type="numeric", default=10,
-              help="Number of taxa to plot (in order of decreasing mean). Ignored if --which_taxa exists [default: %default]")
-)
+              help="Number of taxa to plot (in order of decreasing mean). Ignored if --which_taxa exists [default: %default]"),
+  make_option(c("-T", "--transform_type"), type="character", default="norm_asin_sqrt",
+              help="Relative abundance transform type (none, asin_sqrt, or norm_asin_sqrt) [default: norm_asin_sqrt]"),
+  make_option(c("-X", "--x_axis_label"), type="character", default="",
+              help="Label for x axis [default: blank]"),
+  make_option(c("-C", "--suppress_relative_abundance_conversion"),action='store_true',default=FALSE,
+              help="Do not convert input to relative abundances (assumes already relative abundances). [default: %default]"),
+  make_option(c("-R", "--sort_by_abundance"),action='store_true',default=FALSE,
+              help="Sort resulting plots by decreasing relative abundance (instead of significance) [default: %default]"),
+  make_option(c("-A","--alpha"), type='numeric', default=.05,
+              help='Maximum false discovery rate to report. Ignored if --which_taxa exists or --nplot exists [default: %default]'),
+  make_option(c("-O","--category_order"), type="character", default=NULL,
+              help="Optional ordering of categories (comma-separated) [default alphabetical].")
+  )
 
 opts <- parse_args(OptionParser(option_list=option_list),
                    args=commandArgs(trailing=TRUE))

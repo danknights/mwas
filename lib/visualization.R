@@ -11,6 +11,8 @@
 # -------
 # Last update: 10/28/2014
 #
+# Need to fix heatmap plots
+
 "plot.mwas" <- function(data, ...){ 
   
   options <- list(...)
@@ -28,8 +30,8 @@
     num_taxa <- data$num_taxa
     alpha <- data$alpha
     x_axis_label <- data$x_axis_label
-    out.dir <- opts$outdir
-    plot.type <- opts$plottype
+    out.dir <- data$outdir
+    plot.type <- data$plottype
   }
   switch(plot.type,
          diff = {
@@ -41,11 +43,20 @@
                                     category_order=category_order, 
                                     x_axis_label=x_axis_label)
          },
-         gradients ={
-           plot.gradients(x=x, pc=pc, fp=fp, m=m,
+         gradients = {
+           processed.data <- preprocess.mwas(data)
+           plot.gradients(x=processed.data$otu, 
+                          pc=pc, fp=fp, m=m,
                           taxon.names=taxon.names, 
                           category=category,
                           is.multiple_axes=is.multiple_axes)
+         },
+         heatmap = { # need to fix
+           heatmap.mwas(x, map, diff.features, cluster.var=c("Sex", "Treatment"), 
+                        color.var=names(color.list), color.list, 
+                        kegg_pathways=kegg_pathways, 
+                        heatmap.title=heatmap.title, 
+                        outputfile=fp)
          },
          stop("Please assign the correct plot type!")
     )
@@ -57,8 +68,8 @@
   cols[1:2] <- cols[2:1]
   cols <- sprintf('%sbb',cols)
   if (!length(hit.ix)) hit.ix = seq(1,dim(x)[2])
-  print(x[,1])
-  print(env)
+  #print(x[,1])
+  #print(env)
   for(i in hit.ix){
     taxon <- x[,i]
     taxon.name <- colnames(x)[i]

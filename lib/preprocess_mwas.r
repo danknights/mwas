@@ -13,17 +13,39 @@
 #
 
 # temporary place holder for use by PJ until the real preprocess function is written
-"preprocess.mwas" <- function(otu, minOTUInSamples=.001, filter.kegg=FALSE)
+"preprocess.mwas" <- function(data, map=NULL, min_prevalence=NULL, transform_type=NULL, 
+                              minOTUInSamples=.001, filter.kegg=FALSE)
 {
-	#source("util.load.r")
-	
-	otu <- (remove.nonoverlapping.samples(map = map, otus = otus))$otus
-
-	otu <- sweep(otu, 1, rowSums(otu), '/')
-	otu <- otu[, colMeans(otu) > minOTUInSamples, drop=FALSE]
-	otu <- asin(sqrt(otu))
-	ret <- collapse.by.correlation(otu, .95)
-	otu <- otu[, ret$reps]
+  if (class(data)=="mwas"){
+    otu <- data$otu
+    map <- data$map
+    
+    min_prevalence <- data$min_prevalence
+    transform_type <- data$transform_type
+    
+  }else otu <- data
+  
+  otu <- (remove.nonoverlapping.samples(map = map, otus = otus))$otus
+  
+  # remove rare features (do by minimum prevalence or average prevalence)
+  # print(dim(otu))
+  otu <- sweep(otu, 1, rowSums(otu), '/')
+  if (dim(otu)[2] > 1&&!is.null(min_prevalence)) 
+    otu <- otu[,colMeans(otu > 0) >= min_prevalence, drop = FALSE]
+  
+  # data transform
+  if(!is.null(transform_type)){
+    switch(transform_type,
+           asin_sqrt = {x <- asin(sqrt(x))
+                        }, 
+           norm_asin_sqrt={x <- asin(sqrt(x))/asin(sqrt(1))
+                           },
+           stop(paste('Unrecognized data transform type:', transform_type))
+    )
+  }
+  
+	# ret <- collapse.by.correlation(otu, .95)
+	# otu <- otu[, ret$reps]
 	
 	if(filter.kegg)
 	{
@@ -35,38 +57,9 @@
 		next.kegg <- get.next.kegg(kegg)
 		names(next.kegg) <- names(kegg)
 		kegg_pathways<-next.kegg
-	}
+	}	
   
-  ##############################
-	# remove rare features (do by minimum prevalence or average prevalence)
-	print(dim(x))
-	if (dim(x)[2] > 1) x <- x[,colMeans(x > 0) >= opts$min_prevalence, drop = FALSE]
-	
-	# data transform
-	if(opts$transform_type == 'asin-sqrt'){
-	  x <- asin(sqrt(x))
-	} else if(opts$transform_type == 'norm-asin-sqrt'){
-	  x <- asin(sqrt(x))/asin(sqrt(1))
-	} else if(opts$transform_type != 'none'){
-	  stop(paste('Unrecognized data transform type:',opts$transform_type))
-	}
-	
-	# check that taxon.names are in taxon table
-	if(is.null(opts$which_taxa)){
-	  taxon.names <- colnames(x)[rev(order(colMeans(x)))]
-	  taxon.names <- taxon.names[1:min(opts$nplot, length(taxon.names))]
-	} else {
-	  taxon.names <- strsplit(opts$which_taxa,',')[[1]]
-	  
-	  if(!all(taxon.names %in% colnames(x))){
-	    stop(paste('The following taxa are not present in the taxon table:',
-	               paste(taxon.names[!(taxon.names %in% colnames(x))],collapse=', '),
-	               '\n'))
-	  }
-	}
-	if(!is.element(opts$column,colnames(m))) stop(paste(opts$column,'not in mapping file.'))
-	
-	return(otu)
+	return(list(otu=otu, kegg_pathways=kegg_pathways))
 }
 
 # This function filters the kegg descriptions by a vector of unknown-level kegg pathways

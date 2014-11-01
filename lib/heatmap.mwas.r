@@ -109,11 +109,11 @@ heatmap.mwas <- function(otu, map, diff.features, cluster.var, color.var, color.
 # OPTIONAL: distance matrix
 {
 	source("heatmap.3.r")
-	source("util.r")
+    #source("util.r")
 	
-	require(vegan)
-	require(RColorBrewer)
-	require(gplots) 
+    #require(vegan)
+    #require(RColorBrewer)
+    #require(gplots)
 	
 	use.kegg <- as.logical(length(kegg_pathways))
 	
