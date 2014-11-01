@@ -27,26 +27,11 @@
 # Last update: 10/25/2014
 #
 
-#source("../lib/load_library.r")
-#source("Documents/FMT_stability/dist_median.r")
-#source('~/Documents/FMT_stability/hmp_fmt/lib/health_index_methods.R')
-
-# convert arguments to vector
-#myPackages <- c("biom", "optparse", "e1071", "kernlab","randomForest", "glmnet", "pROC", "ROCR")
-#load.library(myPackages)
-#require(biom)
-#require(optparse) 
-#require(e1071) 
-#require(kernlab)
-#require(randomForest)
-#require(glmnet)
-#require(pROC)
-#require(ROCR)
-
 # Source files
-#file.sources = list.files(c("C:/folder1", "C:/folder2"), 
+#file.sources = list.files(c("C:/folder1", "C:/folder2"),
 
-file.sources = list.files("lib", pattern="*.R$", full.names=TRUE, ignore.case=TRUE)
+file.sources = list.files(paste(Sys.getenv('MWAS_DIR'),'/lib',sep=''), pattern="*.R$", 
+                          full.names=TRUE, ignore.case=TRUE)
 invisible(sapply(file.sources, source, .GlobalEnv))
 
 ####################### Parse INPUT options #####
