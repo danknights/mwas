@@ -22,6 +22,10 @@
 # --- 
 # Last Update: 10/25/2014
 #
+require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
+require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
+require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
+require(pROC, quietly=TRUE, warn.conflicts=FALSE)
 
 "model.evaluation.mwas" <- function(data.set, model, desired){
   

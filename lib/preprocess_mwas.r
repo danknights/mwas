@@ -13,10 +13,10 @@
 #
 
 # temporary place holder for use by PJ until the real preprocess function is written
-"preprocess" <- function(otu, minOTUInSamples=.001, filter.kegg=FALSE)
+"preprocess.mwas" <- function(otu, minOTUInSamples=.001, filter.kegg=FALSE)
 {
-	source("util.load.r")
-		
+	#source("util.load.r")
+	
 	otu <- (remove.nonoverlapping.samples(map = map, otus = otus))$otus
 
 	otu <- sweep(otu, 1, rowSums(otu), '/')
@@ -36,7 +36,36 @@
 		names(next.kegg) <- names(kegg)
 		kegg_pathways<-next.kegg
 	}
-
+  
+  ##############################
+	# remove rare features (do by minimum prevalence or average prevalence)
+	print(dim(x))
+	if (dim(x)[2] > 1) x <- x[,colMeans(x > 0) >= opts$min_prevalence, drop = FALSE]
+	
+	# data transform
+	if(opts$transform_type == 'asin-sqrt'){
+	  x <- asin(sqrt(x))
+	} else if(opts$transform_type == 'norm-asin-sqrt'){
+	  x <- asin(sqrt(x))/asin(sqrt(1))
+	} else if(opts$transform_type != 'none'){
+	  stop(paste('Unrecognized data transform type:',opts$transform_type))
+	}
+	
+	# check that taxon.names are in taxon table
+	if(is.null(opts$which_taxa)){
+	  taxon.names <- colnames(x)[rev(order(colMeans(x)))]
+	  taxon.names <- taxon.names[1:min(opts$nplot, length(taxon.names))]
+	} else {
+	  taxon.names <- strsplit(opts$which_taxa,',')[[1]]
+	  
+	  if(!all(taxon.names %in% colnames(x))){
+	    stop(paste('The following taxa are not present in the taxon table:',
+	               paste(taxon.names[!(taxon.names %in% colnames(x))],collapse=', '),
+	               '\n'))
+	  }
+	}
+	if(!is.element(opts$column,colnames(m))) stop(paste(opts$column,'not in mapping file.'))
+	
 	return(otu)
 }
 

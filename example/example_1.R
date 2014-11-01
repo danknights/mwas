@@ -12,7 +12,7 @@ opts$map_fp <- "test/data/gg-map-adults.txt"
 opts$category <- "COUNTRY"
 opts$outdir <- "example/"
 
-###################
+################### train
 mapping <- load.qiime.mapping.file('test/data/gg-map-adults.txt')
 dim(mapping)
 #x <- read.table('test/data/GG_100nt_even10k-adults-biom',sep='\t',head=T,row=1,check=F)
@@ -26,7 +26,7 @@ response <- as.factor(mapping[,"COUNTRY"])
 source('~/Documents/R/mwas_git/lib/model.train.r')
 
 best.model <- train.mwas(feat.Data, response, is.feat = FALSE, method="svm")
-###################
+################### train
 opts <- list()
 opts$mode <- "train"
 opts$OTU_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
@@ -53,3 +53,19 @@ pred_opts$param_fp <- "example/trained_model.rds"
 pred.obj <- import.predict.params(pred_opts)
 results <- model.evaluation.mwas(pred.obj)
 export.mwas(model.eval=results, out.dir=pred_opts$outdir, file.name="prediction")
+
+################# feature selection - RF
+opts <- list()
+opts$mode <- "train"
+opts$OTU_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
+opts$map_fp <- "test/data/gg-map-adults.txt"
+opts$category <- "COUNTRY"
+opts$outdir <- "example/"
+opts$method <- "svm"
+opts$feat <- TRUE
+
+case.mode <- tolower(opts$mode)
+
+mwas.obj <- import.train.params(opts)
+model.obj <- train.mwas(mwas.obj)
+print("Training a model is finished!")

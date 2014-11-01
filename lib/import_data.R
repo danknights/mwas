@@ -12,7 +12,10 @@
 #  Last update: 10/27/2014
 #
 
+require(biom, quietly=TRUE, warn.conflicts=FALSE)
+
 "import.train.params" <- function(opts){
+
   mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
   
   if (grep(".biom$",opts$OTU_fp)) {
@@ -32,7 +35,7 @@
   #print(response)
   param.list <- list(features=feat.Data, response=response, is.feat=opts$feat, method=opts$method, 
                      c.params=opts$param, valid_type=opts$validType, out.dir=opts$outdir)
-                    # c.params is parameter sets for the classifier
+  # c.params is parameter sets for the classifier
   class(param.list) <- "mwas"
   
   return(param.list)
@@ -46,7 +49,7 @@
     mapping <- NULL
     response <- NULL
   }
- 
+  
   if (grep(".biom$",opts$OTU_fp)) {
     biom_table <- read_biom(opts$OTU_fp)           # OTU table - biom format
     otus <- t(as.matrix(biom_data(biom_table)))      # OTU table - classic format
@@ -69,26 +72,106 @@
 }
 
 "import.plot.params" <- function(opts){
-  mapping <-  load.qiime.mapping.file(opts$map_fp)         # mapping file
-  dist.matrix <- load.qiime.distance.matrix(opts$param_fp) # distance matrix
+  
+  require('RColorBrewer', quietly=TRUE, warn.conflicts=FALSE)
+  require('optparse', quietly=TRUE, warn.conflicts=FALSE)
+  require('vegan', quietly=TRUE, warn.conflicts=FALSE)
   
   if (grep(".biom$",opts$OTU_fp)) {
     biom_table <- read_biom(opts$OTU_fp)         # OTU table - biom format
-    otus <- t(as.matrix(biom_data(biom_table)))      # OTU table - classic format
+    x <- t(as.matrix(biom_data(biom_table)))      # OTU table - classic format
   } else {
-    tryCatch(otus <- read.delim(opts$OTU_fp, sep='\t',
+    tryCatch(x <- read.delim(opts$OTU_fp, sep='\t',
                                 comment='',head=T,row.names=1,check.names=F),error = function(err) 
                                   print("Couldn't parse OTU table. If BIOM format, use .biom extension"))
   }
   
-  feat.Data <- otus # feature data for training
+  # LOAD DATA
+  x <- t(read.table(opts$input_fp,sep='\t',head=T,row=1,check=F,quote='"'))
+  if(!is.null(opts$map_fp)){
+    m <- read.table(opts$map_fp,sep='\t',head=T,row=1,check=F,comment='',quote='"')
+    # check rownames in mapping file matrix
+    missing.taxa.samples <- setdiff(rownames(x), rownames(m))
+    missing.map.samples <- setdiff(rownames(m), rownames(x))
+    if(length(missing.taxa.samples) > 0){
+      stop(sprintf('\n\nError: one or more sample names from taxonomy table (%s, ...) not present in metadata table (%s, ...).',
+                   paste(sort(missing.taxa.samples)[1:5],collapse=', '),
+                   paste(sort(missing.map.samples)[1:5],collapse=', ')))
+    }
+    
+    x <- x[intersect(rownames(x),rownames(m)),,drop=F]
+    m <- droplevels(m[rownames(x),,drop=F])
+  }else m <- NULL
   
-  response <- droplevels(factor(mapping[, opts$category])) # desired labels 
+  # check that taxon.names are in taxon table
+  if(is.null(opts$which_taxa)){
+    taxon.names <- colnames(x)[rev(order(colMeans(x)))]
+    taxon.names <- taxon.names[1:min(opts$nplot, length(taxon.names))]
+  } else {
+    taxon.names <- strsplit(opts$which_taxa,',')[[1]]
+    
+    if(!all(taxon.names %in% colnames(x))){
+      stop(paste('The following taxa are not present in the taxon table:',
+                 paste(taxon.names[!(taxon.names %in% colnames(x))],collapse=', '),
+                 '\n'))
+    }
+  }
   
-  #print(dim(feat.Data))
-  #print(response)
-  param.list <- list(features=feat.Data, response=response, dist.matrix=opts$feat, method=opts$method, 
-                     c.params=opts$param, valid_type=opts$validType)
+  if(opts$shorten_taxa){
+    colnames(x) <- shorten.taxonomy(colnames(x))
+    taxon.names <- shorten.taxonomy(taxon.names)
+  }
+  
+  if(is.null(opts$pcoa_fp)){
+    if(is.null(opts$distance_fp)){
+      d <- vegdist(x)
+    } else {
+      d <- read.table(opts$distance_fp,sep='\t',head=T,row=1,check=F)
+      # check rownames in distance matrix
+      missing.taxa.samples <- union(setdiff(rownames(x), rownames(d)), setdiff(rownames(x), colnames(d)))
+      missing.distance.samples <- union(setdiff(rownames(d), rownames(x)), setdiff(colnames(d), rownames(x)))
+      if(length(missing.taxa.samples) > 0){
+        stop(sprintf('\n\nError: one or more sample names from taxonomy table (%s, ...) not present in distance table (%s, ...).',
+                     paste(sort(missing.taxa.samples)[1:5],collapse=', '),
+                     paste(sort(missing.distance.samples)[1:5],collapse=', ')))
+      }
+      d <- d[rownames(x),rownames(x)]
+      d <- as.dist(d)
+    }
+    
+    pc <- cmdscale(d,k=5)
+  } else {
+    pc <- read.table(opts$pcoa_fp,sep='\t',row=1,head=T)
+    if(rownames(pc)[nrow(pc)] == '% variation explained'){
+      pc <- pc[1:(nrow(pc)-2),1:min(5,ncol(pc))]
+    }
+    if(mean(rownames(x) %in% rownames(pc)) < 1){
+      stop('Taxon table row names do not match PC file row names')
+    }
+    pc <- pc[rownames(x),]
+  }
+  
+  if(is.null(opts$category)) {
+    fp <- sprintf('%s/gradients.pdf',opts$outdir)
+    is.gradient = FALSE
+  } else {
+    if(!is.element(opts$column,colnames(m))) stop(paste(opts$column,'not in mapping file.'))
+    fp <- sprintf('%s/pcoa.pdf',opts$outdir)
+    is.gradient = TRUE
+  }
+  
+  param.list <- list(x=x, pc=pc, fp=fp, m=m, 
+                     taxon.names = taxon.names, 
+                     category = opts$category,
+                     is.multiple_axes = opts$multiple_axes,
+                     category_order = opts$category_order,
+                     is.sort_by_abundance = opts$sort_by_abundance, 
+                     num_taxa = opts$nplot,
+                     alpha = opts$alpha
+                     x_axis_label = opts$x_axis_label
+                     out.dir = opts$outdir
+                     plot.type = opts$plottype
+                     )
   class(param.list) <- "mwas"
   
   return(param.list)

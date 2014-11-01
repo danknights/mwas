@@ -16,7 +16,7 @@
 # ------
 #  Last update: 10/28/2014
 
-"differentiation.test" <- function (x,category, alpha=0.05, parametric=TRUE,
+"differentiation.test" <- function (x, category, alpha=0.05, parametric=TRUE,
 		include.subset=FALSE){
 	category <- as.factor(as.character(category))
 	if(length(unique(category)) < 2) stop('Category only has one level')

@@ -27,7 +27,6 @@
 # Last update: 10/25/2014
 #
 
-source(paste(Sys.getenv('MWAS_DIR'),'/lib/I-methods.r',sep='')) # for OTUs, mapping files operation
 #source("../lib/load_library.r")
 #source("Documents/FMT_stability/dist_median.r")
 #source('~/Documents/FMT_stability/hmp_fmt/lib/health_index_methods.R')
@@ -35,14 +34,20 @@ source(paste(Sys.getenv('MWAS_DIR'),'/lib/I-methods.r',sep='')) # for OTUs, mapp
 # convert arguments to vector
 #myPackages <- c("biom", "optparse", "e1071", "kernlab","randomForest", "glmnet", "pROC", "ROCR")
 #load.library(myPackages)
-require(biom)
-require(optparse) 
-require(e1071) 
-require(kernlab)
-require(randomForest)
-require(glmnet)
-require(pROC)
+#require(biom)
+#require(optparse) 
+#require(e1071) 
+#require(kernlab)
+#require(randomForest)
+#require(glmnet)
+#require(pROC)
 #require(ROCR)
+
+# Source files
+#file.sources = list.files(c("C:/folder1", "C:/folder2"), 
+
+file.sources = list.files("lib", pattern="*.R$", full.names=TRUE, ignore.case=TRUE)
+invisible(sapply(file.sources, source, .GlobalEnv))
 
 ####################### Parse INPUT options #####
 
@@ -56,27 +61,42 @@ option_list <- list(
               help="Mapping file  [required]."),
   make_option(c("-c","--category"), type="character",
               help="Column name in the mapping file [requried]"),
+  make_option(c("-o", "--outdir"),type='character',default=".",
+              help="Output directory [default: %default]"),
+  # classification parameters
   make_option(c("-t", "--method"),type='character',     #default="RF",
               help="Classifier type [required for model training]"),
   make_option(c("-k", "--param_fp"),type='character',default="radial",
               help="For training: classifier parameter, e.g. SVM kernel type [default: %default]; 
-              For predicting: the directory of the trained model.
-              For plotting: distance matrix file."),
+              For predicting: the directory of the trained model."),
   make_option(c("-e", "--validType"),type='character',default="cv",
               help="Validation type (k-fold cross-validation [cv] or Jackknifing [jk]) [default: %default]"),
   make_option(c("-f", "--fold"),type='numeric',default=10,
               help="Number of folds in cross-validation [default: %default]"),
-  make_option(c("-o", "--outdir"),type='character',default=".",
-              help="Output directory [default: %default]")
-  make_option(c("-v", "--plot_type"),type='character', default="heatmap",
-              help="Plot type [default: %default]")
-  make_option(c("-s", "--feat"),action="store_true", default=TRUE
-              help="Flag for feature selection [default: %default]")
-  make_option(c("-b", "--featparam"),type='numeric',default=0,
-              help="Parameter for feature selection [default: %default]")
+  make_option(c("-s", "--feat"),action="store_true", default=TRUE,
+              help="Flag for feature selection [default: %default]"),
+  make_option(c("-b", "--feat_param"),type='numeric',default=0,
+              help="Parameter for feature selection [default: %default]"),
+  # Statistical test parameters
   make_option(c("-a", "--statistcs"),type='character',default="linear",
-              help="Statistical testing options [default: %default]")
+              help="Statistical testing options [default: %default]"),
+  # plot parameters
+  make_option(c("-v", "--plot_type"),type='character', default="heatmap",
+              help="Plot type [default: %default]"),
+  make_option(c("-D","--distance_fp"), type="character",default=NULL,
+              help="QIIME-formatted distance table file (optional). If omitted, the script uses Bray-Curtis distance."),
+  make_option(c("-P","--pcoa_fp"), type="character",default=NULL,
+              help="QIIME-formatted pcoa table file (optional). If omitted, the script uses Bray-Curtis distance. If included, takes priority over --distance_fp."),
+  make_option(c("-T", "--which_taxa"), type="character", default=NULL,
+              help="Comma-separated list of taxa to plot [default: plot top --nplot taxa]"),
+  make_option(c("-S", "--shorten_taxa"),action='store_true',default=FALSE,
+              help="Shorten taxonomy names to lowest defined level. [default: %default]"),
+  make_option(c("-X", "--multiple_axes"),action='store_true',default=FALSE,
+              help="Show PC1 v PC2, PC1 v PC3, PC2 v PC3 in 3 separate plots. [default: %default]"),
+  make_option(c("-N", "--nplot"), type="numeric", default=10,
+              help="Number of taxa to plot (in order of decreasing mean). Ignored if --which_taxa exists [default: %default]")
 )
+
 opts <- parse_args(OptionParser(option_list=option_list),
                    args=commandArgs(trailing=TRUE))
 
@@ -89,25 +109,25 @@ if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE
 #  2. predict
 #  3. plot
 #  4. statistics
-case.mode <- tolower(opts$mode) # case insensitive
+case_mode <- tolower(opts$mode) # case insensitive
 
-switch(case.mode, 
-       train = {
-         ########################    Load data     #######
-         mwas.obj <- import.train.params(opts, type="train")
-         train.mwas(mwas.obj)
-         print("Training a model is finished!")
+switch(case_mode, 
+       train = { mwas.obj <- import.train.params(opts)
+                 train.mwas(mwas.obj)
+                 print("Training is finished!")
        }, 
-       predict = {
-         mwas.obj <- import.predict.params(opts)
-         results <- model.evaluation.mwas(mwas.obj)
-         export.mwas(model.eval=results, out.dir=opts$outdir, file.name="prediction_results")
-       },
-       plot = {
-         
-       },
-       statistics = {
-         
-       },
+       predict = { mwas.obj <- import.predict.params(opts)
+                   results <- model.evaluation.mwas(mwas.obj)
+                   export.mwas(model.eval=results, out.dir=opts$outdir, file.name="prediction_results")
+         #print("Prediction is finished!")
+       }, 
+       plot = { mwas.obj <- import.plot.params(opts)
+                visualization(mwas.obj)
+         #print("Visualization")
+       }, 
+       statistics = { mwas.obj <- import.stats.params(opts)
+                      model.statistical.test.mwas(mwas.obj)
+         #print("statistics")
+       }, 
        stop("Please specify a function mode: train, predict, plot, statistics.")
-       )
+)

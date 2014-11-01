@@ -13,6 +13,11 @@
 # ------
 #  Last update: 10/25/2014
 #
+require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
+require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
+require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
+require(pROC, quietly=TRUE, warn.conflicts=FALSE)
+
 "train.mwas" <- function(data.set, y=NULL, is.feat = TRUE, 
                          method=c("RF","SVM", "knn", "MLR")[1], valid_type = c("cv", "jk")[1], out.dir=NULL){
   
@@ -32,9 +37,6 @@
   }else if(is.null(y)){
     stop("Response values are missing for the model training!")
   }else x <- data.set
-  
-  require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
-  require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
   
   if (is.feat){
     feat.set <- feature.scores.mwas(x, y, selection_threshold = 0)
