@@ -13,19 +13,19 @@
 #
 
 # temporary place holder for use by PJ until the real preprocess function is written
-"preprocess.mwas" <- function(data, map=NULL, min_prevalence=NULL, transform_type=NULL, 
+"preprocess.mwas" <- function(input.data, map=NULL, min_prevalence=NULL, transform_type=NULL, 
                               minOTUInSamples=.001, filter.kegg=FALSE)
 {
-  if (class(data)=="mwas"){
-    otu <- data$otu
-    map <- data$map
+  if (class(input.data)=="mwas"){
+    otu <- input.data$otu
+    map <- input.data$map
     
-    min_prevalence <- data$min_prevalence
-    transform_type <- data$transform_type
+    min_prevalence <- input.data$min_prevalence
+    transform_type <- input.data$transform_type
     
-  }else otu <- data
+  }else otu <- input.data
   
-  otu <- (remove.nonoverlapping.samples(map = map, otus = otus))$otus
+  otu <- (remove.nonoverlapping.samples(map = map, otus = otu))$otus
   
   # remove rare features (do by minimum prevalence or average prevalence)
   # print(dim(otu))
@@ -36,9 +36,9 @@
   # data transform
   if(!is.null(transform_type)){
     switch(transform_type,
-           asin_sqrt = {x <- asin(sqrt(x))
+           asin_sqrt = {otu <- asin(sqrt(otu))
                         }, 
-           norm_asin_sqrt={x <- asin(sqrt(x))/asin(sqrt(1))
+           norm_asin_sqrt={otu <- asin(sqrt(otu))/asin(sqrt(1))
                            },
            stop(paste('Unrecognized data transform type:', transform_type))
     )
@@ -57,7 +57,7 @@
 		next.kegg <- get.next.kegg(kegg)
 		names(next.kegg) <- names(kegg)
 		kegg_pathways<-next.kegg
-	}	
+	}	else kegg_pathways <- NULL
   
 	return(list(otu=otu, kegg_pathways=kegg_pathways))
 }

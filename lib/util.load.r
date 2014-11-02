@@ -71,7 +71,7 @@
         lineages <- NULL
     }
     
-    #otus <- as.matrix(t(otus)) # need to check
+    otus <- as.matrix(t(otus)) # need to check
     
     if(include.lineages){
         return(list(otus=otus,lineages=lineages))

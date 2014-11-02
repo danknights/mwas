@@ -79,13 +79,20 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
     m <- droplevels(m[rownames(x),,drop=F])
   }else m <- NULL
   
+  #print(dim(x))
+  #otus <- x
+  processed.obj <- preprocess.mwas(input.data=x, map=m, min_prevalence=opts$min_prevalence, transform_type=opts$transform_type)
+  x <- processed.obj$otu
+  kegg_pathways <- processed.obj$kegg_pathways
+  
   # check that taxon.names are in taxon table
   if(is.null(opts$which_taxa)){
     taxon.names <- colnames(x)[rev(order(colMeans(x)))]
     taxon.names <- taxon.names[1:min(opts$nplot, length(taxon.names))]
   } else {
     taxon.names <- strsplit(opts$which_taxa,',')[[1]]
-    if(!all(taxon.names %in% colnames(x))){
+    #if(!all(taxon.names %in% colnames(x))){
+    if(!all(sapply(taxon.names, function(xx) ifelse(length(grep(xx, colnames(x), value=F))>0, T, F)))){
       stop(paste('The following taxa are not present in the taxon table:',
                  paste(taxon.names[!(taxon.names %in% colnames(x))],collapse=', '),
                  '\n'))
@@ -136,6 +143,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   }
   
   param.list <- list(x=x, pc=pc, fp=fp, m=m, 
+                     kegg_pathways = kegg_pathways,
                      taxon.names = taxon.names, 
                      category = opts$category,
                      is.multiple_axes = opts$multiple_axes,
