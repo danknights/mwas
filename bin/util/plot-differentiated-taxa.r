@@ -7,10 +7,10 @@
 # run with Rscript make-beeswarm-plots.r -i taxontable -w 'Bacteroides,Prevotella' -o outdir
 
 # REQUIRED GLOBAL VARIABLES: PLEASE EDIT
-source(paste(Sys.getenv('MWAS_DIR'),'/lib/gradients.r',sep=''))
-source(paste(Sys.getenv('MWAS_DIR'),'/lib/util.r',sep=''))
-source(paste(Sys.getenv('MWAS_DIR'),'/lib/stats.r',sep=''))
-source(paste(Sys.getenv('MWAS_DIR'),'/lib/visualization.R',sep=''))
+#source(paste(Sys.getenv('MWAS_DIR'),'/lib/gradients.r',sep=''))
+#source(paste(Sys.getenv('MWAS_DIR'),'/lib/util.r',sep=''))
+#source(paste(Sys.getenv('MWAS_DIR'),'/lib/stats.r',sep=''))
+#source(paste(Sys.getenv('MWAS_DIR'),'/lib/visualization.R',sep=''))
 
 require('RColorBrewer')
 require('optparse')

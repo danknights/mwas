@@ -62,8 +62,8 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   require('vegan', quietly=TRUE, warn.conflicts=FALSE)
   
   otu_table <- load.qiime.otu.table(opts$OTU_fp, include.lineages=TRUE)  # OTU table - feature data for training
-  x <- otu_table$otu
-  kegg <- setNames(otu_table$lineages, rownames(x))
+  x <- otu_table$otus
+  if (!is.null(otu_table$lineages)) kegg <- setNames(otu_table$lineages, rownames(x))
   
   if(!is.null(opts$map_fp)){
     m <-  load.qiime.mapping.file(opts$map_fp)         # mapping file

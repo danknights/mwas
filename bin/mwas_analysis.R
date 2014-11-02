@@ -29,8 +29,8 @@
 
 # Source files
 #file.sources = list.files(c("C:/folder1", "C:/folder2"),
-#file.sources = list.files("../lib", pattern="*.R$",
-file.sources = list.files(paste(Sys.getenv('MWAS_DIR'),'/lib',sep=''), pattern="*.R$",
+file.sources = list.files("lib", pattern="*.R$",
+#file.sources = list.files(paste(Sys.getenv('MWAS_DIR'),'/lib',sep=''), pattern="*.R$",
                           full.names=TRUE, ignore.case=TRUE)
 invisible(sapply(file.sources, source, .GlobalEnv))
 
@@ -58,7 +58,7 @@ option_list <- list(
               help="Validation type (k-fold cross-validation [cv] or Jackknifing [jk]) [default: %default]"),
   make_option(c("-f", "--fold"),type='numeric',default=10,
               help="Number of folds in cross-validation [default: %default]"),
-  make_option(c("-s", "--feat"),action="store_true", default=TRUE,
+  make_option(c("-s", "--feat"),action="store_true", default=FALSE,
               help="Flag for feature selection [default: %default]"),
   make_option(c("-b", "--feat_param"),type='numeric',default=0,
               help="Parameter for feature selection [default: %default]"),

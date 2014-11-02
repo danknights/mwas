@@ -17,8 +17,8 @@
 # Last update: 10/25/2014
 #
 
-"export.mwas" <- function(trained.model=NULL, model.eval=NULL,
-                          feat.set=NULL,  out.dir=NULL, file.name="model_evaluation"){
+"export.mwas" <- function(trained.model=NULL, model.eval=NULL, trained.model.perform=NULL,
+                          feat.set=NULL, out.dir=NULL, file.name="predcition_results"){
   if(!is.null(trained.model)) {
     # save trained model and selected feature vector
     if(!is.null(feat.set)){
@@ -48,6 +48,12 @@
     save.xlsx(objects=model.eval, file.name=file.name)
   }  
 
+  if (!is.null(trained.model.perform)){
+    # save trained model evaluation
+    file.name <- sprintf('%s/trained_model_performance.xlsx', out.dir)
+    save.xlsx(objects=trained.model.perform, file.name=file.name)
+  }  
+   
 }
 
 # save data tabel in a Excel workbook.

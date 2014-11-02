@@ -15,7 +15,7 @@
 # Last update: 10/25/2014
 #
 
-"feature.scores.rf.mwas" <- function(x, y, selection_thres = 1){
+"feature.scores.mwas" <- function(x, y, selection_thres = 1){
   
   require(caret, quietly=TRUE, warn.conflicts=FALSE)
   require(randomForest, quietly=TRUE, warn.conflicts=FALSE)

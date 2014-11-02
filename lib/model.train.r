@@ -13,9 +13,7 @@
 # ------
 #  Last update: 10/25/2014
 #
-require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
-require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
-require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
+
 require(pROC, quietly=TRUE, warn.conflicts=FALSE)
 
 "train.mwas" <- function(data.set, y=NULL, is.feat = TRUE, 
@@ -136,7 +134,8 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
   # if (savefile) save(best.model, file = paste(opts$outdir,"/trained.model", collapse='', sep=''))
   # Saving file is integrated into export.mwas.R
   
-  export.mwas(trained.model=best.model, trained.model.eval=best.model.eval, model.perform=model.perform,  out.dir=out.dir)
+  export.mwas(trained.model=best.model, model.eval=best.model.eval, 
+              trained.model.perform=model.perform,  out.dir=out.dir)
   
   # class(best.model) <- "mwas"
   return(best.model)
@@ -154,11 +153,10 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
 "cross.validation.mwas" <- function(x, y, nfolds=10, classifier = c("RF","SVM", "knn", "MLR")[1], ...){
   
   classifier <- tolower(classifier) # case insensitive for options
-  switch(classifier, 
-         rf = {
-           best.model <- tune.randomForest(x, y, 
-                                           tunecontrol = tune.control(random=TRUE, sampling="cross", 
-                                                                      cross = nfolds))
+  switch(classifier, rf = {
+           require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
+           
+           best.model <- tune.randomForest(x, y, tunecontrol = tune.control(random=TRUE, sampling="cross", cross = nfolds))
            # $best.performance     the error rate for the best model
            # $train.ind            list of index vectors used for splits into training and validation sets
            # $performances         error and dispersion; a data frame with all parametere combinations along with the corresponding performance results
@@ -178,6 +176,8 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
            #   -- $y               the desired labels for the training set
            #   -- $inbag, $test
          }, svm={
+           require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
+
            best.model <- tune.svm(x, y, tunecontrol = tune.control(random=TRUE, sampling="cross", cross = nfolds))
            # $best.model         the model trained on the complete training data using the best parameter combination.
            # $best.parameters    a 1 x k data frame, k number of parameters
@@ -185,6 +185,8 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
            # $performances       a data frame with all parametere combinations along with the corresponding performance results
            # $train.ind          list of index vectors used for splits into training and validation sets
          }, mlr = {
+           require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
+           
            y <- as.numeric(y)  # for regression, response should be numeric
            best.model <- cv.glmnet(x, y, nfolds = nfolds, family="multinomial")
            # $glmnet.fit   a fitted glmnet object for the full data
@@ -199,6 +201,7 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
            # $fit.preval, $foldid
            
          }, knn = {
+           require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
            best.model <- tune.knn(x, y, k = seq(from=1, to=min(dim(x)[1]/nfolds*(nfolds-1), 25), by =2), 
                                   l= 1, sampling="cross", cross = nfolds, prob = TRUE) 
            class(best.model$best.model) <- 'knn'
