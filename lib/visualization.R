@@ -1,3 +1,4 @@
+
 # Visualization function: including heatmaps, beeswarm, violin, boxplots, etc
 # 
 # ------------
@@ -32,9 +33,24 @@
     x_axis_label <- data$x_axis_label
     out.dir <- data$outdir
     plot.type <- data$plottype
+  } else{
+    x <- data 
+    pc <- options$pc 
+    fp <- options$fp 
+    m <- options$m 
+    taxon.names <- options$taxon.names
+    category <- options$category
+    is.multiple_axes <- options$is.multiple_axes
+    category_order <- options$category_order
+    is.sort_by_abundance <- options$is.sort_by_abundance
+    num_taxa <- options$num_taxa
+    alpha <- options$alpha
+    x_axis_label <- options$x_axis_label
+    out.dir <- options$outdir
+    plot.type <- options$plottype
   }
   switch(plot.type,
-         diff = {
+         beeswarm = {
            plot.differentiated.taxa(x=x, m=m, category=category, 
                                     num_taxa=num_taxa, 
                                     alpha=alpha, out.dir=out.dir, 
@@ -57,10 +73,14 @@
                         kegg_pathways=kegg_pathways, 
                         heatmap.title=heatmap.title, 
                         outputfile=fp)
+         }, 
+         scatter = {
+           
          },
-         stop("Please assign the correct plot type!")
+         stop("Please assign the correct plot type!(Optioins: beeswarm, graidents, heatmap, scatter.")
     )
 }
+
 "plot.beeswarm.dt" <- function(cols, x_axis_label, hit.ix, env, outdir) {
   require(beeswarm, quietly=TRUE, warn.conflicts=FALSE)
   

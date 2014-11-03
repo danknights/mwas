@@ -15,10 +15,77 @@
 #   
 # ------
 #  Last update: 10/28/2014
+"model.statistical.test.mwas" <- function(data, ...){
+  
+  options <- list(...)
+  
+  if (class(data) == "mwas"){
+    x <- data$x 
+    pc <- data$pc 
+    fp <- data$fp 
+    m <- data$m 
+    taxon.names <- data$taxon.names
+    category <- data$category
+    is.multiple_axes <- data$is.multiple_axes
+    category_order <- data$category_order
+    is.sort_by_abundance <- data$is.sort_by_abundance
+    num_taxa <- data$num_taxa
+    alpha <- data$alpha
+    x_axis_label <- data$x_axis_label
+    out.dir <- data$outdir
+    plot.type <- data$plottype
+  } else{
+    x <- data 
+    pc <- options$pc 
+    fp <- options$fp 
+    m <- options$m 
+    taxon.names <- options$taxon.names
+    category <- options$category
+    is.multiple_axes <- options$is.multiple_axes
+    category_order <- options$category_order
+    is.sort_by_abundance <- options$is.sort_by_abundance
+    num_taxa <- options$num_taxa
+    alpha <- options$alpha
+    x_axis_label <- options$x_axis_label
+    out.dir <- options$outdir
+    plot.type <- options$plottype
+  }
+  switch(plot.type,
+         beeswarm = {
+           plot.differentiated.taxa(x=x, m=m, category=category, 
+                                    num_taxa=num_taxa, 
+                                    alpha=alpha, out.dir=out.dir, 
+                                    is.sort_by_abundance=is.sort_by_abundance, 
+                                    taxon.names=taxon.names,
+                                    category_order=category_order, 
+                                    x_axis_label=x_axis_label)
+         },
+         gradients = {
+           processed.data <- preprocess.mwas(data)
+           plot.gradients(x=processed.data$otu, 
+                          pc=pc, fp=fp, m=m,
+                          taxon.names=taxon.names, 
+                          category=category,
+                          is.multiple_axes=is.multiple_axes)
+         },
+         heatmap = { # need to fix
+           heatmap.mwas(x, map, diff.features, cluster.var=c("Sex", "Treatment"), 
+                        color.var=names(color.list), color.list, 
+                        kegg_pathways=kegg_pathways, 
+                        heatmap.title=heatmap.title, 
+                        outputfile=fp)
+         }, 
+         scatter = {
+           
+         },
+         stop("Please assign the correct plot type!(Optioins: beeswarm, graidents, heatmap, scatter.")
+  )
+}
+}
 
-"differentiation.test" <- function (x, category, alpha=0.05, parametric=TRUE,
-		include.subset=FALSE){
-	category <- as.factor(as.character(category))
+"differentiation.test" <- function (x, category, alpha=0.05, parametric=FALSE, include.subset=FALSE){
+	
+  category <- as.factor(as.character(category))
 	if(length(unique(category)) < 2) stop('Category only has one level')
 	if(parametric){
 		pvals <- apply(x,2, function(taxon){
@@ -109,4 +176,3 @@
   if(use.fdr) pvals <- p.adjust(pvals,'fdr')
   return(pvals)
 }
-

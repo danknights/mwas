@@ -164,13 +164,15 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
 }
 
 "import.stats.params" <- function(opts){
+
+  mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
   
-  # mapping <-  load.qiime.mapping.file(opts$map_fp)         # mapping file
+  feat.Data <- load.qiime.otu.table(opts$OTU_fp)  # OTU table - feature data for training
   
-  feat.Data <- load.qiime.otu.table(opts$OTU_fp)  # OTU table 
+  response <- droplevels(factor(mapping[, opts$category])) # desired labels 
   
-  param.list <- list(features=feat.Data, response=response, is.feat=opts$feat, method=opts$method, 
-                     c.params=opts$param, valid_type=opts$validType)
+  param.list <- list(features=feat.Data, response=response, alpha=opts$alpha, is.parametric=opts$parametric, 
+                     include.subset=opts$subset)
   class(param.list) <- "mwas"
   
   return(param.list)
