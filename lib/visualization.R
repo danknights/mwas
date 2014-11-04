@@ -33,7 +33,7 @@
     alpha <- data$alpha
     x_axis_label <- data$x_axis_label
     out.dir <- data$outdir
-    plot.type <- data$plottype
+    plot.type <- data$plot.type
     feat_stats <- data$feat_stats
   } else{
     x <- data 
@@ -50,7 +50,7 @@
     alpha <- options$alpha
     x_axis_label <- options$x_axis_label
     out.dir <- options$outdir
-    plot.type <- options$plottype
+    plot.type <- options$plot.type
     feat_stats <- options$feat_stats
   }
   switch(plot.type,
@@ -67,7 +67,7 @@
                
              }
           
-           }else run.beeswarm(x=x, m=m, category=category,filename=filename,outdir)
+           }else run.beeswarm(x=x,response=response, out.dir = out.dir)
          },
          gradients = {
            processed.data <- preprocess.mwas(data)
@@ -135,44 +135,44 @@
 # ------
 # Last update: 11/03/2014
 #
-"run.beeswarm" <- function(x, response, filename="beesearmplot.pdf",outdir){
+"run.beeswarm" <- function(x, response, filename="beesearmplot.pdf", out.dir){
   #x <- x[match(row.names(m),row.names(x)),]
-  cat <- as.data.frame(response)
-  x2beeswarmfile <- cbind(cat,x)
-  x2beeswarmfile <- x2beeswarmfile[order(response),]
-  beeswarmfile <- x2beeswarmfile
-  attributes(beeswarmfile)
+  #cat <- as.data.frame(response)
+  x2beeswarmfile <- cbind(response,x)
+  beeswarmfile <- x2beeswarmfile[order(response),]
+  #attributes(beeswarmfile)
   beeswarmfiletitle <- names(beeswarmfile)
   colnames(beeswarmfile) <- c(beeswarmfiletitle)
- # category <- category
+  # category <- category
   beeswarmfile2 <-beeswarmfile
-  beeswarmfile3 <- beeswarmfile2[-1]
+  beeswarmfile3 <- beeswarmfile2[, -1]
   
-  
-  require(beeswarm)
+  require(beeswarm, quietly=TRUE, warn.conflicts=FALSE)
   cols <-  c(brewer.pal(9,'Set1'),brewer.pal(9,'Pastel1'),brewer.pal(8,'Dark2'),brewer.pal(8,'Accent'))[-6]
   cols[1:2] <- cols[2:1]
   cols <- sprintf('%sbb',cols)
   
-  if(!is.null(filename)) pdf(filename,width=4,height=4) 
+  if(!is.null(out.dir)) {
+    file.out <- sprintf('%s/%s', out.dir, filename)
+    pdf(file.out,width=4,height=4) }
+  
   for (i in 1:length(beeswarmfile3)){
     beeswarm(beeswarmfile3[,i] ~ response, data = beeswarmfile2,
              pch = 21,
              corral='random',las = 2,
              col='#000000bb',
              bg=cols,
-             
              xlab=c(levels(response)),
              main = colnames(beeswarmfile3)[i],
              ylab ="")
     bxplot(beeswarmfile3[,i] ~ response,add=TRUE)
   }
-  if(!is.null(filename)) dev.off()
+  if(!is.null(out.dir)) dev.off()
 }
 
 "plot.gradients" <- function(x, pc,fp, m=NULL, taxon.names=NULL, category=NULL,
                              is.multiple_axes=FALSE){
-
+  
   if(is.multiple_axes){
     pdf(fp,width=11,height=3.75)
     par(mfrow=c(1,3))

@@ -28,7 +28,7 @@
   }
   else {
     # otherwise, the file could be a classic OTU table/mapping file etc.
-    tryCatch(datatable <- read.qiime.classic.table(filepath), error = function(err) 
+    tryCatch(datatable <- read.qiime.classic.table(filepath, as.data.frame=as.data.frame), error = function(err) 
       print("If BIOM format, use .biom extension"))
   }
   

@@ -25,7 +25,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   mapping <- samp.obj$map
   feat.Data <- samp.obj$otus
   
-  response <- droplevels(factor(mapping[, opts$category])) # desired labels 
+  response <- droplevels(factor(mapping[[opts$category]])) # desired labels 
   
   #print(dim(feat.Data))
   #print(response)
@@ -49,7 +49,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
     mapping <- samp.obj$map
     otus <- samp.obj$otus
     
-    response <- droplevels(factor(mapping[, opts$category])) # desired labels 
+    response <- droplevels(factor(mapping[[opts$category]])) # desired labels 
   } else{
     mapping <- NULL
     response <- NULL
@@ -70,7 +70,6 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
 "import.plot.params" <- function(opts){
   
   require('RColorBrewer', quietly=TRUE, warn.conflicts=FALSE)
-  require('optparse', quietly=TRUE, warn.conflicts=FALSE)
   require('vegan', quietly=TRUE, warn.conflicts=FALSE)
   
   otu_table <- load.qiime.otu.table(opts$OTU_fp, include.lineages=TRUE)  # OTU table - feature data for training
@@ -94,16 +93,22 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
     #               paste(sort(missing.taxa.samples)[1:5],collapse=', '),
     #               paste(sort(missing.map.samples)[1:5],collapse=', ')))
     #}
-    x <- x[intersect(rownames(x),rownames(m)),,drop=F]
-    m <- droplevels(m[rownames(x),,drop=F])
+    #x <- x[intersect(rownames(x),rownames(m)),,drop=F]
+    #m <- droplevels(m[rownames(x),,drop=F])
+    #m[rownames(x),,drop=F]
   }else m <- NULL
+  samp.obj <- remove.nonoverlapping.samples(map=m,otus=x)
   
+  m <- samp.obj$map
+  x <- samp.obj$otus
+  
+  response <- droplevels(factor(m[[opts$category]])) # desired labels 
   #print(dim(x))
   #otus <- x
-  processed.obj <- preprocess.mwas(input.data=x, map=m, min_prevalence=opts$min_prevalence, transform_type=opts$transform_type)
-  x <- processed.obj$otu
-  kegg_pathways <- processed.obj$kegg_pathways
-  
+  #processed.obj <- preprocess.mwas(input.data=x, map=m, min_prevalence=opts$min_prevalence, transform_type=opts$transform_type)
+  #x <- processed.obj$otu
+  #kegg_pathways <- processed.obj$kegg_pathways
+  kegg_pathways <- NULL
   # check that taxon.names are in taxon table
   if(is.null(opts$which_taxa)){
     taxon.names <- colnames(x)[rev(order(colMeans(x)))]
@@ -153,15 +158,15 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   }
   
   if(is.null(opts$category)) {
-    fp <- sprintf('%s/gradients.pdf',opts$outdir)
+    outdir <- sprintf('%s/gradients.pdf',opts$outdir)
     is.gradient = FALSE
   } else {
-    if(!is.element(opts$column,colnames(m))) stop(paste(opts$column,'not in mapping file.'))
-    fp <- sprintf('%s/pcoa.pdf',opts$outdir)
-    is.gradient = TRUE
+  #  if(!is.element(opts$column,colnames(m))) stop(paste(opts$column,'not in mapping file.'))
+   # fp <- sprintf('%s/pcoa.pdf',opts$outdir)
+  #  is.gradient = TRUE
   }
   
-  param.list <- list(x=x, pc=pc, fp=fp, m=m, 
+  param.list <- list(x=x, pc=pc, outdir=opts$outdir, m=m, 
                      kegg_pathways = kegg_pathways,
                      taxon.names = taxon.names, 
                      category = opts$category,
@@ -177,7 +182,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
                      min_prevalence = opts$min_prevalence, 
                      transform_type = opts$transform_type,
                      suppress_relative_abundance_conversion = opts$suppress_relative_abundance_conversion,
-                     kegg = kegg,
+                     #kegg = kegg,
                      feat_stats = feat_stats)
   class(param.list) <- "mwas"
   
