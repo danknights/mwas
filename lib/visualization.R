@@ -60,21 +60,34 @@
                ft.qvalue <- subset(feat_stats, qvalues < alpha) # ft - differentiated feature vector
                ft.qvalue <- t(ft.qvalue)
                
-               # shorten taxonomy name if specified
-               if(!is.null(shorten.taxonomy)) colnames(ft.qvalue) <- shorten.taxonomy(colnames(ft.qvalue))
                keep_bugs <- colnames(x)[colnames(x) %in% colnames(ft.qvalue)]
                if (length(keep_bugs)==0) stop("Please input a taxon table (not OTU table); or there is no overlapped taxa information between these two tables.")
                new_taxon_table <- x[, keep_bugs]
                
                # shorten taxonomy name if specified
-               if (!is.null(taxon.names)) taxon.names <- taxon.names[keep_bugs]
-               
+               if(!is.null(shorten.taxonomy)) {
+                 colnames(ft.qvalue) <- shorten.taxonomy(colnames(ft.qvalue))
+                 colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
+               }
                filename <- sprintf("beeswarm-plot-alpha-%.2f.pdf", alpha)
                run.beeswarm(new_taxon_table, response, filename, out.dir)
              } else { 
                # if the feature stats table is not given, 
                diff.table <- differentiation.test(x, response, alpha = alpha)
+               qvalues <- diff.table$qvalues
+               feat.qvalue <- subset(qvalues, qvalues < alpha)
+              
+               keep_bugs <- colnames(x)[colnames(x) %in% names(feat.qvalue)]
+               if (length(keep_bugs)==0) stop("Please input a taxon table (not OTU table); or there is no overlapped taxa information between these two tables.")
+               new_taxon_table <- x[, keep_bugs]
                
+               # shorten taxonomy name if specified
+               if(!is.null(shorten.taxonomy)) {
+                 colnames(ft.qvalue) <- shorten.taxonomy(colnames(ft.qvalue))
+                 colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
+               }
+               filename <- sprintf("beeswarm-plot-alpha-%.2f.pdf", alpha)
+               run.beeswarm(new_taxon_table, response, filename, out.dir)
              }
           
            }else  {
@@ -140,8 +153,8 @@
 # Contributors: Emmanuel, Hu
 # ------
 # input:
-#        x:  otu table
-#      map:  mapping file
+#        x:  OTU/taxon table
+# response:  response lable
 # ------
 # output:
 #     save the plot as PDF file
@@ -149,7 +162,7 @@
 # Last update: 11/03/2014
 #
 "run.beeswarm" <- function(x, response, filename="beeswarm-plot.pdf", out.dir){
-
+  
   x2beeswarmfile <- cbind(response,x)
   beeswarmfile <- x2beeswarmfile[order(response,decreasing=TRUE),]
   beeswarmfiletitle <- colnames(beeswarmfile)
