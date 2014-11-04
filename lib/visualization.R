@@ -262,7 +262,7 @@
     for (jd in (id+1):level.num){
       
       if(!is.null(out.dir)) {
-        file.out <- sprintf('%s/%d-%d-%s', out.dir, id, jd, filename)
+        file.out <- sprintf('%s/categories-%d-%d-%s', out.dir, id, jd, filename)
         pdf(file.out,width=4,height=4)
         #print(file.out)
       }
