@@ -1,1 +1,3 @@
 preprocess:keggfilterlist "kegg.filter.list.txt"
+heatmap.mwas:cluster.var “cluster.var.txt”
+heatmap.mwas:color.list “color.list.txt”
