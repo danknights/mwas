@@ -156,7 +156,7 @@
     file.out <- sprintf('%s/%s', out.dir, filename)
     pdf(file.out,width=4,height=4) }
   
-  for (i in 1:length(beeswarmfile3)){
+  for (i in 1:dim(beeswarmfile3)[2]){
     beeswarm(beeswarmfile3[,i] ~ response, data = beeswarmfile2,
              pch = 21,
              corral='random',las = 2,
