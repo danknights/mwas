@@ -126,7 +126,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   if(opts$shorten_taxa){
     colnames(x) <- shorten.taxonomy(colnames(x))
     taxon.names <- shorten.taxonomy(taxon.names)
-  }
+  }else taxon.names <- NULL
   
   if(is.null(opts$pcoa_fp)){
     if(is.null(opts$distance_fp)){

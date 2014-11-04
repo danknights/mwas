@@ -59,11 +59,20 @@
              if (!is.null(feat_stats)){
                ft.qvalue <- subset(feat_stats, qvalues < alpha) # ft - differentiated feature vector
                ft.qvalue <- t(ft.qvalue)
+               
+               # shorten taxonomy name if specified
+               if(!is.null(shorten.taxonomy)) colnames(ft.qvalue) <- shorten.taxonomy(colnames(ft.qvalue))
                keep_bugs <- colnames(x)[colnames(x) %in% colnames(ft.qvalue)]
                if (length(keep_bugs)==0) stop("Please input a taxon table (not OTU table); or there is no overlapped taxa information between these two tables.")
-               new_otu_table <- x[, keep_bugs]
-               run.beeswarm(new_otu_table, response,'beeswarm.bacteremia.qvalue.inf.0.25.pdf', out.dir)
+               new_taxon_table <- x[, keep_bugs]
+               
+               # shorten taxonomy name if specified
+               if (!is.null(taxon.names)) taxon.names <- taxon.names[keep_bugs]
+               
+               filename <- sprintf("beeswarm-plot-alpha-%.2f.pdf", alpha)
+               run.beeswarm(new_taxon_table, response, filename, out.dir)
              } else { 
+               # if the feature stats table is not given, 
                diff.table <- differentiation.test(x, response, alpha = alpha)
                
              }
@@ -128,7 +137,7 @@
 
 # Beeswarm of several conditions included in the mapping file
 #
-# Contributors: Emmanuel
+# Contributors: Emmanuel, Hu
 # ------
 # input:
 #        x:  otu table
@@ -165,9 +174,8 @@
              col='#000000bb',
              bg=cols,
              labels=c(levels(response), decreasing=TRUE),
-             xlab="",
              main = beeswarmfiletitle[i+1],
-             ylab ="")
+             xlab="", ylab ="")
     bxplot(beeswarmfile3[,i] ~ response,add=TRUE)
   }
   if(!is.null(out.dir)) dev.off()

@@ -8,7 +8,7 @@ setwd("~/Documents/R/mwas_git")
 
 opts <- list()
 opts$mode <- "train"
-opts$OTU_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
+opts$input_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
 opts$map_fp <- "test/data/gg-map-adults.txt"
 opts$category <- "COUNTRY"
 opts$outdir <- "example/"
@@ -37,7 +37,7 @@ best.model <- train.mwas(feat.Data, response, is.feat = FALSE, method="svm")
 ################### train
 opts <- list()
 opts$mode <- "train"
-opts$OTU_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
+opts$input_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
 opts$map_fp <- "test/data/gg-map-adults.txt"
 opts$category <- "COUNTRY"
 opts$outdir <- "example/"
@@ -52,7 +52,7 @@ print("Training a model is finished!")
 
 ################# predict
 pred_opts <- list()
-pred_opts$OTU_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
+pred_opts$input_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
 pred_opts$map_fp <- "test/data/gg-map-adults.txt"
 pred_opts$category <- "COUNTRY"
 pred_opts$outdir <- "example/"
@@ -65,7 +65,7 @@ export.mwas(model.eval=results, out.dir=pred_opts$outdir, file.name="prediction"
 ################# feature selection - RF
 opts <- list()
 opts$mode <- "train"
-opts$OTU_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
+opts$input_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
 opts$map_fp <- "test/data/gg-map-adults.txt"
 opts$category <- "COUNTRY"
 opts$outdir <- "example/"
@@ -81,7 +81,7 @@ print("Training a model is finished!")
 ################# plot test
 opts <- list()
 opts$mode <- "plot"
-opts$OTU_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
+opts$input_fp <- "test/data/taxa/merged-taxa.txt"
 opts$map_fp <- "test/data/gg-map-adults.txt"
 opts$category <- "COUNTRY"
 opts$outdir <- "example/"
@@ -90,6 +90,7 @@ opts$min_prevalence <- 0.1
 opts$plottype <- "beeswarm"
 opts$shorten_taxa <- FALSE
 opts$alpha <- 0.05
+opts$shorten_taxa <- TRUE
 
 mwas.obj <- import.plot.params(opts)
 plot(mwas.obj)
