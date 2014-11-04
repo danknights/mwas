@@ -91,12 +91,34 @@ create.color.bars<-function(map, color.var, color.list)
 
 }
 
+# helper function for reading in color.list file into a named list of named vectors
+"read.color.list" <- function(filename)
+{
+	x <- scan(filename, what="", sep="\n",quiet=T, comment.char="#")
+	# Separate elements by tab
+	y <- strsplit(x, "\t")
+	
+	# Collapse vectors into named vectors
+	for(i in seq(2, length(y), 2))
+	{
+		names(y[[i]]) <- y[[i-1]]
+	}
+	# remove odd list items (names)
+	z <- y[-(seq(1, length(y), 2))]
+	
+	# Extract the first vector element and set it as the list element name
+	names(z) <- sapply(z, function(x) x[[1]])
+	# Remove the first vector element from each list element
+	z <- lapply(z, function(x) x[-1])
+	return(z)
+}
 
 # Creates a heatmap to display differentiated kegg pathways, with additional color bars at the top
 # NOTE: uses pearson's correlation as distance function due to inherent limitations with Bray-Curtis
 #
 # otu: normalized and filtered otu table
 # map: mapping table that has already been subsetted to include samples of interest
+# see ../config for files containing clustering and color variables
 # cluster.var: vector of column names to cluster samples by (e.g. can be a single column for simple heatmaps, such as Treatment)
 # color.var: vector of column names, color bars added to top of heatmap (suggested usage: set color.var=cluster.var)
 #			note that factors will be treated as distinct colors, and numerics will be transformed into gradients
@@ -104,7 +126,7 @@ create.color.bars<-function(map, color.var, color.list)
 # kegg_pathways: vector of pathways, useful for highlighting different levels
 # heatmap.title: title to display on the heatmap 
 # outputfile: heatmap output file name 
-heatmap.mwas <- function(otu, map, diff.features, cluster.var, color.var, color.list, kegg_pathways, heatmap.title="", outputfile)
+heatmap.mwas <- function(otu, map, diff.features, kegg_pathways, heatmap.title="", outputfile)
 #TODO add some extra formatting parameters here
 # OPTIONAL: distance matrix
 {
@@ -114,6 +136,12 @@ heatmap.mwas <- function(otu, map, diff.features, cluster.var, color.var, color.
     #require(vegan)
     #require(RColorBrewer)
     #require(gplots)
+	
+	cluster.var.fn <- parse.params("heatmap.mwas", "cluster.var")
+	color.list.fn <- parse.params("heatmap.mwas", "color.list")
+	cluster.var <- read.table(cluster.var.fn) # vector
+	color.list <- read.color.list(color.list.fn)
+	color.var=names(color.list)
 	
 	use.kegg <- as.logical(length(kegg_pathways))
 	

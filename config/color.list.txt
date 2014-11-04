@@ -1,0 +1,2 @@
+# tab delimited, colors must be listed before variables. variable names and values must match exactly to values in mapping file
+Treatment.color	antiquewhite	darkseagreen1	thistleTreatment	Control	PAT	STATSex.color	pink	lightblue	Sex	F	M	Diabetes_week.color	indianred1	snow3	Diabetes_week	early Diabetes	late Diabetes	

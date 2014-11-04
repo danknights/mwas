@@ -411,11 +411,13 @@
   return(x)
 }
 
-#PARAMETERS <<- NULL
+PARAMETERS <<- NULL
 # used for parsing the params file. read into global var to avoid rereading too many times.
-#parse.params<-function(function, parameter)
-#{
-#	if(PARAMETERS == NULL)
-#		PARAMETERS <- read.table("../config/params",sep=" ",row=1)
-#	return PARAMETERS[paste(function,parameter,sep=":")]
-#}
+"parse.params" <- function(functionname, parameter)
+{
+	if(length(PARAMETERS)==0)
+		PARAMETERS <- read.table("../config/params",sep=" ",row=1)
+	ret <- levels(PARAMETERS[paste(functionname,parameter,sep=":"),])
+	return(ret)
+}
+
