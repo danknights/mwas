@@ -24,7 +24,7 @@
     fp <- data$fp 
     m <- data$m 
     response <- data$response
-    taxon.names <- data$taxon.names
+    is.shorten.taxa <- data$is.shorten.taxa
     category <- data$category
     is.multiple_axes <- data$is.multiple_axes
     category_order <- data$category_order
@@ -41,7 +41,7 @@
     fp <- options$fp 
     m <- options$m 
     response <- options$response
-    taxon.names <- options$taxon.names
+    is.shorten.taxa <- options$is.shorten.taxa
     category <- options$category
     is.multiple_axes <- options$is.multiple_axes
     category_order <- options$category_order
@@ -65,13 +65,15 @@
                new_taxon_table <- x[, keep_bugs]
                
                # shorten taxonomy name if specified
-               if(!is.null(shorten.taxonomy)) {
+               if(is.shorten.taxa) {
                  colnames(ft.qvalue) <- shorten.taxonomy(colnames(ft.qvalue))
                  colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
                }
                filename <- sprintf("beeswarm-plot-alpha-%.2f.pdf", alpha)
                run.beeswarm(new_taxon_table, response, filename, out.dir)
+               
              } else { 
+               
                # if the feature stats table is not given, 
                diff.table <- differentiation.test(x, response, alpha = alpha)
                qvalues <- diff.table$qvalues
@@ -82,7 +84,7 @@
                new_taxon_table <- x[, keep_bugs]
                
                # shorten taxonomy name if specified
-               if(!is.null(shorten.taxonomy)) {
+               if(is.shorten.taxa) {
                  colnames(ft.qvalue) <- shorten.taxonomy(colnames(ft.qvalue))
                  colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
                }

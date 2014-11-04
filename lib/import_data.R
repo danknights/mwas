@@ -123,10 +123,10 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
     }
   }
   
-  if(opts$shorten_taxa){
-    colnames(x) <- shorten.taxonomy(colnames(x))
-    taxon.names <- shorten.taxonomy(taxon.names)
-  }else taxon.names <- NULL
+  #if(opts$shorten_taxa){
+  #  colnames(x) <- shorten.taxonomy(colnames(x))
+  #  taxon.names <- shorten.taxonomy(taxon.names)
+  #}else taxon.names <- NULL
   
   if(is.null(opts$pcoa_fp)){
     if(is.null(opts$distance_fp)){
@@ -168,7 +168,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   
   param.list <- list(x=x, pc=pc, outdir=opts$outdir, m=m, 
                      kegg_pathways = kegg_pathways,
-                     taxon.names = taxon.names, 
+                     is.shorten.taxa = opts$shorten_taxa, 
                      category = opts$category,
                      response = response,
                      is.multiple_axes = opts$multiple_axes,
