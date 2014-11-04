@@ -113,6 +113,21 @@ create.color.bars<-function(map, color.var, color.list)
 	return(z)
 }
 
+# combines cluster variable values to create new groupings to cluster by
+create.new.treatments<-function(map, cluster.var)
+{
+	if(length(cluster.var) > 1){
+		new.treatments <- as.factor(apply(map[,cluster.var], 1, paste0, collapse="."))
+	} else {
+		new.treatments <- map[,cluster.var]
+		# cluster.var must be a factor in order to cluster properly, apply original levels
+		new.treatments <- as.factor(new.treatments)
+		levels(new.treatments) <- names(color.list[[cluster.var]])
+	}
+	names(new.treatments) <- rownames(map)	
+	new.treatments
+}
+
 # Creates a heatmap to display differentiated kegg pathways, with additional color bars at the top
 # NOTE: uses pearson's correlation as distance function due to inherent limitations with Bray-Curtis
 #
