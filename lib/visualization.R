@@ -251,7 +251,7 @@
 # Output:
 #   save plot as a PDF file
 # -------
-# Last update: 10/25/2014
+# Last update: 11/04/2014
 #
 
 "run.2d.scatterplot" <- function(x, response, filename="scatter-plot.pdf", out.dir){
@@ -281,7 +281,7 @@
         xx2 <- x2[rand.id, ]
       }
       
-      for (i in 1:dim(x1)[2]){
+      for (i in 1:3){#dim(x1)[2]){
         if ((max(x1[,i])<0.1) & (max(x2[,i])< 0.1)){
           
           plot(xx1[,i],xx2[,i],xlim=c(0,0.1),ylim=c(0,0.1), col=c("firebrick2"), pch= 20, 
@@ -299,6 +299,8 @@
                xlab=level.names[id],ylab=level.names[jd],main= colnames(xx1)[i],cex.main=1.5)
           abline(0, 1)
         }
+        legend("topleft", sprintf('Spearman Coeff.: %.4f', cor(xx1[,i], xx2[,i], method="spearman")),
+               pt.cex=0.1, adj=0.05, cex=0.85)
       }
       if(!is.null(out.dir)) dev.off()
     }
