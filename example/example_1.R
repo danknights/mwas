@@ -87,7 +87,7 @@ opts$category <- "COUNTRY"
 opts$outdir <- "example/"
 opts$feat_stats <- "test/data/stats/taxon-stats-table.txt"
 opts$min_prevalence <- 0.1
-opts$plottype <- "beeswarm"
+opts$plottype <- "scatterplot"
 opts$shorten_taxa <- FALSE
 opts$alpha <- 0.05
 opts$shorten_taxa <- TRUE

@@ -70,6 +70,7 @@
                  colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
                }
                filename <- sprintf("beeswarm-plot-alpha-%.2f.pdf", alpha)
+               print("Beeswarm plot...")
                run.beeswarm(new_taxon_table, response, filename, out.dir)
                
              } else { 
@@ -89,12 +90,13 @@
                  colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
                }
                filename <- sprintf("beeswarm-plot-alpha-%.2f.pdf", alpha)
+               print("Beeswarm plot...")
                run.beeswarm(new_taxon_table, response, filename, out.dir)
              }
           
-           }else  {
+           }else  { # plot all the taxa that are provided in the table
              print("Beeswarm plot...")
-             run.beeswarm(x=x, response=response, filename="beeswarm-plot.pdf", out.dir = out.dir)
+             run.beeswarm(x = x, response=response, filename="beeswarm-plot.pdf", out.dir = out.dir)
            }
          },
          gradients = {
@@ -112,10 +114,50 @@
                         heatmap.title=heatmap.title, 
                         outputfile=fp)
          }, 
-         scatter = {
-           
+         scatterplot = {
+           if (!is.null(alpha)) {
+             if (!is.null(feat_stats)){
+               ft.qvalue <- subset(feat_stats, qvalues < alpha) # ft - differentiated feature vector
+               ft.qvalue <- t(ft.qvalue)
+               
+               keep_bugs <- colnames(x)[colnames(x) %in% colnames(ft.qvalue)]
+               if (length(keep_bugs)==0) stop("Please input a taxon table (not OTU table); or there is no overlapped taxa information between these two tables.")
+               new_taxon_table <- x[, keep_bugs]
+               
+               # shorten taxonomy name if specified
+               if(is.shorten.taxa) {
+                 colnames(ft.qvalue) <- shorten.taxonomy(colnames(ft.qvalue))
+                 colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
+               }
+               filename <- sprintf("scatter-plot-alpha-%.2f.pdf", alpha)
+               run.2d.scatterplot(new_taxon_table, response, filename, out.dir)
+               
+             } else { 
+               
+               # if the feature stats table is not given, 
+               diff.table <- differentiation.test(x, response, alpha = alpha)
+               qvalues <- diff.table$qvalues
+               feat.qvalue <- subset(qvalues, qvalues < alpha)
+               
+               keep_bugs <- colnames(x)[colnames(x) %in% names(feat.qvalue)]
+               if (length(keep_bugs)==0) stop("Please input a taxon table (not OTU table); or there is no overlapped taxa information between these two tables.")
+               new_taxon_table <- x[, keep_bugs]
+               
+               # shorten taxonomy name if specified
+               if(is.shorten.taxa) {
+                 colnames(ft.qvalue) <- shorten.taxonomy(colnames(ft.qvalue))
+                 colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
+               }
+               filename <- sprintf("Scatter-plot-alpha-%.2f.pdf", alpha)
+               run.2d.scatterplot(new_taxon_table, response, filename, out.dir)
+             }
+             
+           }else  {
+             print("2D scatter plot...")
+             run.2d.scatterplot(x=x, response=response, out.dir = out.dir)
+           }
          },
-         stop("Please assign the correct plot type!(Optioins: beeswarm, graidents, heatmap, scatter.")
+         stop("Please assign the correct plot type!(Optioins: beeswarm, graidents, heatmap, scatterplot.")
     )
 }
 
@@ -197,6 +239,73 @@
   return("Please check the PDF file.")
 }
 
+# Scatterplot of 2 conditions included in the mapping file
+# and perform spearman correlation for each taxon
+#
+# Contributors: Emmanuel
+# -------
+# Input:
+#    m:  mapping file
+#   x: otu table
+# -------
+# Output:
+#   save plot as a PDF file
+# -------
+# Last update: 10/25/2014
+#
+
+"run.2d.scatterplot" <- function(x, response, filename="scatter-plot.pdf", out.dir){
+
+  level.names = levels(response) 
+  level.num = length(level.names)
+  for (id in 1:(level.num-1)){
+    for (jd in (id+1):level.num){
+      
+      if(!is.null(out.dir)) {
+        file.out <- sprintf('%s/%d-%d-%s', out.dir, id, jd, filename)
+        pdf(file.out,width=4,height=4)
+        #print(file.out)
+      }
+      print(id)
+      print(jd)
+      x1 <- as.data.frame(x[names(response[response==level.names[id]]),])
+      x2 <- as.data.frame(x[names(response[response==level.names[jd]]),])
+      
+      if (dim(x1)[1] > dim(x2)[1]) {
+        rand.id <- sample(dim(x1)[1], size = dim(x2)[1])
+        xx1 <- x1[rand.id, ]
+        xx2 <- x2
+      } else{
+        rand.id <- sample(dim(x2)[1], size = dim(x1)[1])
+        xx1 <- x1
+        xx2 <- x2[rand.id, ]
+      }
+      
+      for (i in 1:dim(x1)[2]){
+        if ((max(x1[,i])<0.1) & (max(x2[,i])< 0.1)){
+          
+          plot(xx1[,i],xx2[,i],xlim=c(0,0.1),ylim=c(0,0.1), col=c("firebrick2"), pch= 20, 
+               xlab=level.names[id],ylab=level.names[jd],main = colnames(xx1)[i], cex.main=1.5)
+          abline(0, 1)
+          
+        } else if ((max(x1[,i])<0.3) & (max(x2[,i])< 0.3)){
+          
+          plot(xx1[,i],xx2[,i],xlim=c(0,0.4),ylim=c(0,0.4), col=c("firebrick2"), pch= 20, 
+               xlab=level.names[id],ylab=level.names[jd],main= colnames(xx1)[i],cex.main=1.5)
+          abline(0, 1)
+          
+        } else {
+          plot(xx1[,i],xx2[,i],xlim=c(0,0.6),ylim=c(0,0.9), col=c("firebrick2"), pch= 20, 
+               xlab=level.names[id],ylab=level.names[jd],main= colnames(xx1)[i],cex.main=1.5)
+          abline(0, 1)
+        }
+      }
+      if(!is.null(out.dir)) dev.off()
+    }
+  }
+ 
+}
+
 "plot.gradients" <- function(x, pc,fp, m=NULL, taxon.names=NULL, category=NULL,
                              is.multiple_axes=FALSE){
   
@@ -226,137 +335,6 @@
   }
   dev.off()
 }
-
-# Usage: run non-parametric test for differentiation according to metadata:
-# Usage: plot specific taxa (must match row name exactly from taxontable)
-# run with Rscript make-beeswarm-plots.r -i taxontable -w 'Bacteroides,Prevotella' -o outdir
-"plot.differentiated.taxa" <- function(x, m, category, num_taxa=NULL, alpha, out.dir=NULL, 
-                                       is.sort_by_abundance=FALSE, taxon.names=NULL,
-                                       category_order=NULL, x_axis_label=NULL){
-
-  diff.tests = NULL
-  # identify differentiated features
-  #print(dim(m))
-  if (dim(m)[2] > 1)
-    try (diff.tests <- differentiation.test(x, m[,category], alpha=2, parametric=FALSE),silent=T)
-  
-  #if(is.null(opts$which_taxa)){
-  if (!is.null(diff.tests)) {
-    if(is.null(num_taxa)){
-      hit.ix <- which(diff.tests$qvalues <- alpha)
-    } else {
-      hit.ix <- order(diff.tests$pvalues)[1:min(num_taxa,length(diff.tests$pvalues))]
-    }
-  } else {
-    hit.ix <- match(which_taxa, colnames(x))
-  }
-  
-  if(length(hit.ix) == 0){
-    print('No hits found.')
-  } else {
-    cat("There were",length(hit.ix),"taxa significant at FDR of", alpha,'\n')
-  }
-  
-  # save hits
-  if (length(hit.ix)) write.differentiation.test.results(diff.tests, filename=sprintf('%s/test_results.txt',out.dir))
-  
-  # sort by relative abundance if requested
-  if(is.sort_by_abundance){
-    hit.ix <- hit.ix[order(colMeans(x)[hit.ix],decreasing=TRUE)]
-  }
-
-  ############### plots
-  env <- m[, category]
-  
-  # fix order if requested
-  if(!is.null(category_order)){
-    level.order <- strsplit(category_order,',')[[1]]
-    expected.levels <- sort(unique(as.character(env)))
-    if(!identical(sort(unique(level.order)),expected.levels)){
-      stop(paste("--category_order list does not contain the same categories",
-                 "as the provided mapping file:",
-                 paste(sort(unique(env)),collapse=', '),'\n',sep=' '))
-    }
-    env <- factor(env,levels=level.order)
-  }
-  
-  plot.beeswarm.dt(cols, x_axis_label, hit.ix, env, out.dir)
-  
-}
-
-# Scatterplot of 2 conditions included in the mapping file
-# and perform spearman correlation for each taxon
-#
-# Contributors: Emmanuel
-# -------
-# Input:
-#    m:  mapping file
-#   x: otu table
-# -------
-# Output:
-#   save plot as a PDF file
-# -------
-# Last update: 10/25/2014
-#
-
-"run.scatterplot" <- function(m,x, filename=NULL, ...){
-  x <- x[order(row.names(x)),]
-  m <- m[order(row.names(m)),]
-  x2scatterplot <- cbind(m,x)
-  x2scatterplot<- x2scatterplot[order(x2scatterplot$Treatment),]
-  scatterplotfile <- x2scatterplot
-  scatterplotfile2 <-scatterplotfile[,-c(1,2,3,4,5)]
-  attributes(scatterplotfile2)
-  scatterplotitle2 <- names(scatterplotfile2)
-  scatterplotitle2 <- shorten.taxonomy(scatterplotitle2)
-  colnames(scatterplotfile2) <- c(scatterplotitle2)
-  after <- asin(sqrt(scatterplotfile2[1:15,]))
-  before <- asin(sqrt(scatterplotfile2[16:30,]))
-  attach(scatterplotfile2)
-  attributes(scatterplotfile2)
-  scatterplotitle <- names(scatterplotfile2)
-  
-  if(!is.null(filename)) pdf(filename,width=4,height=4)
-  for (i in scatterplotitle[1:16]){
-    title.text = i
-    if ((max(before[,i])<0.1) & (max(after[,i])< 0.1)){
-      plot(before[,i],after[,i],xlim=c(0,0.1),ylim=c(0,0.1), col=c("firebrick2"), pch= 20 , xlab='before chemotherapy',ylab='afterchemotherapy',main= title.text,cex.main=1.5)
-      #abine(0,1) #separe en 2 le graph
-      abline(before[,i],after[,i])
-    } else if ((max(before[,i])<0.3) & (max(after[,i])< 0.3)){
-      plot(before[,i],after[,i],xlim=c(0,0.4),ylim=c(0,0.4), col=c("firebrick2"), pch= 20 , xlab='before chemotherapy',ylab='afterchemotherapy',main= title.text,cex.main=1.5)
-      abline(before[,i],after[,i])
-    } else {
-      plot(before[,i],after[,i],xlim=c(0,0.6),ylim=c(0,0.9), col=c("firebrick2"), pch= 20 , xlab='before chemotherapy',ylab='afterchemotherapy',main= title.text,cex.main=1.5)
-      abline(before[,i],after[,i])
-    }
-  }
-  if(!is.null(filename)) dev.off()
-}
-
-# perform an unique scatterplot of all the bugs
-# and calculate Spearman correlation
-# require m:  mapping file
-# x: otu table
-
-"run.scatterplot.all.data" <- function(scatterplotfile2, filename=NULL){
-  if(!is.null(filename)) pdf(filename,width=4,height=4)
-  scatterplotfileAV <- scatterplotfile2[-c(1:15),]
-  AV <- stack(scatterplotfileAV)
-  scatterplotfileAP <- scatterplotfile2[-c(16:30),]
-  AP <- stack(scatterplotfileAP)
-  AVAP <- cbind(AV,AP)
-  AVAP <- AVAP[,-c(2,4)]
-  colnames(AVAP) <- c('before' , 'after')
-  plot(AVAP$before, AVAP$after, main="Scatterplot pre post CT ALL",
-       xlab="preCT ", ylab="postCT ", col=c("firebrick2"), pch= 20)
-  res <- cor.test(a$before, a$after, method = 'spearman')
-  res$estimate
-  res$p.value
-  if(!is.null(filename)) dev.off()
-  print(paste("rho:",res$estimate, "and p-value:",res$p.value))
-}
-
 
 #QQ plot
 # http://GettingGeneticsDone.blogspot.com/

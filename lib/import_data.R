@@ -103,6 +103,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   x <- samp.obj$otus
   
   response <- droplevels(factor(m[[opts$category]])) # desired labels 
+  names(response) <- rownames(m)
   #print(dim(x))
   #otus <- x
   #processed.obj <- preprocess.mwas(input.data=x, map=m, min_prevalence=opts$min_prevalence, transform_type=opts$transform_type)
