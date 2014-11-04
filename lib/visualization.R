@@ -10,7 +10,7 @@
 # Output:
 #
 # -------
-# Last update: 10/28/2014
+# Last update: 11/04/2014
 #
 # Need to fix heatmap plots
 
@@ -23,6 +23,7 @@
     pc <- data$pc 
     fp <- data$fp 
     m <- data$m 
+    response <- data$response
     taxon.names <- data$taxon.names
     category <- data$category
     is.multiple_axes <- data$is.multiple_axes
@@ -33,11 +34,13 @@
     x_axis_label <- data$x_axis_label
     out.dir <- data$outdir
     plot.type <- data$plottype
+    feat_stats <- data$feat_stats
   } else{
     x <- data 
     pc <- options$pc 
     fp <- options$fp 
     m <- options$m 
+    response <- options$response
     taxon.names <- options$taxon.names
     category <- options$category
     is.multiple_axes <- options$is.multiple_axes
@@ -48,16 +51,23 @@
     x_axis_label <- options$x_axis_label
     out.dir <- options$outdir
     plot.type <- options$plottype
+    feat_stats <- options$feat_stats
   }
   switch(plot.type,
          beeswarm = {
-           plot.differentiated.taxa(x=x, m=m, category=category, 
-                                    num_taxa=num_taxa, 
-                                    alpha=alpha, out.dir=out.dir, 
-                                    is.sort_by_abundance=is.sort_by_abundance, 
-                                    taxon.names=taxon.names,
-                                    category_order=category_order, 
-                                    x_axis_label=x_axis_label)
+           if (!is.null(alpha)) {
+             if (!is.null(feat_stats)){
+               ft.qvalue <- subset(feat_stats, qvalue < alpha) # ft - differentiated feature vector
+               ft.qvalue <- t(ft.qvalue)
+               keep_bugs <- colnames(x)[colnames(x) %in% colnames(ft.qvalue)]
+               new_otu_table <- x[, keep_bugs]
+               run.beeswarm(new_otu_table, response,'beeswarm.bacteremia.qvalue.inf.0.25.pdf', out.dir)
+             } else { 
+               diff.table <- differentiation.test(x, response, alpha = alpha)
+               
+             }
+          
+           }else run.beeswarm(x=x, m=m, category=category,filename=filename,outdir)
          },
          gradients = {
            processed.data <- preprocess.mwas(data)
@@ -81,31 +91,83 @@
     )
 }
 
-"plot.beeswarm.dt" <- function(cols, x_axis_label, hit.ix, env, outdir) {
-  require(beeswarm, quietly=TRUE, warn.conflicts=FALSE)
+# This function is replaced by "run.beeswarm" function
+#"plot.beeswarm.dt" <- function(cols, x_axis_label, hit.ix, env, outdir) {
+#  require(beeswarm, quietly=TRUE, warn.conflicts=FALSE)
+#  
+#  cols <-  c(brewer.pal(9,'Set1'),brewer.pal(9,'Pastel1'),brewer.pal(8,'Dark2'),brewer.pal(8,'Accent'))[-6]
+#  cols[1:2] <- cols[2:1]
+#  cols <- sprintf('%sbb',cols)
+#  if (!length(hit.ix)) hit.ix = seq(1,dim(x)[2])
+#  #print(x[,1])
+#  #print(env)
+#  #pdf(filename.i,width=8.5,height=11)
+#  #par(oma=rep(c(0,0),2),mar=c(12,8,8,3), cex.axis=.65, cex.lab=.65, cex=2)
+#  for(i in hit.ix){
+#    taxon <- x[,i]
+#    taxon.name <- colnames(x)[i]
+#    filename.i <- sprintf('%s/beeswarm-%s.pdf',outdir, taxon.name)
+#    pdf(filename.i,width=8.5,height=11)
+#    par(oma=rep(c(0,0),2),mar=c(12,8,8,3), cex.axis=.65, cex.lab=.65, cex=2)
+#   cex.lab <- max(.45, 1 - strwidth(taxon.name, units='figure') / 4)
+#    cex.lab <- .45
+#   cex.axis <- .45
+#    beeswarm(taxon ~ env,corral='random',las=2,
+#             col='#000000bb',
+#             bg=cols,
+#             pch=21,ylab=taxon.name,xlab=x_axis_label,cex.lab=cex.lab, cex.axis=cex.axis)
+#    bxplot(taxon ~ env,add=TRUE)
+#    dev.off()
+#  }
+#}
+
+
+# Beeswarm of several conditions included in the mapping file
+#
+# Contributors: Emmanuel
+# ------
+# input:
+#        x:  otu table
+#      map:  mapping file
+# ------
+# output:
+#     save the plot as PDF file
+# ------
+# Last update: 11/03/2014
+#
+"run.beeswarm" <- function(x, response, filename="beesearmplot.pdf",outdir){
+  #x <- x[match(row.names(m),row.names(x)),]
+  cat <- as.data.frame(response)
+  x2beeswarmfile <- cbind(cat,x)
+  x2beeswarmfile <- x2beeswarmfile[order(response),]
+  beeswarmfile <- x2beeswarmfile
+  attributes(beeswarmfile)
+  beeswarmfiletitle <- names(beeswarmfile)
+  colnames(beeswarmfile) <- c(beeswarmfiletitle)
+ # category <- category
+  beeswarmfile2 <-beeswarmfile
+  beeswarmfile3 <- beeswarmfile2[-1]
   
+  
+  require(beeswarm)
   cols <-  c(brewer.pal(9,'Set1'),brewer.pal(9,'Pastel1'),brewer.pal(8,'Dark2'),brewer.pal(8,'Accent'))[-6]
   cols[1:2] <- cols[2:1]
   cols <- sprintf('%sbb',cols)
-  if (!length(hit.ix)) hit.ix = seq(1,dim(x)[2])
-  #print(x[,1])
-  #print(env)
-  for(i in hit.ix){
-    taxon <- x[,i]
-    taxon.name <- colnames(x)[i]
-    filename.i <- sprintf('%s/beeswarm-%s.pdf',outdir, taxon.name)
-    pdf(filename.i,width=8.5,height=11)
-    par(oma=rep(c(0,0),2),mar=c(12,8,8,3), cex.axis=.65, cex.lab=.65, cex=2)
-    cex.lab <- max(.45, 1 - strwidth(taxon.name, units='figure') / 4)
-    cex.lab <- .45
-    cex.axis <- .45
-    beeswarm(taxon ~ env,corral='random',las=2,
+  
+  if(!is.null(filename)) pdf(filename,width=4,height=4) 
+  for (i in 1:length(beeswarmfile3)){
+    beeswarm(beeswarmfile3[,i] ~ response, data = beeswarmfile2,
+             pch = 21,
+             corral='random',las = 2,
              col='#000000bb',
              bg=cols,
-             pch=21,ylab=taxon.name,xlab=x_axis_label,cex.lab=cex.lab, cex.axis=cex.axis)
-    bxplot(taxon ~ env,add=TRUE)
-    dev.off()
+             
+             xlab=c(levels(response)),
+             main = colnames(beeswarmfile3)[i],
+             ylab ="")
+    bxplot(beeswarmfile3[,i] ~ response,add=TRUE)
   }
+  if(!is.null(filename)) dev.off()
 }
 
 "plot.gradients" <- function(x, pc,fp, m=NULL, taxon.names=NULL, category=NULL,
@@ -268,49 +330,6 @@
   print(paste("rho:",res$estimate, "and p-value:",res$p.value))
 }
 
-# Beeswarm of several conditions included in the mapping file
-#
-# Contributors: Emmanuel
-# ------
-# input:
-#        x:  otu table
-#      map:  mapping file
-# ------
-# output:
-#     save the plot as PDF file
-# ------
-# Last update: 10/25/2014
-#
-
-"run.beeswarm" <- function(x, map, filename='beeswarm_plot.pdf'){
-  x <- x[order(row.names(x)),]
-  m <- map[order(row.names(m)),]
-  
-  x2beeswarmfile <- cbind(m,x)
-  x2beeswarmfile <- x2beeswarmfile[order(x2beeswarmfile$Treatment,decreasing = FALSE),]
-  beeswarmfile <- x2beeswarmfile
-  attributes(beeswarmfile)
-  beeswarmfiletitle <- names(beeswarmfile)
-  beeswarmfiletitle <- shorten.taxonomy(beeswarmfiletitle)
-  colnames(beeswarmfile) <- c(beeswarmfiletitle)
-  category <- beeswarmfile$Treatment
-  beeswarmfile2 <-beeswarmfile[,-c(1,2,4,5)]
-  beeswarmfile3 <- asin(sqrt(beeswarmfile2[-1]))
-  
-  require(beeswarm)
-  
-  if(!is.null(filename)) pdf(filename,width=4,height=4)
-  for (i in 1:length(beeswarmfile3)){
-    beeswarm(beeswarmfile3[,i] ~ category, data = beeswarmfile2,
-             pch = 16,
-             col = rainbow(8),
-             labels = c("postCT", "preCT"),
-             main = colnames(beeswarmfile3)[i],
-             xlab = "", ylab ="")
-    
-  }
-  if(!is.null(filename)) dev.off()
-}
 
 #QQ plot
 # http://GettingGeneticsDone.blogspot.com/

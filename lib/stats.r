@@ -81,10 +81,10 @@
          stop("Please assign the correct plot type!(Optioins: beeswarm, graidents, heatmap, scatter.")
   )
 }
-}
+
 
 "differentiation.test" <- function (x, category, alpha=0.05, parametric=FALSE, include.subset=FALSE){
-	
+	# category here is a column, not a name.
   category <- as.factor(as.character(category))
 	if(length(unique(category)) < 2) stop('Category only has one level')
 	if(parametric){

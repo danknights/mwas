@@ -88,10 +88,12 @@ option_list <- list(
               help="Do not convert input to relative abundances (assumes already relative abundances). [default: %default]"),
   make_option(c("-R", "--sort_by_abundance"),action='store_true',default=FALSE,
               help="Sort resulting plots by decreasing relative abundance (instead of significance) [default: %default]"),
-  make_option(c("-A","--alpha"), type='numeric', default=.05,
+  make_option(c("-A","--alpha"), type='numeric', default=NULL,
               help='Maximum false discovery rate to report. Ignored if --which_taxa exists or --nplot exists [default: %default]'),
+  make_option(c("-F","--feat_stats"), type='character', default=NULL,
+              help='Differentiated feature table file [default: %default]'),
   make_option(c("-O","--category_order"), type="character", default=NULL,
-              help="Optional ordering of categories (comma-separated) [default alphabetical].")
+              help="Optional ordering of categories (comma-separated) [default: alphabetical].")
   )
 
 opts <- parse_args(OptionParser(option_list=option_list),

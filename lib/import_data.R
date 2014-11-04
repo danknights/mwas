@@ -18,8 +18,13 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
 
   mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
   
-  feat.Data <- load.qiime.otu.table(opts$OTU_fp)  # OTU table - feature data for training
-
+  otus <- load.qiime.otu.table(opts$OTU_fp)  # OTU table - feature data for training
+  
+  samp.obj <- remove.nonoverlapping.samples(map=mapping,otus=otus)
+  
+  mapping <- samp.obj$map
+  feat.Data <- samp.obj$otus
+  
   response <- droplevels(factor(mapping[, opts$category])) # desired labels 
   
   #print(dim(feat.Data))
@@ -33,15 +38,22 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
 }
 
 "import.predict.params" <- function(opts){
+  
+  otus <- load.qiime.otu.table(opts$OTU_fp)  # OTU table
+  
   if(!is.null(opts$map_fp)) {
     mapping <-  load.qiime.mapping.file(opts$map_fp)         # mapping file
+    
+    samp.obj <- remove.nonoverlapping.samples(map=mapping,otus=otus)
+    
+    mapping <- samp.obj$map
+    otus <- samp.obj$otus
+    
     response <- droplevels(factor(mapping[, opts$category])) # desired labels 
   } else{
     mapping <- NULL
     response <- NULL
   }
-  
-  otus <- load.qiime.otu.table(opts$OTU_fp)  # OTU table
   
   best.model <- readRDS(opts$param_fp)
   
@@ -63,18 +75,25 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   
   otu_table <- load.qiime.otu.table(opts$OTU_fp, include.lineages=TRUE)  # OTU table - feature data for training
   x <- otu_table$otus
+ 
+  # differentiated feature table
+  if(!is.null(opts$feat_stats)){ 
+    feat_stats <- read.table(opts$feat_stats,sep='\t',head=T,row=1,check=F,quote='"',comment='')  
+  }else feat_stats <- NULL 
+  
   if (!is.null(otu_table$lineages)) kegg <- setNames(otu_table$lineages, rownames(x))
   
   if(!is.null(opts$map_fp)){
     m <-  load.qiime.mapping.file(opts$map_fp)         # mapping file
     # check rownames in mapping file matrix
-    missing.taxa.samples <- setdiff(rownames(x), rownames(m))
-    missing.map.samples <- setdiff(rownames(m), rownames(x))
-    if(length(missing.taxa.samples) > 0){
-      stop(sprintf('\n\nError: one or more sample names from taxonomy table (%s, ...) not present in metadata table (%s, ...).',
-                   paste(sort(missing.taxa.samples)[1:5],collapse=', '),
-                   paste(sort(missing.map.samples)[1:5],collapse=', ')))
-    }
+    #missing.taxa.samples <- setdiff(rownames(x), rownames(m))
+    #missing.map.samples <- setdiff(rownames(m), rownames(x))
+    #if(length(missing.taxa.samples) > 0){
+    
+    #stop(sprintf('\n\nError: one or more sample names from taxonomy table (%s, ...) not present in metadata table (%s, ...).',
+    #               paste(sort(missing.taxa.samples)[1:5],collapse=', '),
+    #               paste(sort(missing.map.samples)[1:5],collapse=', ')))
+    #}
     x <- x[intersect(rownames(x),rownames(m)),,drop=F]
     m <- droplevels(m[rownames(x),,drop=F])
   }else m <- NULL
@@ -146,6 +165,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
                      kegg_pathways = kegg_pathways,
                      taxon.names = taxon.names, 
                      category = opts$category,
+                     response = response,
                      is.multiple_axes = opts$multiple_axes,
                      category_order = opts$category_order,
                      is.sort_by_abundance = opts$sort_by_abundance, 
@@ -157,7 +177,8 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
                      min_prevalence = opts$min_prevalence, 
                      transform_type = opts$transform_type,
                      suppress_relative_abundance_conversion = opts$suppress_relative_abundance_conversion,
-                     kegg = kegg)
+                     kegg = kegg,
+                     feat_stats = feat_stats)
   class(param.list) <- "mwas"
   
   return(param.list)
