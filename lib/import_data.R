@@ -18,7 +18,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
 
   mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
   
-  otus <- load.qiime.otu.table(opts$OTU_fp)  # OTU table - feature data for training
+  otus <- load.qiime.otu.table(opts$input_fp)  # OTU table - feature data for training
   
   samp.obj <- remove.nonoverlapping.samples(map=mapping,otus=otus)
   
@@ -39,7 +39,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
 
 "import.predict.params" <- function(opts){
   
-  otus <- load.qiime.otu.table(opts$OTU_fp)  # OTU table
+  otus <- load.qiime.otu.table(opts$input_fp)  # OTU table
   
   if(!is.null(opts$map_fp)) {
     mapping <-  load.qiime.mapping.file(opts$map_fp)         # mapping file
@@ -72,7 +72,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   require('RColorBrewer', quietly=TRUE, warn.conflicts=FALSE)
   require('vegan', quietly=TRUE, warn.conflicts=FALSE)
   
-  otu_table <- load.qiime.otu.table(opts$OTU_fp, include.lineages=TRUE)  # OTU table - feature data for training
+  otu_table <- load.qiime.otu.table(opts$input_fp, include.lineages=TRUE)  # OTU table - feature data for training
   x <- otu_table$otus
  
   # differentiated feature table
@@ -193,7 +193,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
 
   mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
   
-  feat.Data <- load.qiime.otu.table(opts$OTU_fp)  # OTU table - feature data for training
+  feat.Data <- load.qiime.otu.table(opts$input_fp)  # OTU table - feature data for training
   
   response <- droplevels(factor(mapping[, opts$category])) # desired labels 
   

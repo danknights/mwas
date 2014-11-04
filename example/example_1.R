@@ -85,11 +85,11 @@ opts$OTU_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
 opts$map_fp <- "test/data/gg-map-adults.txt"
 opts$category <- "COUNTRY"
 opts$outdir <- "example/"
-opts$feat_fp <- "test/data/stats/taxon-stats-table.txt"
+opts$feat_stats <- "test/data/stats/taxon-stats-table.txt"
 opts$min_prevalence <- 0.1
 opts$plottype <- "beeswarm"
 opts$shorten_taxa <- FALSE
+opts$alpha <- 0.05
 
 mwas.obj <- import.plot.params(opts)
-mwas.obj$plottype <- opts$plottype 
 plot(mwas.obj)

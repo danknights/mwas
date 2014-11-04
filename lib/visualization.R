@@ -32,7 +32,7 @@
     num_taxa <- data$num_taxa
     alpha <- data$alpha
     x_axis_label <- data$x_axis_label
-    out.dir <- data$outdir
+    out.dir <- data$out.dir
     plot.type <- data$plot.type
     feat_stats <- data$feat_stats
   } else{
@@ -49,7 +49,7 @@
     num_taxa <- options$num_taxa
     alpha <- options$alpha
     x_axis_label <- options$x_axis_label
-    out.dir <- options$outdir
+    out.dir <- options$out.dir
     plot.type <- options$plot.type
     feat_stats <- options$feat_stats
   }
@@ -57,9 +57,10 @@
          beeswarm = {
            if (!is.null(alpha)) {
              if (!is.null(feat_stats)){
-               ft.qvalue <- subset(feat_stats, qvalue < alpha) # ft - differentiated feature vector
+               ft.qvalue <- subset(feat_stats, qvalues < alpha) # ft - differentiated feature vector
                ft.qvalue <- t(ft.qvalue)
                keep_bugs <- colnames(x)[colnames(x) %in% colnames(ft.qvalue)]
+               if (length(keep_bugs)==0) stop("Please input a taxon table (not OTU table); or there is no overlapped taxa information between these two tables.")
                new_otu_table <- x[, keep_bugs]
                run.beeswarm(new_otu_table, response,'beeswarm.bacteremia.qvalue.inf.0.25.pdf', out.dir)
              } else { 
@@ -67,7 +68,10 @@
                
              }
           
-           }else run.beeswarm(x=x,response=response, out.dir = out.dir)
+           }else  {
+             print("Beeswarm plot...")
+             run.beeswarm(x=x, response=response, filename="beeswarm-plot.pdf", out.dir = out.dir)
+           }
          },
          gradients = {
            processed.data <- preprocess.mwas(data)
@@ -135,15 +139,11 @@
 # ------
 # Last update: 11/03/2014
 #
-"run.beeswarm" <- function(x, response, filename="beesearmplot.pdf", out.dir){
-  #x <- x[match(row.names(m),row.names(x)),]
-  #cat <- as.data.frame(response)
+"run.beeswarm" <- function(x, response, filename="beeswarm-plot.pdf", out.dir){
+
   x2beeswarmfile <- cbind(response,x)
-  beeswarmfile <- x2beeswarmfile[order(response),]
-  #attributes(beeswarmfile)
-  beeswarmfiletitle <- names(beeswarmfile)
-  colnames(beeswarmfile) <- c(beeswarmfiletitle)
-  # category <- category
+  beeswarmfile <- x2beeswarmfile[order(response,decreasing=TRUE),]
+  beeswarmfiletitle <- colnames(beeswarmfile)
   beeswarmfile2 <-beeswarmfile
   beeswarmfile3 <- beeswarmfile2[, -1]
   
@@ -154,7 +154,9 @@
   
   if(!is.null(out.dir)) {
     file.out <- sprintf('%s/%s', out.dir, filename)
-    pdf(file.out,width=4,height=4) }
+    pdf(file.out,width=4,height=4)
+    #print(file.out)
+  }
   
   for (i in 1:dim(beeswarmfile3)[2]){
     beeswarm(beeswarmfile3[,i] ~ response, data = beeswarmfile2,
@@ -162,12 +164,14 @@
              corral='random',las = 2,
              col='#000000bb',
              bg=cols,
-             xlab=c(levels(response)),
-             main = colnames(beeswarmfile3)[i],
+             labels=c(levels(response), decreasing=TRUE),
+             xlab="",
+             main = beeswarmfiletitle[i+1],
              ylab ="")
     bxplot(beeswarmfile3[,i] ~ response,add=TRUE)
   }
   if(!is.null(out.dir)) dev.off()
+  return("Please check the PDF file.")
 }
 
 "plot.gradients" <- function(x, pc,fp, m=NULL, taxon.names=NULL, category=NULL,
