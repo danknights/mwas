@@ -6,7 +6,7 @@
 # if filename is provided, saves result of statistical test to file
 # if parametric, uses t-test/ANOVA; else uses mann-whitney U/Kruskal-wallis
 # -------------
-# Contributors: Dan
+# Contributors: Dan, Hu
 # -------------
 # Input:
 #     
