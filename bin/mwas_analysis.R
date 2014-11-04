@@ -40,7 +40,7 @@ require(optparse, quietly=TRUE, warn.conflicts=FALSE)
 option_list <- list(
   make_option(c("-w", "--mode"),type='character',
               help="Function mode [required]"),
-  make_option(c("-i","--OTU_fp"), type="character",
+  make_option(c("-i","--input_fp"), type="character",
               help="BIOM format or classic format of OTU table or other matrix [requried]"),
   make_option(c("-m","--map_fp"), type="character",
               help="Mapping file  [required]."),

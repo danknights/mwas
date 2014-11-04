@@ -32,7 +32,7 @@
 
 	# intersect, filter, and transform (AND filter kegg pathways here)
 	# *** TODO replace this chunk with the real preprocess function when it's available
-	otu <- preprocess(map=map, otu=otu, filter.kegg=TRUE)
+	otu.obj <- preprocess(map=map, otu=otu, filter.kegg=TRUE, kegg)
 	
 	# burden the user with some custom subsetting 
 	map <- subset(map, !is.na(Diabetes) & Location=="fecal" & Week==6 & Sex %in% c("M") & Treatment %in% c("Control","PAT"))

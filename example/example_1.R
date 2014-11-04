@@ -2,6 +2,7 @@
 #
 #
 source('~/Documents/R/mwas_git/lib/util.load.r')
+source('~/Documents/R/mwas_git/lib/stats.r')
 library(biom)
 setwd("~/Documents/R/mwas_git")
 
@@ -23,6 +24,13 @@ otus <- biom_table[rownames(mapping),]
 feat.Data <- otus
 response <- as.factor(mapping[,"COUNTRY"])
 
+diff <- differentiation.test(feat.Data, response)
+write.differentiation.test.results(diff,  filename='example/differentiated.features.txt')
+
+diff.qvalue <- subset(diff, diff$qvalues < 0.05)
+
+ft<- read.table('example/differentiated.features.txt',sep='\t',head=T,row=1,check=F,quote='"',comment='')
+ft.qvalue <-  subset(ft, qvalue < 0.05)
 source('~/Documents/R/mwas_git/lib/model.train.r')
 
 best.model <- train.mwas(feat.Data, response, is.feat = FALSE, method="svm")
@@ -69,3 +77,19 @@ case.mode <- tolower(opts$mode)
 mwas.obj <- import.train.params(opts)
 model.obj <- train.mwas(mwas.obj)
 print("Training a model is finished!")
+
+################# plot test
+opts <- list()
+opts$mode <- "plot"
+opts$OTU_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
+opts$map_fp <- "test/data/gg-map-adults.txt"
+opts$category <- "COUNTRY"
+opts$outdir <- "example/"
+opts$feat_stats <- "test/data/stats/taxon-stats-table.txt"
+opts$min_prevalence <- 0.1
+opts$plottype <- "beeswarm"
+opts$shorten_taxa <- FALSE
+opts$alpha <- 0.05
+
+mwas.obj <- import.plot.params(opts)
+plot(mwas.obj)

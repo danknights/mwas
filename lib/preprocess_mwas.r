@@ -14,7 +14,7 @@
 
 # temporary place holder for use by PJ until the real preprocess function is written
 "preprocess.mwas" <- function(input.data, map=NULL, min_prevalence=NULL, transform_type=NULL, 
-                              minOTUInSamples=.001, filter.kegg=FALSE)
+                              minOTUInSamples=.001, filter.kegg=FALSE, kegg)
 {
   if (class(input.data)=="mwas"){
     otu <- input.data$otu
@@ -25,11 +25,12 @@
     
   }else otu <- input.data
   
-  otu <- (remove.nonoverlapping.samples(map = map, otus = otu))$otus
-  
+  preprocess.obj <- remove.nonoverlapping.samples(map = map, otus = otu)
+  otu <- preprocess.obj$otus
+  map <- preprocess.obj$map
   # remove rare features (do by minimum prevalence or average prevalence)
   # print(dim(otu))
-  otu <- sweep(otu, 1, rowSums(otu), '/')
+  otu <- sweep(otu, 1, rowSums(otu), '/') #relative abundance
   if (dim(otu)[2] > 1&&!is.null(min_prevalence)) 
     otu <- otu[,colMeans(otu > 0) >= min_prevalence, drop = FALSE]
   
@@ -59,7 +60,7 @@
 		kegg_pathways<-next.kegg
 	}	else kegg_pathways <- NULL
   
-	return(list(otu=otu, kegg_pathways=kegg_pathways))
+	return(list(otu=otu, kegg_pathways=kegg_pathways, map=map))
 }
 
 # This function filters the kegg descriptions by a vector of unknown-level kegg pathways
