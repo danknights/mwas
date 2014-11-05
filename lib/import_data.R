@@ -179,7 +179,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
                      alpha = opts$alpha,
                      x_axis_label = opts$x_axis_label,
                      out.dir = opts$outdir,
-                     plot.type = opts$plottype,
+                     plot.type = opts$plot_type,
                      min_prevalence = opts$min_prevalence, 
                      transform_type = opts$transform_type,
                      suppress_relative_abundance_conversion = opts$suppress_relative_abundance_conversion,

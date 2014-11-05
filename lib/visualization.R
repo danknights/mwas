@@ -53,6 +53,7 @@
     plot.type <- options$plot.type
     feat_stats <- options$feat_stats
   }
+  #print(plot.type)
   switch(plot.type,
          beeswarm = {
            if (!is.null(alpha)) {
@@ -70,7 +71,7 @@
                  colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
                }
                filename <- sprintf("beeswarm-plot-alpha-%.2f.pdf", alpha)
-               print("Beeswarm plot...")
+               #print("Beeswarm plot...")
                run.beeswarm(new_taxon_table, response, filename, out.dir)
                
              } else { 
@@ -90,12 +91,12 @@
                  colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
                }
                filename <- sprintf("beeswarm-plot-alpha-%.2f.pdf", alpha)
-               print("Beeswarm plot...")
+               #print("Beeswarm plot...")
                run.beeswarm(new_taxon_table, response, filename, out.dir)
              }
           
            }else  { # plot all the taxa that are provided in the table
-             print("Beeswarm plot...")
+             #print("Beeswarm plot...")
              run.beeswarm(x = x, response=response, filename="beeswarm-plot.pdf", out.dir = out.dir)
            }
          },
@@ -220,20 +221,23 @@
   
   if(!is.null(out.dir)) {
     file.out <- sprintf('%s/%s', out.dir, filename)
-    pdf(file.out,width=4,height=4)
+    pdf(file.out,width=6,height=7)
     #print(file.out)
   }
   
   for (i in 1:dim(beeswarmfile3)[2]){
+    par(mar =c(13,4,3,2))
     beeswarm(beeswarmfile3[,i] ~ response, data = beeswarmfile2,
              pch = 21,
              corral='random',las = 2,
              col='#000000bb',
              bg=cols,
-             labels=c(levels(response), decreasing=TRUE),
              main = beeswarmfiletitle[i+1],
+             #labels= "",
+             labels=levels(response),
              xlab="", ylab ="")
     bxplot(beeswarmfile3[,i] ~ response,add=TRUE)
+    #text(x = 1:3, y=-0.05, labels=levels(response), srt = 20, pos=1, xpd=TRUE)
   }
   if(!is.null(out.dir)) dev.off()
   return("Please check the PDF file.")
