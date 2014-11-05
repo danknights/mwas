@@ -87,10 +87,27 @@ opts$category <- "COUNTRY"
 opts$outdir <- "example/"
 opts$feat_stats <- "test/data/stats/taxon-stats-table.txt"
 opts$min_prevalence <- 0.1
-opts$plot_type <- "beeswarm"
+opts$plot_type <- "scatterplot"
 opts$shorten_taxa <- FALSE
 opts$alpha <- 0.05
 opts$shorten_taxa <- TRUE
+
+mwas.obj <- import.plot.params(opts)
+plot(mwas.obj)
+###### test plot gradients
+opts <- list()
+opts$mode <- "plot"
+opts$input_fp <- "test/data/taxa/merged-taxa.txt"
+opts$map_fp <- "test/data/gg-map-adults.txt"
+opts$category <- "COUNTRY"
+opts$outdir <- "example/"
+opts$feat_stats <- "test/data/stats/taxon-stats-table.txt"
+opts$min_prevalence <- 0.1
+opts$plot_type <- "scatterplot"
+opts$shorten_taxa <- FALSE
+opts$alpha <- 0.05
+opts$shorten_taxa <- TRUE
+opts$which_taxa <- 'k__Bacteria; p__Bacteroidetes; c__Bacteroidia; o__Bacteroidales; f__Bacteroidaceae; g__Bacteroides'
 
 mwas.obj <- import.plot.params(opts)
 plot(mwas.obj)

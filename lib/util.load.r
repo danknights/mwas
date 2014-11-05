@@ -246,7 +246,7 @@
   for(i in seq_along(ids)){
     n <- length(ids[[i]])
     j <- n
-    while(ids[[i]][j] == 'Other' || ids[[i]][j] == '') j <- j - 1
+    while(ids[[i]][j] == ' Other' || ids[[i]][j] == '') j <- j - 1
     start.level <- min(must.include.level,j-num.levels+1)
     start.level <- max(1,start.level)
     newids[i] <- paste(ids[[i]][start.level:j],collapse=' ')

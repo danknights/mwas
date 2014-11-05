@@ -225,7 +225,7 @@
     #print(file.out)
   }
   
-  for (i in 1:dim(beeswarmfile3)[2]){
+  for (i in 1:3){#dim(beeswarmfile3)[2]){
     par(mar =c(13,4,3,2))
     beeswarm(beeswarmfile3[,i] ~ response, data = beeswarmfile2,
              pch = 21,
@@ -235,7 +235,7 @@
              main = beeswarmfiletitle[i+1],
              #labels= "",
              labels=levels(response),
-             xlab="", ylab ="")
+             xlab="", ylab ="Relative abundance")
     bxplot(beeswarmfile3[,i] ~ response,add=TRUE)
     #text(x = 1:3, y=-0.05, labels=levels(response), srt = 20, pos=1, xpd=TRUE)
   }

@@ -110,6 +110,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   #x <- processed.obj$otu
   #kegg_pathways <- processed.obj$kegg_pathways
   kegg_pathways <- NULL
+  
   # check that taxon.names are in taxon table
   if(is.null(opts$which_taxa)){
     taxon.names <- colnames(x)[rev(order(colMeans(x)))]
@@ -170,6 +171,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   param.list <- list(x=x, pc=pc, outdir=opts$outdir, m=m, 
                      kegg_pathways = kegg_pathways,
                      is.shorten.taxa = opts$shorten_taxa, 
+                     taxon.names = taxon.names,
                      category = opts$category,
                      response = response,
                      is.multiple_axes = opts$multiple_axes,
