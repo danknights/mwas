@@ -87,10 +87,13 @@ opts$category <- "COUNTRY"
 opts$outdir <- "example/"
 opts$feat_stats <- "test/data/stats/taxon-stats-table.txt"
 opts$min_prevalence <- 0.1
-opts$plot_type <- "scatterplot"
+opts$plot_type <- "beeswarm"
 opts$shorten_taxa <- FALSE
 opts$alpha <- 0.05
 opts$shorten_taxa <- TRUE
+opts$filter_kegg <- FALSE
+opts$collapse_table <- FALSE
+opts$suppress_relative_abundance_conversion <- FALSE
 
 mwas.obj <- import.plot.params(opts)
 plot(mwas.obj)

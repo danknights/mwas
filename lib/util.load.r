@@ -25,15 +25,18 @@
     
     biom_table <- read_biom(filepath)          	   # OTU table - biom format
     datatable <- as.matrix(biom_data(biom_table))  # OTU table - classic format
+    metadata <- observation_metadata(biom_table) 
+    lineages <- apply(metadata, 1, function(x) paste(x, collapse=';')) # lineage names
   }
   else {
     # otherwise, the file could be a classic OTU table/mapping file etc.
     tryCatch(datatable <- read.qiime.classic.table(filepath, as.data.frame=as.data.frame), error = function(err) 
       print("If BIOM format, use .biom extension"))
+    lineages <- NULL
   }
   
   if(!as.data.frame) datatable <- as.matrix(datatable)
-  return(datatable)
+  return(list(otus=datatable, lineages=lineages))
 }
 
 "read.qiime.classic.table" <- function(filepath, as.data.frame=FALSE){
@@ -56,20 +59,22 @@
 
 
 "load.qiime.mapping.file" <- function(filepath){
-    return(read.qiime.table.mwas(filepath, as.data.frame=TRUE))
+    return(read.qiime.classic.table(filepath, as.data.frame=TRUE))
 }
 
 "load.qiime.otu.table" <- function(filepath,include.lineages=FALSE){
-    otus <- read.qiime.table.mwas(filepath, as.data.frame=TRUE)
-
+    otus.obj <- read.qiime.table.mwas(filepath, as.data.frame=TRUE)
+    otus <- otus.obj$otus
+    lineages <-  otus.obj$lineages # from biom_read
     # drop "Consensus Lineage" column if present
     if(otu.table.has.metadata(colnames(otus))){
         C <- ncol(otus)
         lineages <- as.character(otus[,C])
         otus <- otus[,-C]
-    } else {
-        lineages <- NULL
     }
+    #} else {
+    #    lineages <- NULL
+    #}
     
     otus <- as.matrix(t(otus)) # need to check
     
@@ -131,10 +136,11 @@
     return(header.index)
 }
 
-"load.qiime.taxon.table" <- function(filepath){
-    taxa <- as.matrix(t(read.table(filepath,sep='\t',head=T,row.names=1,check=FALSE,quote='"')))
-    return(taxa)
-}
+# The same as load.qiime.otu.table(taxon_table_path)
+#"load.qiime.taxon.table" <- function(filepath){
+#    taxa <- as.matrix(t(read.table(filepath,sep='\t',head=T,row.names=1,check=FALSE,quote='"')))
+#    return(taxa)
+#}
 
 "load.qiime.distance.matrix" <- function(filepath){
     d <- as.matrix(read.table(filepath,sep='\t',head=T,row.names=1,check=FALSE,quote='"'))
@@ -238,7 +244,7 @@
 }
 
 
-"shorten.taxonomy" <- function(ids,delim=';',num.levels=1,must.include.level=7){
+"shorten.taxonomy" <- function(ids,delim='; ',num.levels=1,must.include.level=7){
   ids <- gsub('[kpcofgs]__$','Other',ids)
   ids <- gsub('[kpcofgs]__','',ids)
   newids <- ids
@@ -246,7 +252,7 @@
   for(i in seq_along(ids)){
     n <- length(ids[[i]])
     j <- n
-    while(ids[[i]][j] == ' Other' || ids[[i]][j] == '') j <- j - 1
+    while(ids[[i]][j] == 'Other' || ids[[i]][j] == '') j <- j - 1
     start.level <- min(must.include.level,j-num.levels+1)
     start.level <- max(1,start.level)
     newids[i] <- paste(ids[[i]][start.level:j],collapse=' ')

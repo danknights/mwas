@@ -92,6 +92,12 @@ option_list <- list(
               help='Maximum false discovery rate to report. Ignored if --which_taxa exists or --nplot exists [default: %default]'),
   make_option(c("-F","--feat_stats"), type='character', default=NULL,
               help='Differentiated feature table file [default: %default]'),
+  make_option(c("-???","--filter_kegg"), type='store_true', default=FALSE,
+              help='Whether filter kegg list'),
+  make_option(c("-???","--collapse_table"), type='store_true', default=FALSE,
+              help='Collapse table'),  
+  make_option(c("-R","--min_prevalence"), type="numeric",default=.1,
+              help="Minimum fraction of samples in which taxon must be present to be included [default: %default]."),
   make_option(c("-O","--category_order"), type="character", default=NULL,
               help="Optional ordering of categories (comma-separated) [default: alphabetical].")
   )

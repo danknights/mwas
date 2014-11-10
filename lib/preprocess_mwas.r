@@ -13,24 +13,41 @@
 #
 
 # temporary place holder for use by PJ until the real preprocess function is written
-"preprocess.mwas" <- function(input.data, map=NULL, min_prevalence=NULL, transform_type=NULL, 
-                              minOTUInSamples=.001, filter.kegg=FALSE, kegg)
+"preprocess.mwas" <- function(input.data, 
+                              map = NULL, 
+                              distMat = NULL,
+                              kegg = NULL,
+                              min_prevalence = .001, 
+                              transform_type = NULL, 
+                              is.filter.kegg = FALSE, 
+                              is.collapse = FALSE,
+                              is.relative.conversion = TRUE
+                              )
 {
   if (class(input.data)=="mwas"){
     otu <- input.data$otu
     map <- input.data$map
+    distMat <- input.data$distMat
+    taxa <- input.data$taxa
     
     min_prevalence <- input.data$min_prevalence
     transform_type <- input.data$transform_type
     
   }else otu <- input.data
   
-  preprocess.obj <- remove.nonoverlapping.samples(map = map, otus = otu)
+  # remove nonoverlapping samples from OTU table, mapping file and other distance/PCoA table
+  preprocess.obj <- remove.nonoverlapping.samples(map = map, otus = otu, distmat = distMat)
   otu <- preprocess.obj$otus
   map <- preprocess.obj$map
+  taxa <- preprocess.obj$taxa
+  distMat <- preprocess.obj$distmat
+  
+  # convert to the relative abundance
+  if(is.relative.conversion){
+    otu <- sweep(otu, 1, rowSums(otu), '/') #relative abundance
+  }
+  
   # remove rare features (do by minimum prevalence or average prevalence)
-  # print(dim(otu))
-  otu <- sweep(otu, 1, rowSums(otu), '/') #relative abundance
   if (dim(otu)[2] > 1&&!is.null(min_prevalence)) 
     otu <- otu[,colMeans(otu > 0) >= min_prevalence, drop = FALSE]
   
@@ -45,10 +62,14 @@
     )
   }
   
-	# ret <- collapse.by.correlation(otu, .95)
-	# otu <- otu[, ret$reps]
-	
-	if(filter.kegg)
+	# OTU collapse by correlation
+  if (is.collapse){
+  ret <- collapse.by.correlation(otu, .95)
+	otu <- otu[, ret$reps]
+  }
+  
+  # filter kegg pathways
+	if(is.filter.kegg)
 	{
 		keep.pathways.file <- parse.params("preprocess", "keggfilterlist")
 		kegg_pathways <- NULL
@@ -60,7 +81,7 @@
 		kegg_pathways<-next.kegg
 	}	else kegg_pathways <- NULL
   
-	return(list(otu=otu, kegg_pathways=kegg_pathways, map=map))
+	return(list(otu=otu, kegg_pathways=kegg_pathways, map = map, distMat = distMat, taxa = taxa))
 }
 
 # This function filters the kegg descriptions by a vector of unknown-level kegg pathways
