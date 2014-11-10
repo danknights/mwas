@@ -140,32 +140,25 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   #kegg_pathways <- NULL
   
   # check that taxon.names are in taxon table
- # if(is.null(opts$which_taxa)){
-#    taxon.names <- colnames(x)[rev(order(colMeans(x)))]
-#    taxon.names <- taxon.names[1:min(opts$nplot, length(taxon.names))]
-#  } else {
-#    taxon.names <- strsplit(opts$which_taxa,',')[[1]]
-#    #if(!all(taxon.names %in% colnames(x))){
-#    if(!all(sapply(taxon.names, function(xx) ifelse(length(grep(xx, colnames(x), value=F))>0, T, F)))){
-#      stop(paste('The following taxa are not present in the taxon table:',
-#                 paste(taxon.names[!(taxon.names %in% colnames(x))],collapse=', '),
-#                 '\n'))
-#    }
-#  }
-
-#  if(is.null(opts$category)) {
-#    outdir <- sprintf('%s/gradients.pdf',opts$outdir)
-#    is.gradient = FALSE
-#  } else {
-  #  if(!is.element(opts$column,colnames(m))) stop(paste(opts$column,'not in mapping file.'))
-   # fp <- sprintf('%s/pcoa.pdf',opts$outdir)
-  #  is.gradient = TRUE
-#  }
+  if(is.null(opts$which_taxa)){
+    taxon.names <- colnames(otu)[rev(order(colMeans(otu)))]
+    taxon.names <- taxon.names[1:min(opts$nplot, length(taxon.names))]
+  } else {
+    taxon.names <- strsplit(opts$which_taxa,',')[[1]]
+    if(!all(taxon.names %in% colnames(otu))){
+    #if(!all(sapply(taxon.names, function(xx) ifelse(length(grep(xx, colnames(x), value=F))>0, T, F)))){
+      stop(paste('The following taxa are not present in the taxon table:',
+                 paste(taxon.names[!(taxon.names %in% colnames(otu))],collapse=', '),
+                 '\n'))
+    }
+  }
   
-  param.list <- list(x=otu, pc=pc, outdir=opts$outdir, m=m, 
+  if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
+  
+  param.list <- list(otu=otu, pc=pc, out.dir=opts$outdir, m=m, 
                      kegg_pathways = kegg_pathways,
                      is.shorten.taxa = opts$shorten_taxa, 
-                     #taxon.names = taxon.names,
+                     taxon.names = taxon.names,
                      category = opts$category,
                      response = response,
                      is.multiple_axes = opts$multiple_axes,

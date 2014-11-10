@@ -21,7 +21,7 @@
   if (class(data) == "mwas"){
     x <- data$x 
     pc <- data$pc 
-    fp <- data$fp 
+    out.dir <- data$out.dir
     m <- data$m 
     response <- data$response
     is.shorten.taxa <- data$is.shorten.taxa
@@ -32,13 +32,12 @@
     num_taxa <- data$num_taxa
     alpha <- data$alpha
     x_axis_label <- data$x_axis_label
-    out.dir <- data$out.dir
     plot.type <- data$plot.type
     feat_stats <- data$feat_stats
   } else{
     x <- data 
     pc <- options$pc 
-    fp <- options$fp 
+    out.dir <- options$out.dir
     m <- options$m 
     response <- options$response
     is.shorten.taxa <- options$is.shorten.taxa
@@ -49,7 +48,6 @@
     num_taxa <- options$num_taxa
     alpha <- options$alpha
     x_axis_label <- options$x_axis_label
-    out.dir <- options$out.dir
     plot.type <- options$plot.type
     feat_stats <- options$feat_stats
   }
@@ -73,7 +71,7 @@
          gradients = {
            processed.data <- preprocess.mwas(data)
            plot.gradients(x=processed.data$otu, 
-                          pc=pc, fp=fp, m=m,
+                          pc=pc, out.dir=out.dir, m=m,
                           taxon.names=taxon.names, 
                           category=category,
                           is.multiple_axes=is.multiple_axes)
@@ -254,17 +252,27 @@
  
 }
 
-"plot.gradients" <- function(x, pc,fp, m=NULL, taxon.names=NULL, category=NULL,
+"plot.gradients" <- function(x, pc, out.dir, m=NULL, taxon.names=NULL, category=NULL,
                              is.multiple_axes=FALSE){
-  
-  if(is.multiple_axes){
-    pdf(fp,width=11,height=3.75)
-    par(mfrow=c(1,3))
-    combs <- combn(1:3,2)
-  } else {
-    pdf(fp,width=6,height=5)
-    combs <- matrix(1:2,ncol=1)
+  if(!is.null(out.dir)) {
+    file.out <- sprintf('%s/gradient-plot.pdf', out.dir)
+    if(is.multiple_axes){
+      pdf(file.out,width=11,height=3.75)
+      par(mfrow=c(1,3))
+      combs <- combn(1:3,2)
+    } else {
+      pdf(file.out,width=6,height=5)
+      combs <- matrix(1:2,ncol=1)
+    }
   }
+  #  if(is.null(opts$category)) {
+  #    outdir <- sprintf('%s/gradients.pdf',opts$outdir)
+  #    is.gradient = FALSE
+  #  } else {
+  #  if(!is.element(opts$column,colnames(m))) stop(paste(opts$column,'not in mapping file.'))
+  # fp <- sprintf('%s/pcoa.pdf',opts$outdir)
+  #  is.gradient = TRUE
+  #  }
   
   if(is.null(category)){
     for(i in seq_along(taxon.names)){
@@ -281,7 +289,7 @@
                     title.text=sprintf('%s - PC%d v PC%d',category,combs[1,j],combs[2,j]))
     }
   }
-  dev.off()
+  if(!is.null(out.dir)) dev.off()
 }
 
 "diff.plot.parameters" <- function(x, response,  alpha, feat_stats=NULL, is.shorten.taxa=TRUE){
