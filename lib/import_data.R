@@ -1,15 +1,44 @@
 # Function: import parameters for different functional modules
 # -----------------
-# Contributors: Hu
+# Contributor: Hu
 # -----------------
 # input:
 #       opts : options from the user
+#              parameters are slightly different for the four modes:
+#              train -- input_fp
+#                       category
+#                       map_fp
+#                       feat (is.feat_select)
+#                       method
+#                       param (method_param)
+#                       valid_type (validation type)
+#                       outdir
+#            predict -- input_fp
+#                       map_fp (optional)
+#                       category (optional, must be given with map_fp)
+#                       param_fp (trained model object file)
+#                       outdir
+#               plot -- input_fp
+#                       map_fp
+#                       category
+#                       feat_stats (optional)
+#                       pcao_fp (optional)
+#                       distance_fp (optional)
+#                       suppress_relative_abundance_conversion (optional)
+#                       min_prevalence
+#                       transform_type
+#                       collapse_table
+#                       which_taxa
+#                       filter_kegg (optional, for heatmap)
+#                       outdir
+#         statistics -- 
+#
 # --------
 # output:
 #   param.list : a table of parameters that needed in each corresponding fucntion
 # 
 # -------------
-#  Last update: 10/27/2014
+#  Last update: 11/12/2014
 #
 
 require(biom, quietly=TRUE, warn.conflicts=FALSE)
@@ -18,17 +47,25 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
 
   mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
   
-  otus <- load.qiime.otu.table(opts$input_fp)  # OTU table - feature data for training
+  otu <- load.qiime.otu.table(opts$input_fp, include.lineages=FALSE)
   
-  samp.obj <- remove.nonoverlapping.samples(map=mapping,otus=otus)
+  # preprocessing
+  if(opts$suppress_relative_abundance_conversion) {
+    is.relative.conversion = FALSE
+  } else is.relative.conversion = TRUE
   
-  mapping <- samp.obj$map
-  feat.Data <- samp.obj$otus
+  preporcessed.obj <- preprocess.mwas(input.data = otu, 
+                                      map = mapping, 
+                                      min_prevalence = opts$min_prevalence,
+                                      transform_type = opts$transform_type,
+                                      is.collapse = opts$collapse_table,
+                                      is.relative.conversion=is.relative.conversion
+                                      )
+  feat.Data <- preporcessed.obj$otu
+  mapping <- preporcessed.obj$map
   
   response <- droplevels(factor(mapping[[opts$category]])) # desired labels 
   
-  #print(dim(feat.Data))
-  #print(response)
   param.list <- list(features=feat.Data, response=response, is.feat=opts$feat, method=opts$method, 
                      c.params=opts$param, valid_type=opts$validType, out.dir=opts$outdir)
   # c.params is parameter sets for the classifier
@@ -39,26 +76,38 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
 
 "import.predict.params" <- function(opts){
   
-  otus <- load.qiime.otu.table(opts$input_fp)  # OTU table
+  otu <- load.qiime.otu.table(opts$input_fp, include.lineages=FALSE)
   
   if(!is.null(opts$map_fp)) {
     mapping <-  load.qiime.mapping.file(opts$map_fp)         # mapping file
-    
-    samp.obj <- remove.nonoverlapping.samples(map=mapping,otus=otus)
-    
-    mapping <- samp.obj$map
-    otus <- samp.obj$otus
     
     response <- droplevels(factor(mapping[[opts$category]])) # desired labels 
   } else{
     mapping <- NULL
     response <- NULL
   }
+
+  # preprocessing
+  if(opts$suppress_relative_abundance_conversion) {
+    is.relative.conversion = FALSE
+  } else is.relative.conversion = TRUE
+  
+  preporcessed.obj <- preprocess.mwas(input.data = otu, 
+                                      map = mapping, 
+                                      min_prevalence = opts$min_prevalence,
+                                      transform_type = opts$transform_type,
+                                      is.collapse = opts$collapse_table,
+                                      is.relative.conversion=is.relative.conversion
+                                      )
+  otus <- preporcessed.obj$otu
+  mapping <- preporcessed.obj$map
   
   best.model <- readRDS(opts$param_fp)
   
-  if("feat.set" %in% best.model) feat.Data <- otus[, best.model$feat.set]
-  else feat.Data <- otus
+  #if("feat.set" %in% best.model) {
+  if(!is.null(best.model$feat.set)) {
+      feat.Data <- otus[, best.model$feat.set]
+  } else feat.Data <- otus
   
   param.list <- list(features=feat.Data, trained.model=best.model$trained.model, response=response, 
                      out.dir=opts$outdir)

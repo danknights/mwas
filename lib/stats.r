@@ -50,34 +50,16 @@
     out.dir <- options$outdir
     plot.type <- options$plottype
   }
-  switch(plot.type,
-         beeswarm = {
-           plot.differentiated.taxa(x=x, m=m, category=category, 
-                                    num_taxa=num_taxa, 
-                                    alpha=alpha, out.dir=out.dir, 
-                                    is.sort_by_abundance=is.sort_by_abundance, 
-                                    taxon.names=taxon.names,
-                                    category_order=category_order, 
-                                    x_axis_label=x_axis_label)
-         },
-         gradients = {
-           processed.data <- preprocess.mwas(data)
-           plot.gradients(x=processed.data$otu, 
-                          pc=pc, fp=fp, m=m,
-                          taxon.names=taxon.names, 
-                          category=category,
-                          is.multiple_axes=is.multiple_axes)
-         },
-         heatmap = { # need to fix
-           heatmap.mwas(x, map, diff.features, cluster.var=c("Sex", "Treatment"), 
-                        color.var=names(color.list), color.list, 
-                        kegg_pathways=kegg_pathways, 
-                        heatmap.title=heatmap.title, 
-                        outputfile=fp)
-         }, 
-         scatter = {
+  switch(test.type,
+         diff = {
            
          },
+         linear = {
+           
+         },
+         ttest = {
+          
+         }
          stop("Please assign the correct plot type!(Optioins: beeswarm, graidents, heatmap, scatter.")
   )
 }

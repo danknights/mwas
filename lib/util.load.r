@@ -276,7 +276,7 @@
 }
 
 # Get balanced folds where each fold has close to overall class ratio
-"balanced.folds" <- function(y, nfolds=10){
+#"balanced.folds" <- function(y, nfolds=10){
   folds = rep(0, length(y))
   y <- as.factor(y)
   classes = levels(y)
@@ -301,7 +301,7 @@
   }
 }
 
-"is.outlier" <- function(x,range=1.5){
+#"is.outlier" <- function(x,range=1.5){
   # normalize first
   x <- (x - mean(x)) / sd(x)
   sx <- summary(x)
@@ -314,7 +314,7 @@
   return(ret)
 }
 
-"factor.to.numeric"<-function(x)
+#"factor.to.numeric"<-function(x)
 {
   x <- factor(x)
   levels(x) <- 1:length(levels(x))
