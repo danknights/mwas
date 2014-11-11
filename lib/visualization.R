@@ -27,11 +27,7 @@
     is.shorten.taxa <- data$is.shorten.taxa
     category <- data$category
     is.multiple_axes <- data$is.multiple_axes
-    category_order <- data$category_order
-    is.sort_by_abundance <- data$is.sort_by_abundance
-    num_taxa <- data$num_taxa
     alpha <- data$alpha
-    x_axis_label <- data$x_axis_label
     plot.type <- data$plot.type
     feat_stats <- data$feat_stats
   } else{
@@ -43,11 +39,7 @@
     is.shorten.taxa <- options$is.shorten.taxa
     category <- options$category
     is.multiple_axes <- options$is.multiple_axes
-    category_order <- options$category_order
-    is.sort_by_abundance <- options$is.sort_by_abundance
-    num_taxa <- options$num_taxa
     alpha <- options$alpha
-    x_axis_label <- options$x_axis_label
     plot.type <- options$plot.type
     feat_stats <- options$feat_stats
   }
@@ -186,7 +178,7 @@
 # Scatterplot of 2 conditions included in the mapping file
 # and perform spearman correlation for each taxon
 #
-# Contributors: Emmanuel
+# Contributors: Emmanuel, Hu
 # -------
 # Input:
 #    m:  mapping file
@@ -254,17 +246,26 @@
 
 "plot.gradients" <- function(x, pc, out.dir, m=NULL, taxon.names=NULL, category=NULL,
                              is.multiple_axes=FALSE){
+  
+  if (is.null(category)){ 
+    # if the category is not specified, then plot gradient
+    # else show the metadata.
+    filename <- "gradient-plot.pdf"
+  } else filename <- sprintf("%s-plot.pdf", category)
+  
   if(!is.null(out.dir)) {
-    file.out <- sprintf('%s/gradient-plot.pdf', out.dir)
-    if(is.multiple_axes){
-      pdf(file.out,width=11,height=3.75)
-      par(mfrow=c(1,3))
-      combs <- combn(1:3,2)
-    } else {
-      pdf(file.out,width=6,height=5)
-      combs <- matrix(1:2,ncol=1)
-    }
+    file.out <- sprintf('%s/%s', out.dir, filename)
+  }else file.out <- filename
+  
+  if(is.multiple_axes){
+    pdf(file.out,width=11,height=3.75)
+    par(mfrow=c(1,3))
+    combs <- combn(1:3,2)
+  } else {
+    pdf(file.out,width=6,height=5)
+    combs <- matrix(1:2,ncol=1)
   }
+  
   #  if(is.null(opts$category)) {
   #    outdir <- sprintf('%s/gradients.pdf',opts$outdir)
   #    is.gradient = FALSE
@@ -328,12 +329,12 @@
 # See http://gettinggeneticsdone.blogspot.com/p/copyright.html
 
 # Define the function
-"qqplot.pvals"   <- function(pvector, main=NULL, ...) {
-  o = -log10(sort(pvector,decreasing=F))
-  e = -log10( 1:length(o)/length(o) )
-  plot(e,o,pch=19,cex=1, main=main, ...,
-       xlab=expression(Expected~~-log[10](italic(p))),
-       ylab=expression(Observed~~-log[10](italic(p))),
-       xlim=c(0,max(e)), ylim=c(0,max(o)))
-  lines(e,e,col="red")
-}
+#"qqplot.pvals"   <- function(pvector, main=NULL, ...) {
+#  o = -log10(sort(pvector,decreasing=F))
+#  e = -log10( 1:length(o)/length(o) )
+#  plot(e,o,pch=19,cex=1, main=main, ...,
+#       xlab=expression(Expected~~-log[10](italic(p))),
+#       ylab=expression(Observed~~-log[10](italic(p))),
+#       xlim=c(0,max(e)), ylim=c(0,max(o)))
+#  lines(e,e,col="red")
+#}

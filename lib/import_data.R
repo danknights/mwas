@@ -8,21 +8,32 @@
 #              train -- input_fp
 #                       category
 #                       map_fp
-#                       feat (is.feat_select)
+#                       is_feat (is.feat_select)
+#                       feat_param (parameters for feature selection)
 #                       method
-#                       param (method_param)
-#                       valid_type (validation type)
+#                       method_param
+#                       suppress_relative_abundance_conversion (optional)
+#                       min_prevalence
+#                       transform_type
+#                       collapse_table
+#                       validType (validation type)
+#                       nfolds (# of folds in cross validation)
 #                       outdir
 #            predict -- input_fp
 #                       map_fp (optional)
 #                       category (optional, must be given with map_fp)
-#                       param_fp (trained model object file)
+#                       method (trained model object file)
+#                       suppress_relative_abundance_conversion (optional)
+#                       min_prevalence
+#                       transform_type
+#                       collapse_table
 #                       outdir
 #               plot -- input_fp
 #                       map_fp
 #                       category
+#                       method (plot type)
 #                       feat_stats (optional)
-#                       pcao_fp (optional)
+#                       pcoa_fp (optional)
 #                       distance_fp (optional)
 #                       suppress_relative_abundance_conversion (optional)
 #                       min_prevalence
@@ -66,8 +77,15 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   
   response <- droplevels(factor(mapping[[opts$category]])) # desired labels 
   
-  param.list <- list(features=feat.Data, response=response, is.feat=opts$feat, method=opts$method, 
-                     c.params=opts$param, valid_type=opts$validType, out.dir=opts$outdir)
+  param.list <- list(features=feat.Data, 
+                     response=response, 
+                     is.feat=opts$is_feat, 
+                     feat.param = opts$feat_param
+                     method=opts$method, 
+                     c.params=opts$method_param, 
+                     valid_type=opts$validType, 
+                     out.dir=opts$outdir, 
+                     nfolds=opts$nfolds)
   # c.params is parameter sets for the classifier
   class(param.list) <- "mwas"
   
@@ -102,14 +120,16 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   otus <- preporcessed.obj$otu
   mapping <- preporcessed.obj$map
   
-  best.model <- readRDS(opts$param_fp)
+  best.model <- readRDS(opts$method)
   
   #if("feat.set" %in% best.model) {
   if(!is.null(best.model$feat.set)) {
       feat.Data <- otus[, best.model$feat.set]
   } else feat.Data <- otus
   
-  param.list <- list(features=feat.Data, trained.model=best.model$trained.model, response=response, 
+  param.list <- list(features=feat.Data, 
+                     trained.model=best.model$trained.model, 
+                     response=response, 
                      out.dir=opts$outdir)
   class(param.list) <- "mwas"
   
@@ -130,8 +150,8 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   }
 
   # load differentiated feature table
-  if(!is.null(opts$feat_stats)){ 
-    feat_stats <- read.table(opts$feat_stats,sep='\t',head=T,row=1,check=F,quote='"',comment='')  
+  if(!is.null(opts$feat_stats_fp)){ 
+    feat_stats <- read.table(opts$feat_stats_fp,sep='\t',head=T,row=1,check=F,quote='"',comment='')  
   }else feat_stats <- NULL 
   
   # load mapping file
@@ -204,24 +224,18 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   
   if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
   
-  param.list <- list(otu=otu, pc=pc, out.dir=opts$outdir, m=m, 
+  param.list <- list(otu=otu, 
+                     m=m, 
+                     out.dir=opts$outdir,
+                     pc=pc, 
                      kegg_pathways = kegg_pathways,
                      is.shorten.taxa = opts$shorten_taxa, 
                      taxon.names = taxon.names,
                      category = opts$category,
                      response = response,
                      is.multiple_axes = opts$multiple_axes,
-                     category_order = opts$category_order,
-                     is.sort_by_abundance = opts$sort_by_abundance, 
-                     num_taxa = opts$nplot,
                      alpha = opts$alpha,
-                     x_axis_label = opts$x_axis_label,
-                     out.dir = opts$outdir,
-                     plot.type = opts$plot_type,
-                     min_prevalence = opts$min_prevalence, 
-                     transform_type = opts$transform_type,
-                     suppress_relative_abundance_conversion = opts$suppress_relative_abundance_conversion,
-                     #kegg = kegg,
+                     plot.type = opts$method,
                      feat_stats = feat_stats)
   class(param.list) <- "mwas"
   

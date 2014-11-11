@@ -58,6 +58,7 @@
                         }, 
            norm_asin_sqrt={otu <- asin(sqrt(otu))/asin(sqrt(1))
                            },
+           none = {otu <- otu},
            stop(paste('Unrecognized data transform type:', transform_type))
     )
   }

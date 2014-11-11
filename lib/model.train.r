@@ -17,7 +17,10 @@
 require(pROC, quietly=TRUE, warn.conflicts=FALSE)
 
 "train.mwas" <- function(data.set, y=NULL, is.feat = TRUE, 
-                         method=c("RF","SVM", "knn", "MLR")[1], valid_type = c("cv", "jk")[1], out.dir=NULL){
+                         method=c("RF","SVM", "knn", "MLR")[1], 
+                         valid_type = c("cv", "jk")[1], 
+                         nfolds = 10,
+                         out.dir=NULL){
   
   if (class(data.set)=="mwas") {
     x <- data.set$features 
@@ -41,7 +44,7 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
     train.set <- x[,feat.set$ix]
   }else train.set <- x
   
-  best.model <- persist.model.mwas(train.set, y, nfolds=10, classifier=method, valid_type,  out.dir=out.dir)
+  best.model <- persist.model.mwas(train.set, y, nfolds=nfolds, classifier=method, valid_type,  out.dir=out.dir)
   
   #export.mwas(trained.model = best.model, feat.set = feat.set)
   return(best.model)
