@@ -290,6 +290,7 @@
     }
   }
   if(!is.null(out.dir)) dev.off()
+  return("Please check the PDF file.")
 }
 
 "diff.plot.parameters" <- function(x, response,  alpha, feat_stats=NULL, is.shorten.taxa=TRUE){
