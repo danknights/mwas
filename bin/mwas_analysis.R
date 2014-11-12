@@ -125,7 +125,7 @@ case_mode <- tolower(opts$mode) # case insensitive
 switch(case_mode, 
        train = { mwas.obj <- import.train.params(opts)
                  train.mwas(mwas.obj)
-                 print("Training is finished!")
+                 #print("Training is finished!")
        }, 
        predict = { mwas.obj <- import.predict.params(opts)
                    results <- model.evaluation.mwas(mwas.obj)
