@@ -9,7 +9,7 @@
 #   2. i - OTU table - BIOM or classic format (required)
 #   3. m - map file   (required)
 #   4. c - category name(s) (required)
-#   5. o - output directory: save classification model, model evaluation results, visualization file etc.
+#   5. o - output directory: save classification model, model evaluation results, visualization file etc. [default: "."]
 #   6. M - method: classifier type for "training", trained classifier model file name for "predict", 
 #                  plot type for "plot", statistical test type for "statistics"
 #   <preprocessing options>
@@ -57,7 +57,7 @@ option_list <- list(
               help="Relative abundance transform type (none, asin_sqrt, or norm_asin_sqrt) [default: norm_asin_sqrt]"),
   make_option(c("-r", "--suppress_relative_abundance_conversion"),action='store_true',default=FALSE,
               help="Do not convert input to relative abundances (assumes already relative abundances). [default: %default]"),
-  make_option(c("-p","--min_prevalence"), type="numeric",default=.01,
+  make_option(c("-p","--min_prevalence"), type="numeric",default=0.0,
               help="Minimum fraction of samples in which taxon must be present to be included [default: %default]."),
   make_option(c("-b","--collapse_table"), type="logical", action='store_true', default=FALSE,
               help="Collapse otu table by correlation."), 
@@ -82,7 +82,7 @@ option_list <- list(
               help="Number of folds in cross-validation [default: %default]"),
   make_option(c("-f", "--is_feat"),type="logical", action="store_true", default=FALSE,
               help="Flag for feature selection [default: %default]"),
-  make_option(c("-s", "--feat_param"),type='numeric',default=0,
+  make_option(c("-s", "--feat_param"),type='numeric',default=0.0,
               help="Parameter for feature selection [default: %default]. 
               For plotting options, it specifies the directory of feature statistics file."),
   # plot parameters

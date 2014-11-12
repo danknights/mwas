@@ -63,8 +63,10 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   # preprocessing
   if(opts$suppress_relative_abundance_conversion) {
     is.relative.conversion = FALSE
-  } else is.relative.conversion = TRUE
-  
+  } else {
+    if (sum(rowSums(otu)) != dim(otu)[1]) is.relative.conversion = TRUE
+    else is.relative.conversion = FALSE
+  }
   preporcessed.obj <- preprocess.mwas(input.data = otu, 
                                       map = mapping, 
                                       min_prevalence = opts$min_prevalence,
@@ -80,7 +82,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   param.list <- list(features=feat.Data, 
                      response=response, 
                      is.feat=opts$is_feat, 
-                     feat.param = opts$feat_param
+                     feat.param = opts$feat_param,
                      method=opts$method, 
                      c.params=opts$method_param, 
                      valid_type=opts$validType, 
@@ -108,7 +110,10 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   # preprocessing
   if(opts$suppress_relative_abundance_conversion) {
     is.relative.conversion = FALSE
-  } else is.relative.conversion = TRUE
+  } else {
+    if (sum(rowSums(otu)) != dim(otu)[1]) is.relative.conversion = TRUE
+    else is.relative.conversion = FALSE
+  }
   
   preporcessed.obj <- preprocess.mwas(input.data = otu, 
                                       map = mapping, 
@@ -179,9 +184,13 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
     pc <- pc[rownames(otu),]
   }
   
+  # whether supress converting to relative abundance
   if(opts$suppress_relative_abundance_conversion) {
     is.relative.conversion = FALSE
-  } else is.relative.conversion = TRUE
+  } else {
+    if (sum(rowSums(otu)) != dim(otu)[1]) is.relative.conversion = TRUE
+    else is.relative.conversion = FALSE
+  }
   
   preporcessed.obj <- preprocess.mwas(input.data = otu, 
                                       map = m, 
