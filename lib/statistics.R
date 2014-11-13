@@ -59,7 +59,7 @@
          },
          ttest = {
           
-         }
+         },
          stop("Please assign the correct plot type!(Optioins: beeswarm, graidents, heatmap, scatter.")
   )
 }

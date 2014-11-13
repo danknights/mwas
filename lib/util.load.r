@@ -277,50 +277,49 @@
 
 # Get balanced folds where each fold has close to overall class ratio
 #"balanced.folds" <- function(y, nfolds=10){
-  folds = rep(0, length(y))
-  y <- as.factor(y)
-  classes = levels(y)
-  # size of each class
-  Nk = table(y)
-  # -1 or nfolds = len(y) means leave-one-out
-  if (nfolds == -1 || nfolds == length(y)){
-    invisible(1:length(y))
-  }
-  else{
-    # Can't have more folds than there are items per class
-    nfolds = min(nfolds, max(Nk))
-    # Assign folds evenly within each class, then shuffle within each class
-    for (k in 1:length(classes)){
-      ixs <- which(y==classes[k])
-      folds_k <- rep(1:nfolds, ceiling(length(ixs) / nfolds))
-      folds_k <- folds_k[1:length(ixs)]
-      folds_k <- sample(folds_k)
-      folds[ixs] = folds_k
-    }
-    invisible(folds)
-  }
-}
+#  folds = rep(0, length(y))
+#  y <- as.factor(y)
+#  classes = levels(y)
+#  # size of each class
+#  Nk = table(y)
+#  # -1 or nfolds = len(y) means leave-one-out
+#  if (nfolds == -1 || nfolds == length(y)){
+#    invisible(1:length(y))
+#  } else{
+#    # Can't have more folds than there are items per class
+#    nfolds = min(nfolds, max(Nk))
+#    # Assign folds evenly within each class, then shuffle within each class
+#    for (k in 1:length(classes)){
+#      ixs <- which(y==classes[k])
+#      folds_k <- rep(1:nfolds, ceiling(length(ixs) / nfolds))
+#      folds_k <- folds_k[1:length(ixs)]
+#      folds_k <- sample(folds_k)
+#      folds[ixs] = folds_k
+#    }
+#    invisible(folds)
+#  }
+#}
 
 #"is.outlier" <- function(x,range=1.5){
-  # normalize first
-  x <- (x - mean(x)) / sd(x)
-  sx <- summary(x)
-  q1 <- sx[2]
-  q3 <- sx[5]
-  iqr <- q3 - q1
-  ret <- x > q3  + range * iqr | x < q1 - range * iqr
-  if(any(is.na(ret))) ret <- rep(FALSE,length(x))
-  if(all(ret)) ret <- !ret # don't call all outliers
-  return(ret)
-}
+#   # normalize first
+#   x <- (x - mean(x)) / sd(x)
+#   sx <- summary(x)
+#   q1 <- sx[2]
+#   q3 <- sx[5]
+#   iqr <- q3 - q1
+#   ret <- x > q3  + range * iqr | x < q1 - range * iqr
+#   if(any(is.na(ret))) ret <- rep(FALSE,length(x))
+#   if(all(ret)) ret <- !ret # don't call all outliers
+#   return(ret)
+# }
 
 #"factor.to.numeric"<-function(x)
-{
-  x <- factor(x)
-  levels(x) <- 1:length(levels(x))
-  x <- as.numeric(x)
-  return(x)
-}
+# {
+#   x <- factor(x)
+#   levels(x) <- 1:length(levels(x))
+#   x <- as.numeric(x)
+#   return(x)
+# }
 
 PARAMETERS <<- NULL
 # used for parsing the params file. read into global var to avoid rereading too many times.
