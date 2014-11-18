@@ -1,10 +1,16 @@
 # Example - using the whole pipeline
 #
 #
-source('~/Documents/R/mwas_git/lib/util.load.r')
-source('~/Documents/R/mwas_git/lib/stats.r')
-library(biom)
+
+
+#library(biom)
 setwd("~/Documents/R/mwas_git")
+# Source files
+#file.sources = list.files(c("C:/folder1", "C:/folder2"),
+file.sources = list.files("lib", pattern="*.R$",
+                          #file.sources = list.files(paste(Sys.getenv('MWAS_DIR'),'/lib',sep=''), pattern="*.R$",
+                          full.names=TRUE, ignore.case=TRUE)
+invisible(sapply(file.sources, source, .GlobalEnv))
 
 opts <- list()
 opts$mode <- "train"
@@ -40,11 +46,17 @@ opts$mode <- "train"
 opts$input_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
 opts$map_fp <- "test/data/gg-map-adults.txt"
 opts$category <- "COUNTRY"
-opts$outdir <- "example/"
+opts$outdir <- "example/train_model"
 opts$method <- "svm"
 opts$feat <- FALSE
+opts$suppress_relative_abundance_conversion <- FALSE
+opts$collapse_table <- FALSE
+opts$min_prevalence <- 0.01
+opts$transform_type <- "none"
+opts$validType <- "cv"
+opts$nfolds <- 10
 
-case.mode <- tolower(opts$mode)
+if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
 
 mwas.obj <- import.train.params(opts)
 model.obj <- train.mwas(mwas.obj)

@@ -41,8 +41,8 @@
 
 # Source files
 #file.sources = list.files(c("C:/folder1", "C:/folder2"),
-#file.sources = list.files("lib", pattern="*.R$",
-file.sources = list.files(paste(Sys.getenv('MWAS_DIR'),'/lib',sep=''), pattern="*.R$",
+file.sources = list.files("lib", pattern="*.R$",
+#file.sources = list.files(paste(Sys.getenv('MWAS_DIR'),'/lib',sep=''), pattern="*.R$",
                           full.names=TRUE, ignore.case=TRUE)
 invisible(sapply(file.sources, source, .GlobalEnv))
 
@@ -102,10 +102,9 @@ option_list <- list(
               help='Maximum false discovery rate to report. Ignored if --which_taxa exists exists [default: %default]'),
   make_option(c("-K","--filter_kegg"), type="logical", action='store_true', default=FALSE,
               help='Whether filter kegg list'),
- 
   # Statistical test parameters
   make_option(c("-a", "--statistcs"),type='character',default="linear",
-              help="Statistical testing options [default: %default]"),
+              help="Statistical testing options [default: %default]")
   )
 
 opts <- parse_args(OptionParser(option_list=option_list),
@@ -120,6 +119,7 @@ if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE
 #  2. predict
 #  3. plot
 #  4. statistics
+
 case_mode <- tolower(opts$mode) # case insensitive
 
 switch(case_mode, 

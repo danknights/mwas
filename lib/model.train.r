@@ -16,7 +16,7 @@
 
 require(pROC, quietly=TRUE, warn.conflicts=FALSE)
 
-"train.mwas" <- function(data.set, y=NULL, is.feat = TRUE, 
+"train.mwas" <- function(data.set, y=NULL, is.feat = FALSE, 
                          method=c("RF","SVM", "knn", "MLR")[1], 
                          valid_type = c("cv", "jk")[1], 
                          nfolds = 10,
