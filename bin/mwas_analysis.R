@@ -32,8 +32,9 @@
 #  21. A - False discovery rate, alpha [default: NULL]
 #  22. X - whhether plot pair-wise PC plots [default: FALSE]
 #  23. K - For heatmap plot, whether filter kegg list [default: FALSE]
+#  24. N - the number of plots for beeswarm and scatter plots [default: NULL]
 #  <statistical testing>
-#  24. a - statistical options
+#  25. a - statistical options
 #
 # ----
 # Last update: 11/12/2014
@@ -102,7 +103,7 @@ option_list <- list(
               help='Maximum false discovery rate to report. Ignored if --which_taxa exists exists [default: %default]'),
   make_option(c("-K","--filter_kegg"), type="logical", action='store_true', default=FALSE,
               help='Whether filter kegg list'),
-  make_option(c("-N", "--nplot"), type="numeric", default=50,
+  make_option(c("-N", "--nplot"), type="numeric", default=NULL,
               help="Number of taxa to plot (in order of decreasing significance). Ignored if --which_taxa exists [default: %default]"),
   # Statistical test parameters
   make_option(c("-a", "--statistcs"),type='character',default="linear",
