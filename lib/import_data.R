@@ -217,6 +217,11 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   #kegg_pathways <- processed.obj$kegg_pathways
   #kegg_pathways <- NULL
   
+  if(opts$method == 'gradients' & opts$shorten_taxa) {
+    colnames(otu) <- shorten.taxonomy(colnames(otu))
+   # colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
+  }
+  
   # check that taxon.names are in taxon table
   if(is.null(opts$which_taxa)){
     taxon.names <- colnames(otu)[rev(order(colMeans(otu)))]
@@ -229,6 +234,7 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
                  paste(taxon.names[!(taxon.names %in% colnames(otu))],collapse=', '),
                  '\n'))
     }
+    #print(taxon.names)
   }
   
   if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
@@ -245,7 +251,8 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
                      is.multiple_axes = opts$multiple_axes,
                      alpha = opts$alpha,
                      plot.type = opts$method,
-                     feat_stats = feat_stats)
+                     feat_stats = feat_stats,
+                     nplot = opts$nplot)
   class(param.list) <- "mwas"
   
   return(param.list)

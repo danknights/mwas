@@ -104,11 +104,11 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
       MCC <- NULL
       Kappa <- NULL
     }
+  
+    evalobj$performance = c(error, accuracy, AUC, MCC, Kappa)
+    if (length(evalobj$performance)==3) { names(evalobj$performance) <- c("error", "accuracy", "AUC") 
+    }else names(evalobj$performance) <- c("error", "accuracy", "AUC", " Matthews_corr_coeff","Cohens_Kappa")
   }
-  evalobj$performance = c(error, accuracy, AUC, MCC, Kappa)
-  if (length(evalobj$performance)==3) { names(evalobj$performance) <- c("error", "accuracy", "AUC") 
-  }else names(evalobj$performance) <- c("error", "accuracy", "AUC", " Matthews_corr_coeff","Cohens_Kappa")
-
   return(evalobj)
 }
 

@@ -102,6 +102,8 @@ option_list <- list(
               help='Maximum false discovery rate to report. Ignored if --which_taxa exists exists [default: %default]'),
   make_option(c("-K","--filter_kegg"), type="logical", action='store_true', default=FALSE,
               help='Whether filter kegg list'),
+  make_option(c("-N", "--nplot"), type="numeric", default=50,
+              help="Number of taxa to plot (in order of decreasing significance). Ignored if --which_taxa exists [default: %default]"),
   # Statistical test parameters
   make_option(c("-a", "--statistcs"),type='character',default="linear",
               help="Statistical testing options [default: %default]")

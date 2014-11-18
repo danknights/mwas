@@ -97,15 +97,16 @@ opts$input_fp <- "test/data/taxa/merged-taxa.txt"
 opts$map_fp <- "test/data/gg-map-adults.txt"
 opts$category <- "COUNTRY"
 opts$outdir <- "example/"
-opts$feat_stats <- "test/data/stats/taxon-stats-table.txt"
+opts$feat_stats_fp <- "test/data/stats/taxon-stats-table.txt"
 opts$min_prevalence <- 0.1
-opts$plot_type <- "beeswarm"
+opts$method <- "beeswarm"
 opts$shorten_taxa <- FALSE
-opts$alpha <- 0.05
+opts$alpha <- 0.001
 opts$shorten_taxa <- TRUE
 opts$filter_kegg <- FALSE
 opts$collapse_table <- FALSE
 opts$suppress_relative_abundance_conversion <- FALSE
+opts$nplot <- 20
 
 mwas.obj <- import.plot.params(opts)
 plot(mwas.obj)
@@ -119,7 +120,7 @@ opts$category <- "COUNTRY"
 opts$outdir <- "example/gradients"
 opts$feat_stats <- "test/data/stats/taxon-stats-table.txt"
 opts$min_prevalence <- 0.1
-opts$plot_type <- "gradients"
+opts$method <- "gradients"
 opts$shorten_taxa <- FALSE
 opts$alpha <- 0.05
 opts$shorten_taxa <- TRUE

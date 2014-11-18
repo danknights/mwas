@@ -19,23 +19,26 @@
   options <- list(...)
 
   if (class(data) == "mwas"){
-    x <- data$x 
+    x <- data$otu 
     pc <- data$pc 
     out.dir <- data$out.dir
     m <- data$m 
     response <- data$response
+    taxon.names <- data$taxon.names
     is.shorten.taxa <- data$is.shorten.taxa
     category <- data$category
     is.multiple_axes <- data$is.multiple_axes
     alpha <- data$alpha
     plot.type <- data$plot.type
     feat_stats <- data$feat_stats
+    nplot <- opts$nplot
   } else{
     x <- data 
     pc <- options$pc 
     out.dir <- options$out.dir
     m <- options$m 
     response <- options$response
+    taxon.names <- options$taxon.names
     is.shorten.taxa <- options$is.shorten.taxa
     category <- options$category
     is.multiple_axes <- options$is.multiple_axes
@@ -50,7 +53,7 @@
              # if alpha is given, then use the differentiated test feature table
              # otherwise use the whole taxa in the original table.
              
-             diff.obj <- diff.plot.parameters(x, response,  alpha, feat_stats, is.shorten.taxa)
+             diff.obj <- diff.plot.parameters(x, response,  alpha, feat_stats, nplot, is.shorten.taxa)
              run.beeswarm(diff.obj$new_taxon_table, 
                           diff.obj$response, 
                           diff.obj$filename,
@@ -66,7 +69,8 @@
                           pc=pc, out.dir=out.dir, m=m,
                           taxon.names=taxon.names, 
                           category=category,
-                          is.multiple_axes=is.multiple_axes)
+                          is.multiple_axes=is.multiple_axes,
+                          is.shorten.taxa = is.shorten.taxa)
          },
          heatmap = { # need to fix
            heatmap.mwas(x, map, diff.features, cluster.var=c("Sex", "Treatment"), 
@@ -158,6 +162,7 @@
   }
   
   for (i in 1:dim(beeswarmfile3)[2]){
+    #print(i)
     par(mar =c(13,4,3,2))
     beeswarm(beeswarmfile3[,i] ~ response, data = beeswarmfile2,
              pch = 21,
@@ -245,7 +250,7 @@
 }
 
 "plot.gradients" <- function(x, pc, out.dir, m=NULL, taxon.names=NULL, category=NULL,
-                             is.multiple_axes=FALSE){
+                             is.multiple_axes=FALSE, is.shorten.taxa = TRUE){
   
   if (is.null(category)){ 
     # if the category is not specified, then plot gradient
@@ -294,33 +299,38 @@
   return("Please check the PDF file.")
 }
 
-"diff.plot.parameters" <- function(x, response,  alpha, feat_stats=NULL, is.shorten.taxa=TRUE){
+"diff.plot.parameters" <- function(x, response,  alpha, feat_stats=NULL, nplot=50, is.shorten.taxa=TRUE){
   
   if (!is.null(feat_stats)){
     # if the feature statistic table is provided, then load from file
     # else calculate q-values
-    ft.qvalue <- subset(feat_stats, qvalues < alpha) # ft - differentiated feature vector
+    ft.qvalue <- subset(feat_stats, qvalues <= alpha) # ft - differentiated feature vector
     ft.qvalue <- t(ft.qvalue)
-  
-    } else { 
+    ft.qvalue <- ft.qvalue[,order(ft.qvalue["pvalues", ], decreasing=F)[1:min(nplot,dim(ft.qvalue)[2])]]
+    
+    keep_bugs <- colnames(x)[colnames(x) %in% colnames(ft.qvalue)]
+  } else { 
     
     # if the feature stats table is not given, 
     diff.table <- differentiation.test(x, response, alpha = alpha)
-    qvalues <- diff.table$qvalues
-    ft.qvalue <- subset(qvalues, qvalues < alpha)
-    }
-  
-    keep_bugs <- colnames(x)[colnames(x) %in% colnames(ft.qvalue)]
-    if (length(keep_bugs)==0) stop("Please input a taxon table (not OTU table); or there is no overlapped taxa information between these two tables.")
-    new_taxon_table <- x[, keep_bugs]
+    hit.ix <- order(diff.table$pvalues, decreasing=F)[1:min(nplot,length(diff.table$pvalues))]
+    ft.qvalue <- diff.table$qvalues[hit.ix]
     
-    # shorten taxonomy name if specified
-    if(is.shorten.taxa) {
-      colnames(ft.qvalue) <- shorten.taxonomy(colnames(ft.qvalue))
-      colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
-    }
-    filename <- sprintf("beeswarm-plot-alpha-%.2f.pdf", alpha)
-
+    keep_bugs <- colnames(x)[colnames(x) %in% names(ft.qvalue)]
+  }
+  
+  if (length(keep_bugs)==0) stop("Please input a taxon table (not OTU table); or there is no overlapped taxa information between these two tables.")
+  new_taxon_table <- x[, keep_bugs]
+  
+  # shorten taxonomy name if specified
+  if(is.shorten.taxa) {
+    if (!is.null(feat_stats)) colnames(ft.qvalue) <- shorten.taxonomy(colnames(ft.qvalue))
+    else names(ft.qvalue) <- shorten.taxonomy(names(ft.qvalue))
+    
+    colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
+  }
+  filename <- sprintf("beeswarm-plot-alpha-%.3f.pdf", alpha)
+  
   return(list(new_taxon_table=new_taxon_table, response=response, filename=filename))
 }
 
