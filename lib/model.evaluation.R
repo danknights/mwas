@@ -75,7 +75,7 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
     # confusion matrix
     c.matrix <- t(sapply(levels(desired), function(level) table(evalobj$prediction[desired==level])))
     
-    rocobj <- roc.mwas(x, predicted = evalobj$prediction, response = as.numeric(desired))
+    rocobj <- roc.mwas(x, predicted = evalobj$prediction, response = desired)
     
     evalobj$confusion.matrix <- c.matrix
     error <- sum(as.numeric(evalobj$prediction) != as.numeric(desired))/sample.num
@@ -99,7 +99,7 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
     #        = ((TP+FP)/(P+N)*(TP+FP)/(P+N)+(FN+TN)/(P+N)*(FP+TN)/(P+N))
     Pr.e <- (c.matrix[1,1]+c.matrix[1,2])/sum(c.matrix)*(c.matrix[1,1]*c.matrix[2,1])/sum(c.matrix)+
       (c.matrix[2,1]*c.matrix[2,2])/sum(c.matrix)*(c.matrix[1,2]*c.matrix[2,2])/sum(c.matrix)
-    Kappa <- (evalobj$acc - Pr.e)/(1 - Pr.e)
+    Kappa <- (accuracy - Pr.e)/(1 - Pr.e)
     } else {
       MCC <- NULL
       Kappa <- NULL

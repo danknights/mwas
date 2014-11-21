@@ -40,8 +40,8 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
   }else x <- data.set
   
   if (is.feat){
-    feat.set <- feature.scores.mwas(x, y, selection_threshold = 0)
-    train.set <- x[,feat.set$ix]
+    feat.set <- feature.scores.mwas(x, y, selection_threshold = 1)
+    train.set <- x[,feat.set]
   }else train.set <- x
   
   best.model <- persist.model.mwas(train.set, y, nfolds=nfolds, classifier=method, valid_type,  out.dir=out.dir)
@@ -76,7 +76,8 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
       # fold index that is being hold out
       if(cv.id < nfolds) {idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, cv.id*cv.samp.num, by=1)]
       }else {# the last fold could contain less than cv.samp.num of observations
-        idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, length(cv.ind), by=1)] }
+        idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, length(cv.ind), by=1)] 
+      }
       
       validation.set <- x[idx,]
       validation.labels <- y[idx]
@@ -181,7 +182,7 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
          }, svm={
            require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
 
-           best.model <- tune.svm(x, y, tunecontrol = tune.control(random=TRUE, sampling="cross", cross = nfolds))
+           best.model <- tune.svm(x, y, tunecontrol = tune.control(random=TRUE, sampling="cross", cross = nfolds), probability = TRUE)
            # $best.model         the model trained on the complete training data using the best parameter combination.
            # $best.parameters    a 1 x k data frame, k number of parameters
            # $best.performance   best achieved performance

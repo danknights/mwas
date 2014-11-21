@@ -15,38 +15,30 @@
 # Last update: 10/25/2014
 #
 
-"feature.scores.mwas" <- function(x, y, selection_thres = 1){
+"feature.scores.mwas" <- function(x, y, selection_threshold = 1, out.dir = NULL){
   
-  require(caret, quietly=TRUE, warn.conflicts=FALSE)
+  #require(caret, quietly=TRUE, warn.conflicts=FALSE)
   require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
 
-  rf.model <- randomForest(x,y,keep.inbag=TRUE,importance=TRUE)
+  rf.model <- randomForest(x,y, proximity = TRUE, ntree = 1000, importance=TRUE)
+  #importances <- rf.model$importance[,'MeanDecreaseAccuracy']
+  imp <- importance(rf.model, type =1, scale=T)
+  importances_order <- order(imp, decreasing = T)
   
-  features.scores <- importance(rf.model, type=1, scale=FALSE)
+  if (is.null(out.dir)) {
+    file_name = './feature_scores.txt'
+  } else file_name = sprintf('%s/feature_scores.txt', out.dir)
   
-  ff <- varImp(rf.model, mode =1)
-  importances <- rf.model$importance[,'MeanDecreaseAccuracy']
-  varImpPlot(rf.model)
-  # a matrix with nclass + 2 (for classification) or two (for regression) columns. 
-  # For classification, the first nclass columns are the class-specific measures 
-  # computed as mean descrease in accuracy. The nclass + 1st column is the mean 
-  # descrease in accuracy over all classes. The last column is the mean decrease 
-  # in Gini index. For Regression, the first column is the mean decrease in accuracy 
-  # and the second the mean decrease in MSE. If importance=FALSE, the last measure is 
-  # still returned as a vector.
-  features.scores <- importances[order(importances, decreasing=T)]
+  file.out <- file(file_name, 'w')
+  write.table(imp, file.out, sep='\t')
+  flush(file.out)
+  close(file.out)
   
-  # Loop through the features in order of importance, and keep grabbing them until
-  # they are no longer important (threshold > 1)
-  i <- 0
-  endFeatures = NULL
+  ordered_feat_set <- colnames(x)[importances_order]
+  ordered_feat_imp <- imp[importances_order]
   
-  #while (features.scores[i,1] >= selection_threshold) { # features over threshold importance are kept
-  #	endFeatures <- rbind(endFeatures,features[i,:])
-  #	i <- i + 1
-  #}
-  endIx <- match(rownames(endFeatures),colnames(x))
+  feat_set <- ordered_feat_set[ordered_feat_imp > selection_threshold]
   
-  return(list(features = endFeatures, ix = endIx))
+  return(feat_set)
 }
 

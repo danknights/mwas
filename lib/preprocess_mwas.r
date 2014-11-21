@@ -17,7 +17,7 @@
                               map = NULL, 
                               distMat = NULL,
                               kegg = NULL,
-                              min_prevalence = .001, 
+                              min_prevalence = NULL, 
                               transform_type = NULL, 
                               is.filter.kegg = FALSE, 
                               is.collapse = FALSE,
@@ -42,9 +42,13 @@
   taxa <- preprocess.obj$taxa
   distMat <- preprocess.obj$distmat
   
+  if (dim(otu)[1]==0 | dim(map)[1]==0){
+    stop('The sample IDs in the OTU table don\'t match the samples in the mapping file!')
+  }
+  
   # convert to the relative abundance
   if(is.relative.conversion){
-    otu <- sweep(otu, 1, rowSums(otu), '/') #relative abundance
+    otu[rowSums(otu)>0,] <- sweep(otu[rowSums(otu)>0,], 1, rowSums(otu[rowSums(otu)>0,]), '/') #relative abundance
   }
   
   # remove rare features (do by minimum prevalence or average prevalence)
