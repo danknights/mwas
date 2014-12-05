@@ -244,7 +244,7 @@
 }
 
 
-"shorten.taxonomy" <- function(ids,delim='; ',num.levels=1,must.include.level=7){
+"shorten.taxonomy" <- function(ids,delim=';',num.levels=1, must.include.level=7){
   ids <- gsub('[kpcofgs]__$','Other',ids)
   ids <- gsub('[kpcofgs]__','',ids)
   newids <- ids

@@ -20,7 +20,7 @@
   #require(caret, quietly=TRUE, warn.conflicts=FALSE)
   require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
 
-  rf.model <- randomForest(x,y, proximity = TRUE, ntree = 1000, importance=TRUE)
+  rf.model <- randomForest(x,y, proximity = TRUE, importance=TRUE)
   #importances <- rf.model$importance[,'MeanDecreaseAccuracy']
   imp <- importance(rf.model, type =1, scale=T)
   importances_order <- order(imp, decreasing = T)
@@ -42,3 +42,7 @@
   return(feat_set)
 }
 
+"features.mRMR.mwas" <- function(x, y, selection_threshold = 1, out.dir = NULL){
+  require(mRMRe, quietly=TRUE, warn.conflicts=FALSE)
+  
+}

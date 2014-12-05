@@ -19,6 +19,9 @@
 
 "export.mwas" <- function(trained.model=NULL, model.eval=NULL, trained.model.perform=NULL,
                           feat.set=NULL, out.dir=NULL, file.name="predcition_results"){
+  
+  if(is.null(out.dir)) out.dir <- '.'
+  
   if(!is.null(trained.model)) {
     # save trained model and selected feature vector
     if(!is.null(feat.set)){
@@ -28,13 +31,15 @@
       
       best.model<-list()
       best.model$trained.model <- trained.model
-      best.model$features <- feat.set.ix        # feature row names or index
+      best.model$features <- feat.set      # feature row names or index
     } else {
       best.model<-list()
       best.model$trained.model <- trained.model
     }
    # should save as rds format
-    saveRDS(best.model, file = paste(out.dir,"/trained_model.rds", collapse='', sep='')) 
+   model.out.name <- sprintf('%s/trained_%s_model.rds', out.dir, class(trained.model))
+   #saveRDS(best.model, file = paste(out.dir,"/trained_model.rds", collapse='', sep=''))
+   saveRDS(best.model, file = model.out.name)
   }
   
   if (!is.null(model.eval)){
@@ -50,10 +55,17 @@
 
   if (!is.null(trained.model.perform)){
     # save trained model evaluation
-    file.name <- sprintf('%s/trained_model_performance.xlsx', out.dir)
+    file.name <- sprintf('%s/trained_%s_model_performance.xlsx', out.dir, class(trained.model))
     save.xlsx(objects=trained.model.perform, file.name=file.name)
   }  
    
+  if (!is.null(feat.set)){
+    feat_file_name <- sprintf('%s/selected_feature_sets', out.dir)
+    file.out <- file(feat_file_name, 'w')
+    write.table(feat.set, file.out, sep='\t')
+    flush(file.out)
+    close(file.out)
+  }
 }
 
 # save data tabel in a Excel workbook.
