@@ -126,6 +126,13 @@
             # if there is a comment line with the correct number of columns,
             # it is the header
             header.index <- max(which(ncolumns.per.line[-linecount] == C))
+        } else if(any(ncolumns.per.line[-linecount] == C+1)) {
+            # if there is no comment line with the exacet number of columns, 
+            # but one more column than the data tabel, then this line is considered
+            # as the header. 
+            # The last column is "Description" column, and all the data don't 
+            # have any values for this entry column.
+           header.index <- max(which(ncolumns.per.line[-linecount] == C+1))
         } else {
             # if there is no comment line with the correct number of columns,
             # the first non-comment line is the header
