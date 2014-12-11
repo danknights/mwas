@@ -20,7 +20,8 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
                          method=c("RF","SVM", "knn", "MLR")[1], 
                          valid_type = c("cv", "jk")[1], 
                          nfolds = 10,
-                         out.dir=NULL){
+                         out.dir=NULL,
+                         feat.threshold=0){
   
   if (class(data.set)=="mwas") {
     x <- data.set$features 
@@ -28,6 +29,10 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
     
     is.feat <- data.set$is.feat
     if(is.null(is.feat)) is.feat=FALSE
+    
+    if(!is.null(data.set$feat_param)) {
+      feat.threshold <- data.set$feat_param
+    }else feat.threshold <- 0
     
     method <- data.set$method
     
@@ -40,11 +45,15 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
   }else x <- data.set
   
   if (is.feat){
-    feat.set <- feature.scores.mwas(x, y, selection_threshold = 1)
+    feat.set <- feature.scores.mwas(x, y, selection_threshold = feat.threshold)
     train.set <- x[,feat.set]
-  }else train.set <- x
-  
-  best.model <- persist.model.mwas(train.set, y, nfolds=nfolds, classifier=method, valid_type,  out.dir=out.dir)
+  }else {
+    feat.set <- colnames(x)
+    train.set <- x
+  }
+  best.model <- persist.model.mwas(train.set, y, nfolds=nfolds, classifier=method, 
+                                   valid_type, is.feat = is.feat, feat.set=feat.set, 
+                                   out.dir=out.dir)
   
   #export.mwas(trained.model = best.model, feat.set = feat.set)
   return(best.model)
@@ -56,7 +65,8 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
 
 "persist.model.mwas" <- function(x, y, nfolds=10, 
                                  classifier=c("RF","SVM", "knn", "MLR")[1],
-                                 valid_type=c("cv", "jk")[1],  out.dir=NULL){
+                                 valid_type=c("cv", "jk")[1], is.feat=FALSE,
+                                 feat.set=NULL, out.dir=NULL){
   
   #require(pROC, quietly=TRUE, warn.conflicts=FALSE)
   
@@ -137,9 +147,12 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
   
   # if (savefile) save(best.model, file = paste(opts$outdir,"/trained.model", collapse='', sep=''))
   # Saving file is integrated into export.mwas.R
+  if(!is.feat) feat.set <- NULL
   
+  file.out <- sprintf('train_%s_model_results', classifier)
   export.mwas(trained.model=best.model, model.eval=best.model.eval, 
-              trained.model.perform=model.perform,  out.dir=out.dir)
+              trained.model.perform=model.perform, feat.set=feat.set,
+              out.dir=out.dir, file.name = file.out)
   
   # class(best.model) <- "mwas"
   return(best.model)
