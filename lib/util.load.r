@@ -131,7 +131,7 @@
             # but one more column than the data tabel, then this line is considered
             # as the header. 
             # The last column is "Description" column, and all the data don't 
-            # have any values for this entry column.
+            # have any values for this entry column. 
            header.index <- max(which(ncolumns.per.line[-linecount] == C+1))
         } else {
             # if there is no comment line with the correct number of columns,
