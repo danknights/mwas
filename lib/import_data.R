@@ -127,9 +127,15 @@ require(biom, quietly=TRUE, warn.conflicts=FALSE)
   
   best.model <- readRDS(opts$method)
   
+  colnames(otus) <- shorten.taxonomy(colnames(otus))
   #if("feat.set" %in% best.model) {
-  if(!is.null(best.model$feat.set)) {
-      feat.Data <- otus[, best.model$feat.set]
+  if(!is.null(best.model$features)) {
+      #feat.Data <- otus[, best.model$feat.set]
+    feat.Data <- vector()
+    for (id in seq_along(best.model$features)){
+      feat.Data <- cbind(feat.Data, otus[,best.model$features[id]])
+    }
+    colnames(feat.Data) <- best.model$features
   } else feat.Data <- otus
   
   param.list <- list(features=feat.Data, 
