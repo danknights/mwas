@@ -20,27 +20,6 @@ opts$category <- "COUNTRY"
 opts$outdir <- "example/"
 
 ################### train
-mapping <- load.qiime.mapping.file('test/data/gg-map-adults.txt')
-dim(mapping)
-#x <- read.table('test/data/GG_100nt_even10k-adults-biom',sep='\t',head=T,row=1,check=F)
-biom_table <- load.qiime.otu.table('test/data/GG_100nt_even10k-adults-s20.biom')
-dim(biom_table)
-otus <- biom_table[rownames(mapping),]
-
-feat.Data <- otus
-response <- as.factor(mapping[,"COUNTRY"])
-
-diff <- differentiation.test(feat.Data, response)
-write.differentiation.test.results(diff,  filename='example/differentiated.features.txt')
-
-diff.qvalue <- subset(diff, diff$qvalues < 0.05)
-
-ft<- read.table('example/differentiated.features.txt',sep='\t',head=T,row=1,check=F,quote='"',comment='')
-ft.qvalue <-  subset(ft, qvalue < 0.05)
-source('~/Documents/R/mwas_git/lib/model.train.r')
-
-best.model <- train.mwas(feat.Data, response, is.feat = FALSE, method="svm")
-################### train
 opts <- list()
 opts$mode <- "train"
 opts$input_fp <- "test/data/GG_100nt_even10k-adults-s20.biom"
@@ -48,7 +27,7 @@ opts$map_fp <- "test/data/gg-map-adults.txt"
 opts$category <- "COUNTRY"
 opts$outdir <- "example/train_model"
 opts$method <- "svm"
-opts$feat <- FALSE
+opts$feat <- TRUE
 opts$suppress_relative_abundance_conversion <- FALSE
 opts$collapse_table <- FALSE
 opts$min_prevalence <- 0.01
