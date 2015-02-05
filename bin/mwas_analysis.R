@@ -5,7 +5,7 @@
 # ------  
 #  input: 
 #   <general options>
-#   1. w - mode - "train", "predict", "plot", "statistics"
+#   1. w - mode - "learn", "predict", "plot", "statistics"
 #   2. i - OTU table - BIOM or classic format (required)
 #   3. m - map file   (required)
 #   4. c - category name(s) (required)
@@ -37,7 +37,7 @@
 #  25. a - statistical options
 #
 # ----
-# Last update: 11/12/2014
+# Last update: 02/05/2015
 #
 
 # Source files
@@ -118,7 +118,7 @@ if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE
 
 ######################## Mode selection   #######
 # Four available modes:
-#  1. train
+#  1. learn
 #  2. predict
 #  3. plot
 #  4. statistics
@@ -126,7 +126,7 @@ if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE
 case_mode <- tolower(opts$mode) # case insensitive
 
 switch(case_mode, 
-       train = { mwas.obj <- import.train.params(opts)
+       learn = { mwas.obj <- import.train.params(opts)
                  train.mwas(mwas.obj)
                  #print("Training is finished!")
        }, 
@@ -143,5 +143,5 @@ switch(case_mode,
                       model.statistical.test.mwas(mwas.obj)
          #print("statistics")
        }, 
-       stop("Please specify a function mode: train, predict, plot, statistics.")
+       stop("Please specify a function mode: learn, predict, plot, statistics.")
 )
