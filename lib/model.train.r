@@ -72,6 +72,10 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
   
   # x - feature set (observation * features)
   # y - desried response
+  
+  #cat.ind <- list()  # category indices
+  #response.tab <- table(y)
+  
   cv.ind <- sample(dim(x)[1])   # permutate the index
   cv.samp.num <- floor(length(cv.ind)/nfolds)
   sampl_ind <- seq(1, dim(x)[1], by=1)

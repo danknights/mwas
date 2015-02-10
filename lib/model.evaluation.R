@@ -74,13 +74,14 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
 
     # confusion matrix
     c.matrix <- t(sapply(levels(desired), function(level) table(evalobj$prediction[desired==level])))
-    
+
     rocobj <- roc.mwas(x, predicted = evalobj$prediction, response = desired)
+    AUC <- rocobj$auc
     
     evalobj$confusion.matrix <- c.matrix
     error <- sum(as.numeric(evalobj$prediction) != as.numeric(desired))/sample.num
     accuracy <- sum(diag(c.matrix))/sum(c.matrix)  # == 1 - evalobj$error 
-    AUC <- rocobj$auc
+   
     
     # MCC =  Pearson's correlation of y, yhat
     # MCC and Kappa for binary classification only
