@@ -1,6 +1,6 @@
 # Feature selection using randomForest
 # This function is adapted from randomForest module in QIIME pipeline
-# Contributors: Hu, Gabe, Dan
+# Contributors: Hu, Dan
 #---
 #  input:
 #     x : feature vector
@@ -18,7 +18,7 @@
 "feature.scores.mwas" <- function(x, y, selection_threshold = 1, out.dir = NULL){
   
   #require(caret, quietly=TRUE, warn.conflicts=FALSE)
-  require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
+  #require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
 
   rf.model <- randomForest(x,y, proximity = TRUE, importance=TRUE)
   #importances <- rf.model$importance[,'MeanDecreaseAccuracy']

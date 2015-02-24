@@ -48,7 +48,11 @@ file.sources = list.files("lib", pattern="*.R$",
 invisible(sapply(file.sources, source, .GlobalEnv))
 
 ####################### Parse INPUT options #####
-require(optparse, quietly=TRUE, warn.conflicts=FALSE)
+if (!require("optparse")) {
+  install.packages("optparse", dependencies = TRUE)
+  library(optparse)
+}
+#require(optparse, quietly=TRUE, warn.conflicts=FALSE)
 # make option list and parse command line
 option_list <- list(
   make_option(c("-w", "--mode"),type='character',
