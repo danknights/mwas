@@ -5,7 +5,7 @@
 # input:
 #       opts : options from the user
 #              parameters are slightly different for the four modes:
-#              train -- input_fp
+#              learn -- input_fp
 #                       category
 #                       map_fp
 #                       is_feat (is.feat_select)
