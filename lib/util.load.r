@@ -26,9 +26,10 @@
     biom_table <- read_biom(filepath)          	   # OTU table - biom format
     datatable <- as.matrix(biom_data(biom_table))  # OTU table - classic format
     metadata <- observation_metadata(biom_table) 
-    lineages <- apply(metadata, 1, function(x) paste(x, collapse=';')) # lineage names
-  }
-  else {
+    if(!is.null(metadata)){
+      lineages <- apply(metadata, 1, function(x) paste(x, collapse=';')) # lineage names
+    } else lineages <- NULL
+  } else {
     # otherwise, the file could be a classic OTU table/mapping file etc.
     tryCatch(datatable <- read.qiime.classic.table(filepath, as.data.frame=as.data.frame), error = function(err) 
       print("If BIOM format, use .biom extension"))

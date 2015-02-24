@@ -13,7 +13,7 @@
 #
 
 # temporary place holder for use by PJ until the real preprocess function is written
-"preprocess.mwas" <- function(input.data, 
+"preprocess.mwas" <- function(input.data = NULL, 
                               map = NULL, 
                               distMat = NULL,
                               kegg = NULL,
@@ -47,9 +47,9 @@
   }
   
   # convert to the relative abundance
-  if(is.relative.conversion){
-    otu[rowSums(otu)>0,] <- sweep(otu[rowSums(otu)>0,], 1, rowSums(otu[rowSums(otu)>0,]), '/') #relative abundance
-  }
+  #if(is.relative.conversion){
+  #  otu[rowSums(otu)>0,] <- sweep(otu[rowSums(otu)>0,], 1, rowSums(otu[rowSums(otu)>0,]), '/') #relative abundance
+  #}
   
   # remove rare features (do by minimum prevalence or average prevalence)
   if (dim(otu)[2] > 1&&!is.null(min_prevalence)) 

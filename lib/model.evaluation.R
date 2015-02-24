@@ -22,10 +22,27 @@
 # --- 
 # Last Update: 10/25/2014
 #
-require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
-require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
-require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
-require(pROC, quietly=TRUE, warn.conflicts=FALSE)
+
+#if (!require("e1071")) {
+#  install.packages("e1071", dependencies = TRUE)
+#  library(e1071)
+#}
+if (!require("kernlab")) {
+  install.packages("kernlab", dependencies = TRUE)
+  library(kernlab)
+}
+if (!require("glmnet")) {
+  install.packages("glmnet", dependencies = TRUE)
+  library(glmnet)
+}
+if (!require("randomForest")) {
+  install.packages("randomForest", dependencies = TRUE)
+  library(randomForest)
+}
+#require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
+#require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
+#require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
+#require(pROC, quietly=TRUE, warn.conflicts=FALSE)
 
 "model.evaluation.mwas" <- function(data.set, model, desired){
   
@@ -74,13 +91,14 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
 
     # confusion matrix
     c.matrix <- t(sapply(levels(desired), function(level) table(evalobj$prediction[desired==level])))
-    
+
     rocobj <- roc.mwas(x, predicted = evalobj$prediction, response = desired)
+    AUC <- rocobj$auc
     
     evalobj$confusion.matrix <- c.matrix
     error <- sum(as.numeric(evalobj$prediction) != as.numeric(desired))/sample.num
     accuracy <- sum(diag(c.matrix))/sum(c.matrix)  # == 1 - evalobj$error 
-    AUC <- rocobj$auc
+   
     
     # MCC =  Pearson's correlation of y, yhat
     # MCC and Kappa for binary classification only
@@ -117,4 +135,23 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
   require(class)
   prediction <- knn(model$train, test, model$cl, k=model$k, l=model$l, prob=TRUE, use.all=TRUE)
   return(prediction)
+}
+
+bray_dist <- function(data){
+  b_dist <- vegdist(data, method = "bray")
+  b_dist <- as.matrix(b_dist)
+  return(b_dist)
+}
+
+knn_dist <- function(data1, data2, y1, k){
+  Ind1 <- dim(data1)[1]
+  new_data <- rbind(data1, data2)
+  dist_mat <-as.matrix(vegdist(new_data, method="bray"))
+  Num <- dim(dist_mat)[1]
+  y2 <- vector()
+  for(id in (Ind1+1):Num){
+    tt <- table(y1[match(names(sort(dist_mat[id, 1:Ind1])[1:k]), rownames(data1))])
+    y2[id - Ind1] <- names(sort(tt, decreasing=T)[1])
+  }
+  return(y2)
 }

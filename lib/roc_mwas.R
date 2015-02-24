@@ -20,7 +20,7 @@
 
 "roc.mwas" <- function(x, model=NULL, predicted=NULL, response, is.plot=FALSE){
 
-  require(pROC, quietly=TRUE, warn.conflicts=FALSE)
+#  require(pROC, quietly=TRUE, warn.conflicts=FALSE)
   
   if (!is.null(model)&&is.null(predicted)) { 
     predicted <- predict(model, x) 
@@ -29,11 +29,22 @@
     stop("ROC fucntion needs at least one of the following values: trained model or predicted values!")
   }
   
-  if (length(levels(response)) == 2)  { # binary classification
-    rocobj <- roc(response, as.numeric(predicted), percent=TRUE, ci=TRUE, plot=is.plot) 
+  roc.flag <- 1
+  for(id in length(levels(response))){
+    roc.flag <- roc.flag * length(which(response==levels(response)[id]))
+  }
+  
+  if(roc.flag != 0){
+    if (length(levels(response)) == 2)  { # binary classification
+      rocobj <- roc(response, as.numeric(predicted), percent=TRUE, ci=TRUE, plot=is.plot) 
     } else {# multi-class classification
-    rocobj <- multiclass.roc(response, as.numeric(predicted), percent=TRUE, plot=is.plot)
+      rocobj <- multiclass.roc(response, as.numeric(predicted), percent=TRUE, plot=is.plot)
     }
+  } else {
+    rocobj <- list()
+    rocobj$auc <- 0
+    #rocobj <- NULL
+  }
   return(rocobj)
 }
 

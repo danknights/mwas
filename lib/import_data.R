@@ -52,7 +52,11 @@
 #  Last update: 11/12/2014
 #
 
-require(biom, quietly=TRUE, warn.conflicts=FALSE)
+if (!require("biom")) {
+  install.packages("biom", dependencies = TRUE)
+  library(biom)
+}
+#require(biom, quietly=TRUE, warn.conflicts=FALSE)
 
 "import.train.params" <- function(opts){
 

@@ -14,7 +14,11 @@
 #  Last update: 10/25/2014
 #
 
-require(pROC, quietly=TRUE, warn.conflicts=FALSE)
+#if (!require("pROC")) {
+#  install.packages("pROC", dependencies = TRUE)
+#  library(pROC)
+#}
+#require(pROC, quietly=TRUE, warn.conflicts=FALSE)
 
 "train.mwas" <- function(data.set, y=NULL, is.feat = FALSE, 
                          method=c("RF","SVM", "knn", "MLR")[1], 
@@ -72,6 +76,10 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
   
   # x - feature set (observation * features)
   # y - desried response
+  
+  #cat.ind <- list()  # category indices
+  #response.tab <- table(y)
+  
   cv.ind <- sample(dim(x)[1])   # permutate the index
   cv.samp.num <- floor(length(cv.ind)/nfolds)
   sampl_ind <- seq(1, dim(x)[1], by=1)
@@ -171,7 +179,7 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
   
   classifier <- tolower(classifier) # case insensitive for options
   switch(classifier, rf = {
-           require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
+           #require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
            
            best.model <- tune.randomForest(x, y, tunecontrol = tune.control(random=TRUE, sampling="cross", cross = nfolds))
            # $best.performance     the error rate for the best model
@@ -193,7 +201,7 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
            #   -- $y               the desired labels for the training set
            #   -- $inbag, $test
          }, svm={
-           require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
+           #require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
 
            best.model <- tune.svm(x, y, tunecontrol = tune.control(random=TRUE, sampling="cross", cross = nfolds), probability = TRUE)
            # $best.model         the model trained on the complete training data using the best parameter combination.
@@ -202,7 +210,7 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
            # $performances       a data frame with all parametere combinations along with the corresponding performance results
            # $train.ind          list of index vectors used for splits into training and validation sets
          }, mlr = {
-           require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
+           #require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
            
            y <- as.numeric(y)  # for regression, response should be numeric
            best.model <- cv.glmnet(x, y, nfolds = nfolds, family="multinomial")
@@ -218,8 +226,8 @@ require(pROC, quietly=TRUE, warn.conflicts=FALSE)
            # $fit.preval, $foldid
            
          }, knn = {
-           require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
-           best.model <- tune.knn(x, y, k = seq(from=1, to=min(dim(x)[1]/nfolds*(nfolds-1), 25), by =2), 
+           #require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
+           best.model <- tune.knn(x, y, k = seq(from=1, to=min(dim(x)[1]/nfolds*(nfolds-1), 15), by =2), 
                                   l= 1, sampling="cross", cross = nfolds, prob = TRUE) 
            class(best.model$best.model) <- 'knn'
            # $best.parameters$k          best k
