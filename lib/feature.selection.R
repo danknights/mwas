@@ -27,12 +27,13 @@
   
   if (is.null(out.dir)) {
     file_name = './feature_scores.txt'
-  } else file_name = sprintf('%s/feature_scores.txt', out.dir)
-  
-  file.out <- file(file_name, 'w')
-  write.table(imp, file.out, sep='\t')
-  flush(file.out)
-  close(file.out)
+    #} else file_name = sprintf('%s/feature_scores.txt', out.dir)
+    
+    file.out <- file(file_name, 'w')
+    write.table(imp, file.out, sep='\t')
+    flush(file.out)
+    close(file.out)
+  }
   
   ordered_feat_set <- colnames(x)[importances_order]
   ordered_feat_imp <- imp[importances_order]

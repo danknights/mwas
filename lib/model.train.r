@@ -14,10 +14,38 @@
 #  Last update: 10/25/2014
 #
 
+if (!require("e1071")) {
+  install.packages("e1071", dependencies = TRUE)
+  library(e1071)
+}
+
+if (!require("kernlab")) {
+  install.packages("kernlab", dependencies = TRUE)
+  library(kernlab)
+}
+if (!require("glmnet")) {
+  install.packages("glmnet", dependencies = TRUE)
+  library(glmnet)
+}
+if (!require("randomForest")) {
+  install.packages("randomForest", dependencies = TRUE)
+  library(randomForest)
+}
+if (!require("vegan")) {
+  install.packages("vegan", dependencies = TRUE)
+  library(vegan)
+}
+
 #if (!require("pROC")) {
 #  install.packages("pROC", dependencies = TRUE)
 #  library(pROC)
 #}
+
+#require(pROC, quietly=TRUE, warn.conflicts=FALSE)
+
+#require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
+#require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
+#require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
 #require(pROC, quietly=TRUE, warn.conflicts=FALSE)
 
 "train.mwas" <- function(data.set, y=NULL, is.feat = FALSE, 

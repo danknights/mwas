@@ -23,27 +23,6 @@
 # Last Update: 10/25/2014
 #
 
-#if (!require("e1071")) {
-#  install.packages("e1071", dependencies = TRUE)
-#  library(e1071)
-#}
-if (!require("kernlab")) {
-  install.packages("kernlab", dependencies = TRUE)
-  library(kernlab)
-}
-if (!require("glmnet")) {
-  install.packages("glmnet", dependencies = TRUE)
-  library(glmnet)
-}
-if (!require("randomForest")) {
-  install.packages("randomForest", dependencies = TRUE)
-  library(randomForest)
-}
-#require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
-#require(glmnet, quietly=TRUE, warn.conflicts=FALSE)
-#require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
-#require(pROC, quietly=TRUE, warn.conflicts=FALSE)
-
 "model.evaluation.mwas" <- function(data.set, model, desired){
   
   if (class(data.set)=="mwas"){
@@ -137,13 +116,22 @@ if (!require("randomForest")) {
   return(prediction)
 }
 
-bray_dist <- function(data){
-  b_dist <- vegdist(data, method = "bray")
-  b_dist <- as.matrix(b_dist)
-  return(b_dist)
+custom_dist_kernel <- function(dataMat, method, param=1){
+  switch(method,
+         Matrix = {
+           dist_kern <- as.kernelMatrix(exp(dataMat/param))     
+         },
+         bray = {
+           b_dist <- vegdist(dataMat, method = "bray")
+           b_dist <- as.matrix(b_dist)
+           dist_kern <- as.kernelMatrix(exp(dataMat/param))
+         },
+         stop("Please specify distance type: Matrix (distance matrix) or bray (Bray-Curtis)")
+  )
+  return(dist_kern)
 }
 
-knn_dist <- function(data1, data2, y1, k){
+custom.knn <- function(data1, data2, y1, k){
   Ind1 <- dim(data1)[1]
   new_data <- rbind(data1, data2)
   dist_mat <-as.matrix(vegdist(new_data, method="bray"))
