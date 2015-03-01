@@ -56,7 +56,21 @@ if (!require("biom")) {
   install.packages("biom", dependencies = TRUE)
   library(biom)
 }
+if (!require("RColorBrewer")) {
+  install.packages("RColorBrewer", dependencies = TRUE)
+  library(RColorBrewer)
+}
+if (!require("vegan")) {
+  install.packages("vegan", dependencies = TRUE)
+  library(vegan)
+}
+if (!require("beeswarm")) {
+  install.packages("beeswarm", dependencies = TRUE)
+  library(beeswarm)
+}
 #require(biom, quietly=TRUE, warn.conflicts=FALSE)
+#require('RColorBrewer', quietly=TRUE, warn.conflicts=FALSE)
+#require('vegan', quietly=TRUE, warn.conflicts=FALSE)
 
 "import.train.params" <- function(opts){
 
@@ -153,9 +167,6 @@ if (!require("biom")) {
 
 "import.plot.params" <- function(opts){
   
-  require('RColorBrewer', quietly=TRUE, warn.conflicts=FALSE)
-  require('vegan', quietly=TRUE, warn.conflicts=FALSE)
-  
   # load OTU table/taxon table in either BIOM or txt format 
   otu_table <- load.qiime.otu.table(opts$input_fp, include.lineages=TRUE)  # OTU table - feature data for training
   otu <- otu_table$otus
@@ -198,10 +209,16 @@ if (!require("biom")) {
   if(opts$suppress_relative_abundance_conversion) {
     is.relative.conversion = FALSE
   } else {
-    if (sum(rowSums(otu)) != dim(otu)[1]) is.relative.conversion = TRUE
-    else is.relative.conversion = FALSE
+    if (sum(rowSums(otu)) != dim(otu)[1]) {
+      # If row sum is not equal to 1, then convert to relative abundance; 
+      # otherwise, no need to convert
+      is.relative.conversion = TRUE 
+    } else is.relative.conversion = FALSE
   }
   
+  # Preprocessing: 
+  # 1) remove extra samples (rows) that don't match across different matrices;
+  # 2) remove the 
   preporcessed.obj <- preprocess.mwas(input.data = otu, 
                                       map = m, 
                                       distMat = d,
@@ -227,7 +244,7 @@ if (!require("biom")) {
   #kegg_pathways <- processed.obj$kegg_pathways
   #kegg_pathways <- NULL
   
-  if(opts$method == 'gradients' & opts$shorten_taxa) {
+  if(opts$method == 'gradient' & opts$shorten_taxa) {
     colnames(otu) <- shorten.taxonomy(colnames(otu))
    # colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
   }

@@ -1,6 +1,9 @@
 # Preprocessing the original OTU table 
+# Functions: 
+# 1) Remove non-overlapping samples from OTU table, mapping file and distance matrix etc. 
+#    to make sure every sample in each table is one-to-one 
 # ----------------
-# Contributors: PJ
+# Contributors: Hu, PJ
 # ----------------
 # Input: 
 #               otu : OTU table 
@@ -42,8 +45,10 @@
   taxa <- preprocess.obj$taxa
   distMat <- preprocess.obj$distmat
   
-  if (dim(otu)[1]==0 | dim(map)[1]==0){
-    stop('The sample IDs in the OTU table don\'t match the samples in the mapping file!')
+  if (!is.null(otu) & !is.null(map)) {
+    if (dim(otu)[1]==0 | dim(map)[1]==0){
+      stop('The sample IDs in the OTU table don\'t match the samples in the mapping file!')
+    }
   }
   
   # convert to the relative abundance
@@ -52,6 +57,7 @@
   #}
   
   # remove rare features (do by minimum prevalence or average prevalence)
+  # proportion of an OTU over the whole population is larger than min_prevalence
   if (dim(otu)[2] > 1&&!is.null(min_prevalence)) 
     otu <- otu[,colMeans(otu > 0) >= min_prevalence, drop = FALSE]
   

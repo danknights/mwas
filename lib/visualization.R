@@ -14,6 +14,8 @@
 #
 # Need to fix heatmap plots
 
+#require(beeswarm, quietly=TRUE, warn.conflicts=FALSE)
+
 "plot.mwas" <- function(data, ...){ 
   
   options <- list(...)
@@ -63,9 +65,9 @@
              run.beeswarm(x = x, response=response, filename="beeswarm-plot.pdf", out.dir = out.dir)
            }
          },
-         gradients = {
-           processed.data <- preprocess.mwas(data)
-           plot.gradients(x=processed.data$otu, 
+         gradient = {
+           #processed.data <- preprocess.mwas(data)
+           plot.gradients(x=x, 
                           pc=pc, out.dir=out.dir, m=m,
                           taxon.names=taxon.names, 
                           category=category,
@@ -150,7 +152,6 @@
   beeswarmfile2 <-beeswarmfile
   beeswarmfile3 <- beeswarmfile2[, -1]
   
-  require(beeswarm, quietly=TRUE, warn.conflicts=FALSE)
   cols <-  c(brewer.pal(9,'Set1'),brewer.pal(9,'Pastel1'),brewer.pal(8,'Dark2'),brewer.pal(8,'Accent'))[-6]
   cols[1:2] <- cols[2:1]
   cols <- sprintf('%sbb',cols)
