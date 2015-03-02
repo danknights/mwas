@@ -65,7 +65,7 @@
 }
 
 
-"differentiation.test" <- function (x, category, fdr=0.05, parametric=FALSE, include.subset=FALSE){
+"feature.statistics" <- function (x, category, fdr=0.05, parametric=FALSE, include.subset=FALSE){
 	# category here is a column, not a name.
   category <- as.factor(as.character(category))
 	if(length(unique(category)) < 2) stop('Category only has one level')

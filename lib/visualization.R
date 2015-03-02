@@ -52,13 +52,13 @@
   switch(plot.type,
          beeswarm = {
            if (!is.null(fdr)) {
-             # if fdr is given, then use the differentiated test feature table
+             # if fdr is given, then use the feature statistics table
              # otherwise use the whole taxa in the original table.
              
-             diff.obj <- diff.plot.parameters(x, response,  fdr, feat_stats, nplot, is.shorten.taxa, plot.type)
-             run.beeswarm(diff.obj$new_taxon_table, 
-                          diff.obj$response, 
-                          diff.obj$filename,
+             stats.obj <- stats.plot.parameters(x, response,  fdr, feat_stats, nplot, is.shorten.taxa, plot.type)
+             run.beeswarm(stats.obj$new_taxon_table, 
+                          stats.obj$response, 
+                          stats.obj$filename,
                           out.dir = out.dir)
            }else  { # plot all the taxa that are provided in the table
              #print("Beeswarm plot...")
@@ -75,21 +75,21 @@
                           is.shorten.taxa = is.shorten.taxa)
          },
          heatmap = { # need to fix
-           heatmap.mwas(x, map, diff.features, cluster.var=c("Sex", "Treatment"), 
-                        color.var=names(color.list), color.list, 
-                        kegg_pathways=kegg_pathways, 
-                        heatmap.title=heatmap.title, 
-                        outputfile=fp)
+           #heatmap.mwas(x, map, stats.features, cluster.var=c("Sex", "Treatment"), 
+           #            color.var=names(color.list), color.list, 
+          #              kegg_pathways=kegg_pathways, 
+          #              heatmap.title=heatmap.title, 
+          #              outputfile=fp)
          }, 
          scatterplot = {
            if (!is.null(fdr)) {
-             # if FDR is given, then use the differentiated test feature table
+             # if FDR is given, then use the feature statistics table
              # otherwise use the whole taxa in the original table.
              
-             diff.obj <- diff.plot.parameters(x, response,  fdr, feat_stats, nplot, is.shorten.taxa, plot.type)
-             run.2d.scatterplot(diff.obj$new_taxon_table, 
-                                diff.obj$response, 
-                                diff.obj$filename,
+             stats.obj <- stats.plot.parameters(x, response,  fdr, feat_stats, nplot, is.shorten.taxa, plot.type)
+             run.2d.scatterplot(stats.obj$new_taxon_table, 
+                                stats.obj$response, 
+                                stats.obj$filename,
                                 out.dir = out.dir)             
            }else  {
              print("2D scatter plot...")
@@ -300,12 +300,12 @@
   return("Please check the PDF file.")
 }
 
-"diff.plot.parameters" <- function(x, response,  fdr, feat_stats=NULL, nplot=50, is.shorten.taxa=TRUE, plot.type="user-defined"){
+"stats.plot.parameters" <- function(x, response,  fdr, feat_stats=NULL, nplot=50, is.shorten.taxa=TRUE, plot.type="user-defined"){
   
   if (!is.null(feat_stats)){
     # if the feature statistic table is provided, then load from file
     # else calculate q-values
-    ft.qvalue <- subset(feat_stats, qvalues <= fdr) # ft - differentiated feature vector
+    ft.qvalue <- subset(feat_stats, qvalues <= fdr) # ft - feature statistics vector
     ft.qvalue <- t(ft.qvalue)
     ft.qvalue <- ft.qvalue[,order(ft.qvalue["pvalues", ], decreasing=F)[1:min(nplot,dim(ft.qvalue)[2])]]
     
@@ -313,9 +313,9 @@
   } else { 
     
     # if the feature stats table is not given, 
-    diff.table <- differentiation.test(x, response, fdr = fdr)
-    hit.ix <- order(diff.table$pvalues, decreasing=F)[1:min(nplot,length(diff.table$pvalues))]
-    ft.qvalue <- diff.table$qvalues[hit.ix]
+    stats.table <- feature.statistics(x, response, fdr = fdr)
+    hit.ix <- order(stats.table$pvalues, decreasing=F)[1:min(nplot,length(stats.table$pvalues))]
+    ft.qvalue <- stats.table$qvalues[hit.ix]
     
     keep_bugs <- colnames(x)[colnames(x) %in% names(ft.qvalue)]
   }

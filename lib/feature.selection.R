@@ -15,20 +15,16 @@
 # Last update: 10/25/2014
 #
 
-"feature.scores.mwas" <- function(x, y, selection_threshold = 1, out.dir = NULL){
-  
-  #require(caret, quietly=TRUE, warn.conflicts=FALSE)
-  #require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
+"feature.scores.mwas" <- function(x, y, selection_threshold = 0.01,  out.dir = NULL){
 
-  rf.model <- randomForest(x,y, proximity = TRUE, importance=TRUE)
+  rf.model <- randomForest(x, y, proximity = TRUE, importance=TRUE)
   #importances <- rf.model$importance[,'MeanDecreaseAccuracy']
   imp <- importance(rf.model, type =1, scale=T)
   importances_order <- order(imp, decreasing = T)
   
   if (is.null(out.dir)) {
-    file_name = './feature_scores.txt'
-    #} else file_name = sprintf('%s/feature_scores.txt', out.dir)
-    
+    file_name = './RF_feature_importance_scores.txt'
+
     file.out <- file(file_name, 'w')
     write.table(imp, file.out, sep='\t')
     flush(file.out)
@@ -43,3 +39,5 @@
   return(feat_set)
 }
 
+
+  

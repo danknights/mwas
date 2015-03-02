@@ -1,6 +1,6 @@
 # Export results to files
 #
-# Contributors: Hu
+# Contributors: Hu, Dan
 # --- input:
 #     trained.model : trained claissifier model and other parameters
 # trained.model.eval: model evaluation on the training set by using the trained model 
@@ -89,8 +89,8 @@
 }
 
 
-# saves list of results from differentiation.test to file (or prints)
-"write.differentiation.test.results" <- function(results, filename='differentiated.features.txt'){
+# saves list of results from feature.statistics to file (or prints)
+"write.statistical.test.results" <- function(results, filename='feature_statistics.txt'){
   if(!is.null(filename)){
     scipen.save <- options('scipen')
     options(scipen=20)
