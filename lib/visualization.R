@@ -142,7 +142,7 @@
 # output:
 #     save the plot as PDF file
 # ------
-# Last update: 11/03/2014
+# Last update: 03/01/2015
 #
 "run.beeswarm" <- function(x, response, filename="beeswarm-plot.pdf", out.dir){
   
@@ -177,8 +177,11 @@
     bxplot(beeswarmfile3[,i] ~ response,add=TRUE)
     #text(x = 1:3, y=-0.05, labels=levels(response), srt = 20, pos=1, xpd=TRUE)
   }
-  if(!is.null(out.dir)) dev.off()
-  return("Please check the PDF file.")
+  if(!is.null(out.dir)) {
+    dev.off()
+    cat("The Beeswarm plot is saved in ", file.out, '\n')
+  }
+  return(NULL)
 }
 
 # Scatterplot of 2 conditions included in the mapping file
@@ -244,7 +247,10 @@
         legend("topleft", sprintf('Spearman Coeff.: %.4f', cor(xx1[,i], xx2[,i], method="spearman")),
                pt.cex=0.1, adj=0.05, cex=0.85)
       }
-      if(!is.null(out.dir)) dev.off()
+      if(!is.null(out.dir)) {
+        dev.off()
+        cat("The scatter plots are saved in ", out.dir, '\n')
+      }
     }
   }
  
@@ -296,8 +302,11 @@
                     title.text=sprintf('%s - PC%d v PC%d',category,combs[1,j],combs[2,j]))
     }
   }
-  if(!is.null(out.dir)) dev.off()
-  return("Please check the PDF file.")
+  if(!is.null(out.dir)) {
+    dev.off()
+    cat("The gradient plot is saved in ", file.out, "\n")
+  }
+  return(NULL)
 }
 
 "stats.plot.parameters" <- function(x, response,  fdr, feat_stats=NULL, nplot=50, is.shorten.taxa=TRUE, plot.type="user-defined"){

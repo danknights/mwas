@@ -106,6 +106,7 @@
 
 	# add stars to column names based on significance
 	annotations <- colnames(x)
+  stared.annotations <- annotations
 	thresholds <- c(.05, .01, .001, .0001)
   signif.notation <- vector()
 	for(i in seq_along(thresholds)){
@@ -114,12 +115,12 @@
 		
 		if(any(star.ix)){
 			for(j in which(star.ix)){
-				annotations[!na.ix][j] <- paste0('*', annotations[!na.ix][j])
+			  stared.annotations[!na.ix][j] <- paste0('*', stared.annotations[!na.ix][j])
 			}
 		}
 	}
 	result <- list()
-	result$annotations <- annotations
+	result$annotations <- stared.annotations
 	result$features <- which(keep.ix)
 	result$qvalues <- adj.pvals
 	result$pvalues <- pvals

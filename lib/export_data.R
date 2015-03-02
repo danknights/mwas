@@ -99,11 +99,11 @@ if (!require("xlsx")) {
   
   # save as .txt format
   scipen.save <- options('scipen') 
-  options(scipen=20)                  # avoid exponential notation
+  options(scipen=20)                         # avoid exponential notation
   hits <- cbind(results$pvalues, results$qvalues)
   hits <- cbind(hits, results$classwise.means)
   colnames(hits)[1:2] <- c('pvalue','qvalue')
-  hits <- hits[!is.na(hits[,1]),,drop=F]
+  hits <- hits[!is.na(hits[,1]),,drop=F]     # remove all NA values
   hits <- hits[order(hits[,1]),]
   filename1 <- sprintf("%s.txt", filename)
   sink(filename1)
