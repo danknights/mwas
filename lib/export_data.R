@@ -107,14 +107,16 @@ if (!require("xlsx")) {
   hits <- hits[order(hits[,1]),]
   filename1 <- sprintf("%s.txt", filename)
   sink(filename1)
-  cat('Feature\t')
+  cat('Features\t')
   write.table(hits,quote=F,sep='\t')
   sink(NULL)
   options(scipen=scipen.save)
   
   # save as .xlsx format
   filename2 <- sprintf("%s.xlsx", filename)
-  write.xlsx(hits, filename2, sheetName = results)
+  hits <- cbind(rownames(hits), hits)
+  colnames(hits)[1] <- "Features"
+  write.xlsx(hits, filename2, row.names=FALSE, sheetName = results)
   
 }
 
