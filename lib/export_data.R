@@ -17,6 +17,12 @@
 # Last update: 10/25/2014
 #
 
+#require(xlsx, quietly = TRUE, warn.conflicts=FALSE)
+if (!require("xlsx")) {
+  install.packages("xlsx", dependencies = TRUE)
+  library(xlsx)
+}
+
 "export.mwas" <- function(trained.model=NULL, model.eval=NULL, trained.model.perform=NULL,
                           feat.set=NULL, out.dir=NULL, file.name="predcition_results"){
   
@@ -73,8 +79,7 @@
 # from: http://www.r-bloggers.com/quickly-export-multiple-r-objects-to-an-excel-workbook/
 # 
 "save.xlsx" <- function (objects, file.name){
-  require(xlsx, quietly = TRUE, warn.conflicts=FALSE)
-  
+
   #objects <- list(...)
   #fargs <- as.list(match.call(expand.dots = TRUE))
   #objnames <- as.character(fargs)[-c(1, 2)]
@@ -90,20 +95,26 @@
 
 
 # saves list of results from feature.statistics to file (or prints)
-"write.statistical.test.results" <- function(results, filename='feature_statistics.txt'){
-  if(!is.null(filename)){
-    scipen.save <- options('scipen')
-    options(scipen=20)
-    hits <- cbind(results$pvalues, results$qvalues)
-    hits <- cbind(hits, results$classwise.means)
-    colnames(hits)[1:2] <- c('pvalue','qvalue')
-    hits <- hits[!is.na(hits[,1]),,drop=F]
-    hits <- hits[order(hits[,1]),]
-    sink(filename)
-    cat('Feature\t')
-    write.table(hits,quote=F,sep='\t')
-    sink(NULL)
-    options(scipen=scipen.save)
-  }
+"write.statistical.test.results" <- function(results, filename='feature_statistics'){
+  
+  # save as .txt format
+  scipen.save <- options('scipen') 
+  options(scipen=20)                  # avoid exponential notation
+  hits <- cbind(results$pvalues, results$qvalues)
+  hits <- cbind(hits, results$classwise.means)
+  colnames(hits)[1:2] <- c('pvalue','qvalue')
+  hits <- hits[!is.na(hits[,1]),,drop=F]
+  hits <- hits[order(hits[,1]),]
+  filename1 <- sprintf("%s.txt", filename)
+  sink(filename1)
+  cat('Feature\t')
+  write.table(hits,quote=F,sep='\t')
+  sink(NULL)
+  options(scipen=scipen.save)
+  
+  # save as .xlsx format
+  filename2 <- sprintf("%s.xlsx", filename)
+  write.xlsx(hits, filename2, sheetName = results)
+  
 }
 

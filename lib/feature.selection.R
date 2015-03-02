@@ -15,26 +15,37 @@
 # Last update: 10/25/2014
 #
 
-"feature.scores.mwas" <- function(x, y, selection_threshold = 0.01,  out.dir = NULL){
-
-  rf.model <- randomForest(x, y, proximity = TRUE, importance=TRUE)
-  #importances <- rf.model$importance[,'MeanDecreaseAccuracy']
-  imp <- importance(rf.model, type =1, scale=T)
-  importances_order <- order(imp, decreasing = T)
+"feature.scores.mwas" <- function(x, y, selection_threshold = 0.01, method="FDR", out.dir = NULL){
   
-  if (is.null(out.dir)) {
-    file_name = './RF_feature_importance_scores.txt'
-
-    file.out <- file(file_name, 'w')
-    write.table(imp, file.out, sep='\t')
-    flush(file.out)
-    close(file.out)
-  }
+  method <- toupper(method)
+  switch(method,
+         FDR = {
+           feat.scores <- differentiation.test(x, y, selection_threshold)
+           
+         }, 
+         RF = {
+           rf.model <- randomForest(x, y, proximity = TRUE, importance=TRUE)
+           #importances <- rf.model$importance[,'MeanDecreaseAccuracy']
+           imp <- importance(rf.model, type =1, scale=T)
+           importances_order <- order(imp, decreasing = T)
+           
+           if (is.null(out.dir)) {
+             file_name = './RF_feature_importance_scores.txt'
+             
+             file.out <- file(file_name, 'w')
+             write.table(imp, file.out, sep='\t')
+             flush(file.out)
+             close(file.out)
+           }
+           
+           ordered_feat_set <- colnames(x)[importances_order]
+           ordered_feat_imp <- imp[importances_order]
+           
+           feat_set <- ordered_feat_set[ordered_feat_imp > selection_threshold]
+         }
+         
+  )
   
-  ordered_feat_set <- colnames(x)[importances_order]
-  ordered_feat_imp <- imp[importances_order]
-  
-  feat_set <- ordered_feat_set[ordered_feat_imp > selection_threshold]
   
   return(feat_set)
 }
