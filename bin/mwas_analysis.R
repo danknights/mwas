@@ -10,7 +10,7 @@
 #   3. m - map file   (required)
 #   4. c - category name(s) (required)
 #   5. o - output directory: save classification model, model evaluation results, visualization file etc. [default: "."]
-#   6. M - method: classifier type for "training", trained classifier model file name for "predict", 
+#   6. M - method: classifier type for "learn", trained classifier model file name for "predict", 
 #                  plot type for "plot", statistical test type for "statistics"
 #   <preprocessing options>
 #   7. t - transformation type [default: none]

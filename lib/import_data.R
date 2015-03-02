@@ -76,6 +76,11 @@ if (!require("beeswarm")) {
 
 "import.train.params" <- function(opts){
 
+  if(is.null(opts$suppress_relative_abundance_conversion)) opts$suppress_relative_abundance_conversion <- TRUE
+  if(is.null(opts$collapse_table)) opts$collapse_table <- FALSE
+  if(is.null(opts$filter_kegg)) opts$filter_kegg <- FALSE
+  if(is.null(opts$transform_type)) opts$transform_type <- "none"
+  
   mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
   
   otu <- load.qiime.otu.table(opts$input_fp, include.lineages=FALSE)
@@ -115,6 +120,11 @@ if (!require("beeswarm")) {
 }
 
 "import.predict.params" <- function(opts){
+  
+  if(is.null(opts$suppress_relative_abundance_conversion)) opts$suppress_relative_abundance_conversion <- TRUE
+  if(is.null(opts$collapse_table)) opts$collapse_table <- FALSE
+  if(is.null(opts$filter_kegg)) opts$filter_kegg <- FALSE
+  if(is.null(opts$transform_type)) opts$transform_type <- "none"
   
   otu <- load.qiime.otu.table(opts$input_fp, include.lineages=FALSE)
   

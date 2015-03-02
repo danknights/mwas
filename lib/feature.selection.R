@@ -25,6 +25,7 @@
   feat_set <- list()
   
   if(is.null(out.dir)) out.dir <- "."
+  
   file_name = sprintf("%s/%s_%.2f_feature_statistcs.txt", out.dir, method, selection_threshold)
   
   method <- toupper(method)
