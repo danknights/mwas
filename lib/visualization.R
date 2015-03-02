@@ -30,7 +30,7 @@
     is.shorten.taxa <- data$is.shorten.taxa
     category <- data$category
     is.multiple_axes <- data$is.multiple_axes
-    alpha <- data$alpha
+    fdr <- data$fdr
     plot.type <- data$plot.type
     feat_stats <- data$feat_stats
     nplot <- opts$nplot
@@ -44,18 +44,18 @@
     is.shorten.taxa <- options$is.shorten.taxa
     category <- options$category
     is.multiple_axes <- options$is.multiple_axes
-    alpha <- options$alpha
+    fdr <- options$fdr
     plot.type <- options$plot.type
     feat_stats <- options$feat_stats
   }
   #print(plot.type)
   switch(plot.type,
          beeswarm = {
-           if (!is.null(alpha)) {
-             # if alpha is given, then use the differentiated test feature table
+           if (!is.null(fdr)) {
+             # if fdr is given, then use the differentiated test feature table
              # otherwise use the whole taxa in the original table.
              
-             diff.obj <- diff.plot.parameters(x, response,  alpha, feat_stats, nplot, is.shorten.taxa)
+             diff.obj <- diff.plot.parameters(x, response,  fdr, feat_stats, nplot, is.shorten.taxa, plot.type)
              run.beeswarm(diff.obj$new_taxon_table, 
                           diff.obj$response, 
                           diff.obj$filename,
@@ -82,11 +82,11 @@
                         outputfile=fp)
          }, 
          scatterplot = {
-           if (!is.null(alpha)) {
-             # if alpha is given, then use the differentiated test feature table
+           if (!is.null(fdr)) {
+             # if FDR is given, then use the differentiated test feature table
              # otherwise use the whole taxa in the original table.
              
-             diff.obj <- diff.plot.parameters(x, response,  alpha, feat_stats, is.shorten.taxa)
+             diff.obj <- diff.plot.parameters(x, response,  fdr, feat_stats, nplot, is.shorten.taxa, plot.type)
              run.2d.scatterplot(diff.obj$new_taxon_table, 
                                 diff.obj$response, 
                                 diff.obj$filename,
@@ -300,12 +300,12 @@
   return("Please check the PDF file.")
 }
 
-"diff.plot.parameters" <- function(x, response,  alpha, feat_stats=NULL, nplot=50, is.shorten.taxa=TRUE){
+"diff.plot.parameters" <- function(x, response,  fdr, feat_stats=NULL, nplot=50, is.shorten.taxa=TRUE, plot.type="user-defined"){
   
   if (!is.null(feat_stats)){
     # if the feature statistic table is provided, then load from file
     # else calculate q-values
-    ft.qvalue <- subset(feat_stats, qvalues <= alpha) # ft - differentiated feature vector
+    ft.qvalue <- subset(feat_stats, qvalues <= fdr) # ft - differentiated feature vector
     ft.qvalue <- t(ft.qvalue)
     ft.qvalue <- ft.qvalue[,order(ft.qvalue["pvalues", ], decreasing=F)[1:min(nplot,dim(ft.qvalue)[2])]]
     
@@ -313,7 +313,7 @@
   } else { 
     
     # if the feature stats table is not given, 
-    diff.table <- differentiation.test(x, response, alpha = alpha)
+    diff.table <- differentiation.test(x, response, fdr = fdr)
     hit.ix <- order(diff.table$pvalues, decreasing=F)[1:min(nplot,length(diff.table$pvalues))]
     ft.qvalue <- diff.table$qvalues[hit.ix]
     
@@ -325,12 +325,13 @@
   
   # shorten taxonomy name if specified
   if(is.shorten.taxa) {
-    if (!is.null(feat_stats)) colnames(ft.qvalue) <- shorten.taxonomy(colnames(ft.qvalue))
-    else names(ft.qvalue) <- shorten.taxonomy(names(ft.qvalue))
+    if (!is.null(feat_stats)) { 
+      colnames(ft.qvalue) <- shorten.taxonomy(colnames(ft.qvalue))
+    } else names(ft.qvalue) <- shorten.taxonomy(names(ft.qvalue))
     
     colnames(new_taxon_table) <- shorten.taxonomy(colnames(new_taxon_table))
   }
-  filename <- sprintf("beeswarm-plot-alpha-%.3f.pdf", alpha)
+  filename <- sprintf("%s-plot-FDR-%.3f.pdf", plot.type, fdr)
   
   return(list(new_taxon_table=new_taxon_table, response=response, filename=filename))
 }

@@ -1,6 +1,6 @@
 # Statistical testing function.
 # returns p-values, q-values, 
-# indices of those below alpha, and renamed features with '*' etc.
+# indices of those below FDR, and renamed features with '*' etc.
 # and subset of data if requested
 # add.stars adds stars to the column names that are significant at .05, .01, .001, .0001
 # if filename is provided, saves result of statistical test to file
@@ -30,7 +30,7 @@
     category_order <- data$category_order
     is.sort_by_abundance <- data$is.sort_by_abundance
     num_taxa <- data$num_taxa
-    alpha <- data$alpha
+    fdr <- data$fdr
     x_axis_label <- data$x_axis_label
     out.dir <- data$outdir
     plot.type <- data$plottype
@@ -45,7 +45,7 @@
     category_order <- options$category_order
     is.sort_by_abundance <- options$is.sort_by_abundance
     num_taxa <- options$num_taxa
-    alpha <- options$alpha
+    fdr <- options$fdr
     x_axis_label <- options$x_axis_label
     out.dir <- options$outdir
     plot.type <- options$plottype
@@ -65,7 +65,7 @@
 }
 
 
-"differentiation.test" <- function (x, category, alpha=0.05, parametric=FALSE, include.subset=FALSE){
+"differentiation.test" <- function (x, category, fdr=0.05, parametric=FALSE, include.subset=FALSE){
 	# category here is a column, not a name.
   category <- as.factor(as.character(category))
 	if(length(unique(category)) < 2) stop('Category only has one level')
@@ -100,7 +100,7 @@
 	adj.pvals <- rep(NA,length(pvals))
 	names(adj.pvals) <- names(pvals)
 	adj.pvals[!na.ix] <- p.adjust(pvals[!na.ix],'fdr')
-	keep.ix <- adj.pvals < alpha
+	keep.ix <- adj.pvals < fdr
 	keep.ix[is.na(keep.ix)] <- FALSE
 	if(!any(keep.ix)) stop('select.features failed to find any features.')
 

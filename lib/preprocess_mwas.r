@@ -21,10 +21,10 @@
                               distMat = NULL,
                               kegg = NULL,
                               min_prevalence = NULL, 
-                              transform_type = NULL, 
+                              transform_type = "none", 
                               is.filter.kegg = FALSE, 
                               is.collapse = FALSE,
-                              is.relative.conversion = TRUE
+                              is.relative.conversion = FALSE
                               )
 {
   if (class(input.data)=="mwas"){
@@ -52,9 +52,9 @@
   }
   
   # convert to the relative abundance
-  #if(is.relative.conversion){
-  #  otu[rowSums(otu)>0,] <- sweep(otu[rowSums(otu)>0,], 1, rowSums(otu[rowSums(otu)>0,]), '/') #relative abundance
-  #}
+  if(is.relative.conversion){
+    otu[rowSums(otu)>0,] <- sweep(otu[rowSums(otu)>0,], 1, rowSums(otu[rowSums(otu)>0,]), '/') #relative abundance
+  }
   
   # remove rare features (do by minimum prevalence or average prevalence)
   # proportion of an OTU over the whole population is larger than min_prevalence

@@ -48,11 +48,11 @@ file.sources = list.files("lib", pattern="*.R$",
 invisible(sapply(file.sources, source, .GlobalEnv))
 
 ####################### Parse INPUT options #####
-#if (!require("optparse")) {
-#  install.packages("optparse", dependencies = TRUE)
-#  library(optparse)
-#}
-require(optparse, quietly=TRUE, warn.conflicts=FALSE)
+if (!require("optparse")) {
+  install.packages("optparse", dependencies = TRUE)
+  library(optparse)
+}
+#require(optparse, quietly=TRUE, warn.conflicts=FALSE)
 # make option list and parse command line
 option_list <- list(
   make_option(c("-w", "--mode"),type='character',
@@ -60,7 +60,7 @@ option_list <- list(
   # preprocessing parameters
   make_option(c("-t", "--transform_type"), type="character", default="none",
               help="Relative abundance transform type (none, asin_sqrt, or norm_asin_sqrt) [default: norm_asin_sqrt]"),
-  make_option(c("-r", "--suppress_relative_abundance_conversion"),action='store_true',default=FALSE,
+  make_option(c("-r", "--suppress_relative_abundance_conversion"),action='store_false',default=TRUE,
               help="Do not convert input to relative abundances (assumes already relative abundances). [default: %default]"),
   make_option(c("-p","--min_prevalence"), type="numeric",default=0.0,
               help="Minimum fraction of samples in which taxon must be present to be included [default: %default]."),
@@ -103,8 +103,8 @@ option_list <- list(
               help="Shorten taxonomy names to lowest defined level. [default: %default]"),
   make_option(c("-X", "--multiple_axes"),type="logical", action='store_true',default=FALSE,
               help="Show PC1 v PC2, PC1 v PC3, PC2 v PC3 in 3 separate plots. [default: %default]"),
-  make_option(c("-A","--alpha"), type='numeric', default=NULL,
-              help='Maximum false discovery rate to report. Ignored if --which_taxa exists exists [default: %default]'),
+  make_option(c("-A","--fdr"), type='numeric', default=NULL,
+              help='Maximum false discovery rate to report. Ignored if --which_taxa exists [default: %default]'),
   make_option(c("-K","--filter_kegg"), type="logical", action='store_true', default=FALSE,
               help='Whether filter kegg list'),
   make_option(c("-N", "--nplot"), type="numeric", default=NULL,

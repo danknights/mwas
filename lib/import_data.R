@@ -36,6 +36,8 @@
 #                       pcoa_fp (optional)
 #                       distance_fp (optional)
 #                       suppress_relative_abundance_conversion (optional)
+#                       fdr (optional)
+#                       nplot (optional)
 #                       min_prevalence
 #                       transform_type
 #                       collapse_table
@@ -167,6 +169,11 @@ if (!require("beeswarm")) {
 
 "import.plot.params" <- function(opts){
   
+  if(is.null(opts$suppress_relative_abundance_conversion)) opts$suppress_relative_abundance_conversion <- TRUE
+  if(is.null(opts$collapse_table)) opts$collapse_table <- FALSE
+  if(is.null(opts$filter_kegg)) opts$filter_kegg <- FALSE
+  if(is.null(opts$transform_type)) opts$transform_type <- "none"
+  
   # load OTU table/taxon table in either BIOM or txt format 
   otu_table <- load.qiime.otu.table(opts$input_fp, include.lineages=TRUE)  # OTU table - feature data for training
   otu <- otu_table$otus
@@ -276,7 +283,7 @@ if (!require("beeswarm")) {
                      category = opts$category,
                      response = response,
                      is.multiple_axes = opts$multiple_axes,
-                     alpha = opts$alpha,
+                     fdr = opts$fdr,
                      plot.type = opts$method,
                      feat_stats = feat_stats,
                      nplot = opts$nplot)
