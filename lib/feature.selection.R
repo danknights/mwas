@@ -43,7 +43,3 @@
   return(feat_set)
 }
 
-"features.mRMR.mwas" <- function(x, y, selection_threshold = 1, out.dir = NULL){
-  require(mRMRe, quietly=TRUE, warn.conflicts=FALSE)
-  
-}
