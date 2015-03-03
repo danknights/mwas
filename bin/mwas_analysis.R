@@ -48,9 +48,9 @@ file.sources = list.files("lib", pattern="*.R$",
 invisible(sapply(file.sources, source, .GlobalEnv))
 
 ####################### Parse INPUT options #####
-if (!require("optparse")) {
+if (!require("optparse", quietly=TRUE, warn.conflicts = FALSE))) {
   install.packages("optparse", dependencies = TRUE)
-  library(optparse)
+  library("optparse", verbose=F, warn.conflicts =F)
 }
 #require(optparse, quietly=TRUE, warn.conflicts=FALSE)
 # make option list and parse command line

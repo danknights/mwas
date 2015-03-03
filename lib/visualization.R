@@ -181,7 +181,7 @@
     dev.off()
     cat("The Beeswarm plot is saved in ", file.out, '\n')
   }
-  return(NULL)
+  return(invisible(NULL))
 }
 
 # Scatterplot of 2 conditions included in the mapping file
@@ -306,7 +306,7 @@
     dev.off()
     cat("The gradient plot is saved in ", file.out, "\n")
   }
-  return(NULL)
+  return(invisible(NULL))
 }
 
 "stats.plot.parameters" <- function(x, response,  fdr, feat_stats=NULL, nplot=50, is.shorten.taxa=TRUE, plot.type="user-defined"){

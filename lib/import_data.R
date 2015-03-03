@@ -54,22 +54,23 @@
 #  Last update: 11/12/2014
 #
 
-if (!require("biom")) {
-  install.packages("biom", dependencies = TRUE)
-  library(biom)
+if (!require("biom", quietly=TRUE, warn.conflicts = FALSE)) {
+  install.packages("biom", repos="http://cran.r-project.org", dependencies = TRUE)
+  library("biom", verbose=F, warn.conflicts =F)
 }
-if (!require("RColorBrewer")) {
-  install.packages("RColorBrewer", dependencies = TRUE)
-  library(RColorBrewer)
+if (!require("RColorBrewer", quietly=TRUE, warn.conflicts = FALSE)) {
+  install.packages("RColorBrewer",repos="http://cran.r-project.org", dependencies = TRUE)
+  library("RColorBrewer", verbose=F, warn.conflicts =F)
 }
-if (!require("vegan")) {
-  install.packages("vegan", dependencies = TRUE)
-  library(vegan)
+if (!require("vegan", quietly=TRUE, warn.conflicts = FALSE)) {
+  install.packages("vegan", repos="http://cran.r-project.org", dependencies = TRUE)
+  library("vegan", verbose=F, warn.conflicts =F)
 }
-if (!require("beeswarm")) {
-  install.packages("beeswarm", dependencies = TRUE)
-  library(beeswarm)
+if (!require("beeswarm", quietly=TRUE, warn.conflicts = FALSE)) {
+  install.packages("beeswarm", repos="http://cran.r-project.org", dependencies = TRUE)
+  library("beeswarm", verbose=F, warn.conflicts =F)
 }
+
 #require(biom, quietly=TRUE, warn.conflicts=FALSE)
 #require('RColorBrewer', quietly=TRUE, warn.conflicts=FALSE)
 #require('vegan', quietly=TRUE, warn.conflicts=FALSE)
