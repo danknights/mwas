@@ -82,7 +82,10 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   }else x <- data.set
   
   if (is.feat){
-    feat.set <- feature.scores.mwas(x, y, selection_threshold = feat.threshold)
+    if(is.null(out.dir)) out.dir <- "."
+    file.out <- paste0(out.dir, "/feat_statistics")
+    dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
+    feat.set <- feature.selection(x, y, selection_threshold = feat.threshold, "FDR", file.out)
     train.set <- x[,feat.set]
   }else {
     feat.set <- colnames(x)
