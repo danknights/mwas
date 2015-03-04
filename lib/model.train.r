@@ -14,26 +14,31 @@
 #  Last update: 10/25/2014
 #
 
-if (!require("e1071")) {
-  install.packages("e1071", dependencies = TRUE)
-  library(e1071)
+if (!require("e1071", quietly=TRUE, warn.conflicts = FALSE)) {
+  install.packages("e1071", repos="http://cran.r-project.org", dependencies = TRUE)
+  library("e1071", verbose=F, warn.conflicts =F)
 }
 
-if (!require("kernlab")) {
-  install.packages("kernlab", dependencies = TRUE)
-  library(kernlab)
+if (!require("kernlab", quietly=TRUE, warn.conflicts = FALSE)) {
+  install.packages("kernlab", repos="http://cran.r-project.org", dependencies = TRUE)
+  library("kernlab", verbose=F, warn.conflicts =F)
 }
-if (!require("glmnet")) {
-  install.packages("glmnet", dependencies = TRUE)
-  library(glmnet)
+if (!require("glmnet", quietly=TRUE, warn.conflicts = FALSE)) {
+  install.packages("glmnet",repos="http://cran.r-project.org",  dependencies = TRUE)
+  library("glmnet", verbose=F, warn.conflicts =F)
 }
-if (!require("randomForest")) {
-  install.packages("randomForest", dependencies = TRUE)
-  library(randomForest)
+if (!require("randomForest", quietly=TRUE, warn.conflicts = FALSE)) {
+  install.packages("randomForest",repos="http://cran.r-project.org", dependencies = TRUE)
+  library("randomForest", verbose=F, warn.conflicts =F)
 }
-if (!require("vegan")) {
-  install.packages("vegan", dependencies = TRUE)
-  library(vegan)
+if (!require("vegan", quietly=TRUE, warn.conflicts = FALSE)) {
+  install.packages("vegan", repos="http://cran.r-project.org", dependencies = TRUE)
+  library("vegan", verbose=F, warn.conflicts =F)
+}
+
+if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
+  install.packages("pROC", repos="http://cran.r-project.org", dependencies = TRUE)
+  library("pROC", lib.loc = "$MWAS_DIR/R_packages", verbose=F, warn.conflicts =F)
 }
 
 #if (!require("pROC")) {

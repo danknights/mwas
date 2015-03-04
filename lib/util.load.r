@@ -13,10 +13,10 @@
 # Last Update: 10/25/2014
 #
 
-if (!require("biom")) {
-  install.packages("biom", dependencies = TRUE)
-  library(biom)
-}
+#if (!require("biom")) {
+#  install.packages("biom", dependencies = TRUE)
+#  library(biom)
+#}
 
 # Read both BIOM format and classic OTU table
 "read.qiime.table.mwas" <- function(filepath, as.data.frame=FALSE){

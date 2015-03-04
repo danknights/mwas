@@ -18,9 +18,9 @@
 #
 
 #require(xlsx, quietly = TRUE, warn.conflicts=FALSE)
-if (!require("xlsx")) {
+if (!require("xlsx", quietly=TRUE, warn.conflicts = FALSE)) {
   install.packages("xlsx", dependencies = TRUE)
-  library(xlsx)
+  library(xlsx, verbose=F, warn.conflicts =F)
 }
 
 "export.mwas" <- function(trained.model=NULL, model.eval=NULL, trained.model.perform=NULL,
