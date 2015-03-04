@@ -26,34 +26,52 @@
   
   if(is.null(out.dir)) out.dir <- "."
   
-  file_name = sprintf("%s/%s_%.2f_feature_statistcs.txt", out.dir, method, selection_threshold)
-  
-  method <- toupper(method)
+  method <- tolower(method)
   switch(method,
-         FDR = {
+         fdr = {
+           file_name = sprintf("%s/%s_%.2f_feature_statistcs", out.dir, method, selection_threshold)
+           
            feat.stats <- feature.statistics(x, response, selection_threshold, include.subset = TRUE)
            feat_set$id <- colnames(feat.stats$subset)
            feat_set$features <- x[,feat_set$id]
+           feat_set$scores <- 
            
            cat(length(feat_set$id), " features are selected under the criterion FDR < ", selection_threshold)
            
-           file_name <- gsub(".txt", "", file_name)
+           #file_name <- gsub(".txt", "", file_name)
            write.statistical.test.results(feat.stats, filename=file_name)
-         }, 
-         RF = {
-           rf.model <- randomForest(x, response, proximity = TRUE, importance=TRUE)
-           #importances <- rf.model$importance[,'MeanDecreaseAccuracy']
-           imp <- importance(rf.model, type =1, scale=T)
-           importances_order <- order(imp, decreasing = T)
            
-           # save feature importance list
-           file.out <- file(file_name, 'w')
-           write.table(imp, file.out, sep='\t')
-           flush(file.out)
-           close(file.out)
+           ## determine the number of features for the reduced featuer set
+           feat_
+         }, 
+         rf = {
+           file_name = sprintf("%s/%s_%.2f_feature_importance_rank.txt", out.dir, method, selection_threshold)
+           
+           model.rf <- tune.randomForest(x, y, importance=TRUE, mtry=seq(from=min(round(sqrt(num_species)), round(num_species/5)), to=max(round(sqrt(num_species)), round(4*num_species/5)), by=5), 
+                                         tunecontrol = tune.control(random=TRUE, sampling="cross", cross = 5))
+           summary(model.rf)
+           
+           #rf.model <- randomForest(x, response, proximity = TRUE, importance=TRUE)
+           #importances <- rf.model$importance[,'MeanDecreaseAccuracy']
+           imp <- importance(model.rf$best.model, type =1, scale=T) 
+           importances_order <- order(imp, decreasing = T)
            
            ordered_feat_set <- colnames(x)[importances_order]
            ordered_feat_imp <- imp[importances_order]
+           
+           ordered_feat_list <- as.matrix(ordered_feat_imp, dimnames=list(ordered_feat_set))
+           ordered_feat_list <- cbind(ordered_feat_list, model.rf$best.model$importance[importances_order,length(levels(y))+1])
+           colnames(ordered_feat_list) <- c("Importance_value", "MeanDecreaseAccuracy")
+           
+           # save feature importance list
+           file.out <- file(file_name, 'w')
+           #write.table(imp, file.out, sep='\t')
+           #flush(file.out)
+           #close(file.out)
+           sink(file.out)
+           cat('Features\t')
+           write.table(ordered_feat_list, quote=F, sep='\t')
+           sink(NULL)
            
            feat_set$id <- ordered_feat_set[ordered_feat_imp > selection_threshold]
            feat_set$features <- x[, feat_set$id]
@@ -65,5 +83,6 @@
   return(feat_set)
 }
 
-
+"feature.number" <- function(feat_set){
   
+}  
