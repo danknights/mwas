@@ -48,7 +48,7 @@ file.sources = list.files(paste(Sys.getenv('MWAS_DIR'),'/lib',sep=''), pattern="
 invisible(sapply(file.sources, source, .GlobalEnv))
 
 ####################### Parse INPUT options #####
-if (!require("optparse", quietly=TRUE, warn.conflicts = FALSE))) {
+if (!require("optparse", quietly=TRUE, warn.conflicts = FALSE)) {
   install.packages("optparse", dependencies = TRUE)
   library("optparse", verbose=F, warn.conflicts =F)
 }
