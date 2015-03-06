@@ -74,14 +74,14 @@
 				if(var(taxon) == 0){
 					NA
 				} else {
-					summary(lm(taxon~response))[[4]][2,4]
+					summary(lm(taxon~response))[[4]][2,4]  # ANOVA test
 				}
 			})
 		stats <- apply(x,2, function(taxon){
 				if(var(taxon) == 0){
 					NA
-				} else {
-					summary(lm(taxon~response))[[4]][2,1]
+				} else {     
+					summary(lm(taxon~response))[[4]][2,1]  # ANOVA test
 				}
 			})
 	} else {

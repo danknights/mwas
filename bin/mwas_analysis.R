@@ -41,14 +41,14 @@
 #
 
 # Source files
-#file.sources = list.files(c("C:/folder1", "C:/folder2"),
-file.sources = list.files("lib", pattern="*.R$",
-#file.sources = list.files(paste(Sys.getenv('MWAS_DIR'),'/lib',sep=''), pattern="*.R$",
+
+#file.sources = list.files("lib", pattern="*.R$",
+file.sources = list.files(paste(Sys.getenv('MWAS_DIR'),'/lib',sep=''), pattern="*.R$",
                           full.names=TRUE, ignore.case=TRUE)
 invisible(sapply(file.sources, source, .GlobalEnv))
 
 ####################### Parse INPUT options #####
-if (!require("optparse", quietly=TRUE, warn.conflicts = FALSE))) {
+if (!require("optparse", quietly=TRUE, warn.conflicts = FALSE)) {
   install.packages("optparse", dependencies = TRUE)
   library("optparse", verbose=F, warn.conflicts =F)
 }

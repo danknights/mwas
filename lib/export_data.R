@@ -18,10 +18,10 @@
 #
 
 #require(xlsx, quietly = TRUE, warn.conflicts=FALSE)
-if (!require("xlsx", quietly=TRUE, warn.conflicts = FALSE)) {
-  install.packages("xlsx", dependencies = TRUE)
-  library(xlsx, verbose=F, warn.conflicts =F)
-}
+#if (!require("xlsx", quietly=TRUE, warn.conflicts = FALSE)) {
+#  install.packages("xlsx", dependencies = TRUE)
+#  library(xlsx, verbose=F, warn.conflicts =F)
+#}
 
 "export.mwas" <- function(trained.model=NULL, model.eval=NULL, trained.model.perform=NULL,
                           feat.set=NULL, out.dir=NULL, file.name="predcition_results"){
@@ -55,14 +55,14 @@ if (!require("xlsx", quietly=TRUE, warn.conflicts = FALSE)) {
     # save AUC, if there is any
     # save MCC, if there is any
     # save Cohen's Kappa, if there is any
-    file.name <- sprintf('%s/%s.xlsx', out.dir, file.name)
-    save.xlsx(objects=model.eval, file.name=file.name)
+    #file.name <- sprintf('%s/%s.xlsx', out.dir, file.name)
+    #save.xlsx(objects=model.eval, file.name=file.name)
   }  
 
   if (!is.null(trained.model.perform)){
     # save trained model evaluation
-    file.name <- sprintf('%s/trained_%s_model_performance.xlsx', out.dir, class(trained.model))
-    save.xlsx(objects=trained.model.perform, file.name=file.name)
+    #file.name <- sprintf('%s/trained_%s_model_performance.xlsx', out.dir, class(trained.model))
+    #save.xlsx(objects=trained.model.perform, file.name=file.name)
   }  
    
   if (!is.null(feat.set)){
@@ -78,20 +78,20 @@ if (!require("xlsx", quietly=TRUE, warn.conflicts = FALSE)) {
 # The original code is by Rob Kabacoff 
 # from: http://www.r-bloggers.com/quickly-export-multiple-r-objects-to-an-excel-workbook/
 # 
-"save.xlsx" <- function (objects, file.name){
+#"save.xlsx" <- function (objects, file.name){
 
   #objects <- list(...)
   #fargs <- as.list(match.call(expand.dots = TRUE))
   #objnames <- as.character(fargs)[-c(1, 2)]
-  objnames <- names(objects)
-  nobjects <- length(objects)
-  for (i in 1:nobjects) {
-    if (i == 1) {
-      write.xlsx(objects[[i]], file.name, sheetName = objnames[i])
-    }else write.xlsx(objects[[i]], file.name, sheetName = objnames[i], append = TRUE)
-  }
-  print(paste("Workbook", file.name, "has", nobjects, "worksheets."))
-}
+#  objnames <- names(objects)
+#  nobjects <- length(objects)
+#  for (i in 1:nobjects) {
+#    if (i == 1) {
+#      write.xlsx(objects[[i]], file.name, sheetName = objnames[i])
+#    }else write.xlsx(objects[[i]], file.name, sheetName = objnames[i], append = TRUE)
+#  }
+#  print(paste("Workbook", file.name, "has", nobjects, "worksheets."))
+#}
 
 
 # saves list of results from feature.statistics to file (or prints)
@@ -113,10 +113,10 @@ if (!require("xlsx", quietly=TRUE, warn.conflicts = FALSE)) {
   options(scipen=scipen.save)
   
   # save as .xlsx format
-  filename2 <- sprintf("%s.xlsx", filename)
-  hits <- cbind(rownames(hits), hits)
-  colnames(hits)[1] <- "Features"
-  write.xlsx(hits, filename2, row.names=FALSE, sheetName = results)
+  #filename2 <- sprintf("%s.xlsx", filename)
+  #hits <- cbind(rownames(hits), hits)
+  #colnames(hits)[1] <- "Features"
+  #write.xlsx(hits, filename2, row.names=FALSE, sheetName = results)
   
 }
 
