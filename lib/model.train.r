@@ -55,7 +55,7 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
 
 "train.mwas" <- function(data.set, y=NULL, is.feat = FALSE, 
                          method=c("RF","SVM", "knn", "MLR")[1], 
-                         valid_type = c("cv", "jk")[1], 
+                         #valid_type = c("cv", "jk")[1], 
                          nfolds = 10,
                          out.dir=NULL,
                          feat.threshold=0){
@@ -105,7 +105,8 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
 
 "persist.model.mwas" <- function(x, y, nfolds=10, 
                                  classifier=c("RF","SVM", "knn", "MLR")[1],
-                                 valid_type=c("cv", "jk")[1], is.feat=FALSE,
+                                 #valid_type=c("cv", "jk")[1], 
+                                 is.feat=FALSE,
                                  feat.set=NULL, out.dir=NULL){
   
   #require(pROC, quietly=TRUE, warn.conflicts=FALSE)
@@ -217,7 +218,12 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   switch(classifier, rf = {
            #require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
            
-           best.model <- tune.randomForest(x, y, tunecontrol = tune.control(random=TRUE, sampling="cross", cross = nfolds))
+           #best.model <- tune.randomForest(x, y, tunecontrol = tune.control(random=TRUE, sampling="cross", cross = nfolds))
+           
+           best.model <- tune.randomForest(x, y, mtry=seq(from=min(round(sqrt(num_species)), round(num_species/5)), 
+                                                          to=max(round(sqrt(num_species)), round(4*num_species/5)), 
+                                                          by=5), 
+                                         tunecontrol = tune.control(random=TRUE, sampling="cross", cross = 5))
            # $best.performance     the error rate for the best model
            # $train.ind            list of index vectors used for splits into training and validation sets
            # $performances         error and dispersion; a data frame with all parametere combinations along with the corresponding performance results
