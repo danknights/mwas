@@ -38,7 +38,7 @@ if (!require("vegan", quietly=TRUE, warn.conflicts = FALSE)) {
 
 if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   install.packages("pROC", repos="http://cran.r-project.org", dependencies = TRUE)
-  library("pROC", lib.loc = "$MWAS_DIR/R_packages", verbose=F, warn.conflicts =F)
+  library("pROC", verbose=F, warn.conflicts =F)
 }
 
 #if (!require("pROC")) {
@@ -105,7 +105,8 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
 
 "persist.model.mwas" <- function(x, y, nfolds=10, 
                                  classifier=c("RF","SVM", "knn", "MLR")[1],
-                                 valid_type=c("cv", "jk")[1], is.feat=FALSE,
+                                 #valid_type=c("cv", "jk")[1], 
+                                 is.feat=FALSE,
                                  feat.set=NULL, out.dir=NULL){
   
   #require(pROC, quietly=TRUE, warn.conflicts=FALSE)
@@ -278,3 +279,5 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   class(best.model) <- "mwas"
   return(best.model)
 }
+
+"tune.ksvm" <- funciton()
