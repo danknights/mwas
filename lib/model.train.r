@@ -285,4 +285,4 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   return(best.model)
 }
 
-"tune.ksvm" <- funciton()
+"tune.ksvm" <- function()
