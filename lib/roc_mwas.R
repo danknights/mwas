@@ -18,7 +18,7 @@
 # Last update: 10/25/2014
 #
 
-"roc.mwas" <- function(x, model=NULL, predicted=NULL, response, is.plot=FALSE){
+"roc.mwas" <- function(x, model=NULL, predicted=NULL, response, is.plot=TRUE){
 
 #  require(pROC, quietly=TRUE, warn.conflicts=FALSE)
   
@@ -37,8 +37,20 @@
   if(roc.flag != 0){
     if (length(levels(response)) == 2)  { # binary classification
       rocobj <- roc(response, as.numeric(predicted), percent=TRUE, ci=TRUE, plot=is.plot) 
+      if(is.plot){
+        title_text <- sprintf("AUC=%.3f", rocobj$auc)
+        usr <- par( "usr" )
+        text( 0, usr[ 3 ] + 5, title_text, adj = c( 1, 0 ), col = "blue" )
+      }
     } else {# multi-class classification
-      rocobj <- multiclass.roc(response, as.numeric(predicted), percent=TRUE, plot=is.plot)
+      rocobj <- multiclass.roc(response, as.numeric(predicted), percent=TRUE, plot=FALSE)
+      if(is.plot){
+        rocobj2 <- attr(rocobj$auc, "roc")$rocs[[3]]
+        plot(rocobj2)
+        title_text <- sprintf("AUC=%.3f", rocobj$auc)
+        usr <- par( "usr" )
+        text( 0, usr[ 3 ] + 5, title_text, adj = c( 1, 0 ), col = "blue" )
+      }
     }
   } else {
     rocobj <- list()
