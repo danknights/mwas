@@ -34,20 +34,21 @@
            feat.stats <- feature.statistics(x, response, selection_threshold, include.subset = TRUE)
            feat_set$id <- colnames(feat.stats$subset)
            feat_set$features <- x[,feat_set$id]
-           feat_set$scores <- 
+           #feat_set$scores <- 
            
            cat(length(feat_set$id), " features are selected under the criterion FDR < ", selection_threshold)
            
            #file_name <- gsub(".txt", "", file_name)
            write.statistical.test.results(feat.stats, filename=file_name)
            
-           ## determine the number of features for the reduced featuer set
-           feat_
+           ## TODO: determine the number of features for the reduced feature set
+           
          }, 
          rf = {
            file_name = sprintf("%s/%s_%.2f_feature_importance_rank.txt", out.dir, method, selection_threshold)
            
-           model.rf <- tune.randomForest(x, y, importance=TRUE, mtry=seq(from=min(round(sqrt(num_species)), round(num_species/5)), to=max(round(sqrt(num_species)), round(4*num_species/5)), by=5), 
+           #model.rf <- tune.randomForest(x, y, importance=TRUE, mtry=seq(from=min(round(sqrt(num_species)), round(num_species/5)), to=max(round(sqrt(num_species)), round(4*num_species/5)), by=5), 
+           model.rf <- tune.randomForest(x, y, importance=TRUE, mtry=c(round(sqrt(num_species)/2), round(sqrt(num_species)), round(2*sqrt(num_species))), 
                                          tunecontrol = tune.control(random=TRUE, sampling="cross", cross = 5))
            summary(model.rf)
            

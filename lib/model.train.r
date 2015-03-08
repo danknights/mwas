@@ -285,4 +285,39 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   return(best.model)
 }
 
-"tune.ksvm" <- function()
+#"tune.ksvm" <- function()
+
+# S3 method of predict.knn
+"predict.knn" <- function(model, test){
+  require(class)
+  prediction <- knn(model$train, test, model$cl, k=model$k, l=model$l, prob=TRUE, use.all=TRUE)
+  return(prediction)
+}
+
+"custom_dist_kernel" <- function(dataMat, method, param=1){
+  switch(method,
+         Matrix = {
+           dist_kern <- as.kernelMatrix(exp(-dataMat/param))     
+         },
+         bray = {
+           b_dist <- vegdist(dataMat, method = "bray")
+           b_dist <- as.matrix(b_dist)
+           dist_kern <- as.kernelMatrix(exp(-dataMat/param))
+         },
+         stop("Please specify distance type: Matrix (distance matrix) or bray (Bray-Curtis)")
+  )
+  return(dist_kern)
+}
+
+"custom.knn" <- function(data1, data2, y1, k){
+  Ind1 <- dim(data1)[1]
+  new_data <- rbind(data1, data2)
+  dist_mat <-as.matrix(vegdist(new_data, method="bray"))
+  Num <- dim(dist_mat)[1]
+  y2 <- vector()
+  for(id in (Ind1+1):Num){
+    tt <- table(y1[match(names(sort(dist_mat[id, 1:Ind1])[1:k]), rownames(data1))])
+    y2[id - Ind1] <- names(sort(tt, decreasing=T)[1])
+  }
+  return(y2)
+}
