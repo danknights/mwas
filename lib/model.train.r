@@ -103,7 +103,7 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
 # Nested cross-validation and Jack Knife validation for model performance estimation
 # And model selection (model training)
 
-"persist.model.mwas" <- function(x, y, nfolds=10, 
+"persist.model.mwas" <- function(x, y, nfolds=5, 
                                  classifier=c("RF","SVM", "knn", "MLR")[1],
                                  #valid_type=c("cv", "jk")[1], 
                                  is.feat=FALSE,
@@ -117,64 +117,60 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   #cat.ind <- list()  # category indices
   #response.tab <- table(y)
   
-  cv.ind <- sample(dim(x)[1])   # permutate the index
-  cv.samp.num <- floor(length(cv.ind)/nfolds)
-  sampl_ind <- seq(1, dim(x)[1], by=1)
+  class.names <- levels(y)
+  class.response <- list()
+  class.length <- vector()
+  cv.ind <- vector()
+  for(id in seq_len(length(class.names))){
+    class.response[[id]] <- which(y==class.names[id])
+    class.length[id] <- length(class.response[[id]])
+    #names(class.response[[id]]) <- class.names[id]
+    cv.ind[id] <- sample(class.length[id])
+  }
+  
+  #cv.ind <- sample(dim(x)[1])   # permutate the index
+  #cv.samp.num <- floor(length(cv.ind)/nfolds)  
+  #sampl_ind <- seq(1, dim(x)[1], by=1)
+
+  minSample.number <- min(class.length)  # even nubmers of samples for each class
+  cv.samp.num <- floor(minSample.number/nfolds)
+
   candidate.model <- list()
   candidate.rocobj <- list()
   candidate.auc <- vector("numeric", nfolds)
   candidate.error <- vector("numeric", nfolds)
   
   # nested cross-validation
-  if (tolower(valid_type)=="cv"){ # case insensitive
-    for (cv.id in 1:nfolds){
-      # fold index that is being hold out
-      if(cv.id < nfolds) {idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, cv.id*cv.samp.num, by=1)]
-      }else {# the last fold could contain less than cv.samp.num of observations
-        idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, length(cv.ind), by=1)] 
-      }
-      
-      validation.set <- x[idx,]
-      validation.labels <- y[idx]
-      
-      train.set <- x[!sampl_ind %in% idx,]
-      train.labels <- y[!sampl_ind %in% idx]
-      
-      candidate <- cross.validation.mwas(train.set, train.labels, nfolds, classifier)
-      candidate.eval <- model.evaluation.mwas(validation.set, candidate$best.model, validation.labels)
-      
-      candidate.model <- c(candidate.model, list(candidate))
-      candidate.error[cv.id] <- candidate.eval$performance["error"]
-      candidate.auc[cv.id] <- candidate.eval$performance["auc"]
-      
-    }
-  }else if(valid_type=="jk") { # jackknife function 
-    jk.ind <- seq(1, dim(x)[1], by=1)
-    jk.samp.num <- floor(length(cv.ind)/nfolds)
+  #if (tolower(valid_type)=="cv"){ # case insensitive
+ 
+  
+  #}else if(valid_type=="jk") { # jackknife function 
+  # Jackknifing for modle evaluation
+  jk.ind <- seq(1, dim(x)[1], by=1)
+  jk.samp.num <- floor(length(cv.ind)/nfolds)
+  
+  candidate.model <- list()
+  candidate.rocobj <- list()
+  candidate.auc <- vector("numeric", nfolds)
+  candidate.error <- vector("numeric", nfolds)
+  
+  for (jk.fold in 1:nfolds){
+    # fold index that is being hold out
+    if(jk.fold < nfolds){
+      idx <- jk.ind[seq((jk.fold-1)*jk.samp.num + 1, jk.fold*jk.samp.num, by=1)] 
+    }else {# the last fold could contain less than jk.samp.num
+      idx <- jk.ind[seq((jk.fold-1)*jk.samp.num + 1, length(jk.fold), by=1)]}
     
-    candidate.model <- list()
-    candidate.rocobj <- list()
-    candidate.auc <- vector("numeric", nfolds)
-    candidate.error <- vector("numeric", nfolds)
+    train.set <- x[!sampl_ind %in% idx,]
+    train.labels <- y[!sampl_ind %in% idx]
     
-    for (jk.fold in 1:nfolds){
-      # fold index that is being hold out
-      if(jk.fold < nfolds){
-        idx <- jk.ind[seq((jk.fold-1)*jk.samp.num + 1, jk.fold*jk.samp.num, by=1)] 
-      }else {# the last fold could contain less than jk.samp.num
-        idx <- jk.ind[seq((jk.fold-1)*jk.samp.num + 1, length(jk.fold), by=1)]}
-      
-      train.set <- x[!sampl_ind %in% idx,]
-      train.labels <- y[!sampl_ind %in% idx]
-      
-      candidate <- cross.validation.mwas(train.set, train.labels, nfolds, classifier)
-      candidate.model <- c(candidate.model, list(candidate))
-      candidate.error[jk.fold] <- candidate$best.performance
-      
-      candidate.obj <- roc.mwas(validation.set, model=candidate$best.model, response=validation.labels)
-      candidate.rocobj <- c(candidate.model, list(candidate.obj))
-      candidate.auc[jk.fold] <- as.numeric(candidate.rocobj$auc)
-    }
+    candidate <- cross.validation.mwas(train.set, train.labels, nfolds, classifier)
+    candidate.model <- c(candidate.model, list(candidate))
+    candidate.error[jk.fold] <- candidate$best.performance
+    
+    #candidate.obj <- roc.mwas(validation.set, model=candidate$best.model, response=validation.labels)
+    #candidate.rocobj <- c(candidate.model, list(candidate.obj))
+    #candidate.auc[jk.fold] <- as.numeric(candidate.rocobj$auc)
   }
   
   ####### Calculate mean and std of error - model performance estimation
@@ -200,6 +196,30 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
               out.dir=out.dir, file.name = file.out)
   
   # class(best.model) <- "mwas"
+  
+  # 5-fold cv for model traing
+#   for (cv.id in 1:nfolds){
+#     # fold index that is being hold out
+#     if(cv.id < nfolds) {idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, cv.id*cv.samp.num, by=1)]
+#     }else {# the last fold could contain less than cv.samp.num of observations
+#       idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, length(cv.ind), by=1)] 
+#     }
+#     
+#     validation.set <- x[idx,]
+#     validation.labels <- y[idx]
+#     
+#     train.set <- x[!sampl_ind %in% idx,]
+#     train.labels <- y[!sampl_ind %in% idx]
+#     
+#     candidate <- cross.validation.mwas(train.set, train.labels, nfolds, classifier)
+#     candidate.eval <- model.evaluation.mwas(validation.set, candidate$best.model, validation.labels)
+#     
+#     candidate.model <- c(candidate.model, list(candidate))
+#     candidate.error[cv.id] <- candidate.eval$performance["error"]
+#     candidate.auc[cv.id] <- candidate.eval$performance["auc"]
+#     
+#   }
+  
   return(best.model)
 }
 
