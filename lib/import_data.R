@@ -55,7 +55,7 @@
 #
 
 if (!require("biom", quietly=TRUE, warn.conflicts = FALSE)) {
-  install.packages("biom", repos="http://cran.r-project.org", dependencies = TRUE)
+  install.packages("biom", dependencies = TRUE)
   library("biom", verbose=F, warn.conflicts =F)
 }
 if (!require("RColorBrewer", quietly=TRUE, warn.conflicts = FALSE)) {
