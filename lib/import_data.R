@@ -111,7 +111,7 @@ if (!require("beeswarm", quietly=TRUE, warn.conflicts = FALSE)) {
                      feat.param = opts$feat_param,
                      method=opts$method, 
                      c.params=opts$method_param, 
-                     valid_type=opts$validType, 
+                     ft_method=opts$ftMethod, 
                      out.dir=opts$outdir, 
                      nfolds=opts$nfolds)
   # c.params is parameter sets for the classifier

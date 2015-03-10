@@ -30,7 +30,7 @@
 #  19. T - which taxa to plot
 #  20. S - whether shorten taxon names [default: FALSE]
 #  21. A - False discovery rate, alpha [default: NULL]
-#  22. X - whhether plot pair-wise PC plots [default: FALSE]
+#  22. X - whether plot pair-wise PC plots [default: FALSE]
 #  23. K - For heatmap plot, whether filter kegg list [default: FALSE]
 #  24. N - the number of plots for beeswarm and scatter plots [default: NULL]
 #  <statistical testing>
@@ -79,11 +79,11 @@ option_list <- list(
               help="Classifier type [required for model training] or trained model file [required for predicting] 
               or plot type [required for plotting]."),
   # classification parameters
-  make_option(c("-C", "--method_param"),type='character',default="radial",
+  make_option(c("-C", "--method_param"),type='character',default="linear",
               help="For training: classifier parameter, e.g. SVM kernel type [default: %default]."),
-  make_option(c("-v", "--validType"),type='character',default="cv",
-              help="Validation type (k-fold cross-validation [cv] or Jackknifing [jk]) [default: %default]"),
-  make_option(c("-n", "--nfolds"),type='numeric',default=10,
+  make_option(c("-v", "--ftMethod"),type='character',default="fdr",
+              help="Feature selection method:'fdr' for false discovery rate, or 'rf' for randomForest variable importance ranking [default: %default]"),
+  make_option(c("-n", "--nfolds"),type='numeric',default=5,
               help="Number of folds in cross-validation [default: %default]"),
   make_option(c("-f", "--is_feat"),type="logical", action="store_true", default=FALSE,
               help="Flag for feature selection [default: %default]"),

@@ -56,6 +56,7 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
 "train.mwas" <- function(data.set, y=NULL, is.feat = FALSE, 
                          method=c("RF","SVM", "knn", "MLR")[1], 
                          #valid_type = c("cv", "jk")[1], 
+                         ft_method=c("fdr","rf")[1],
                          nfolds = 10,
                          out.dir=NULL,
                          feat.threshold=0){
@@ -85,7 +86,8 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
     if(is.null(out.dir)) out.dir <- "."
     file.out <- paste0(out.dir, "/feat_statistics")
     dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
-    feat.set <- feature.selection(x, y, selection_threshold = feat.threshold, "FDR", file.out)
+    feat.set <- feature.selection(x, y, selection_threshold = feat.threshold, ft_method, file.out)
+    #feat_num <- feature.number(feat.set, method, th)
     train.set <- x[,feat.set]
   }else {
     feat.set <- colnames(x)

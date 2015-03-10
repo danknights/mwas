@@ -86,6 +86,6 @@
   return(feat_set)
 }
 
-"feature.number" <- function(feat_set){
+#"feature.number" <- function(feat_set, ){
   
-}  
+#}  
