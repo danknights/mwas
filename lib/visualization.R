@@ -1,4 +1,3 @@
-
 # Visualization function: including heatmaps, beeswarm, violin, boxplots, etc
 # 
 # ------------
@@ -96,7 +95,37 @@
              run.2d.scatterplot(x=x, response=response, out.dir = out.dir)
            }
          },
-         stop("Please assign the correct plot type!(Optioins: beeswarm, graidents, heatmap, scatterplot.")
+         boxplot={
+           if (!is.null(fdr)) {
+             # if fdr is given, then use the feature statistics table
+             # otherwise use the whole taxa in the original table.
+             
+             stats.obj <- stats.plot.parameters(x, response,  fdr, feat_stats, nplot, is.shorten.taxa, plot.type)
+             run.beeswarm(stats.obj$new_taxon_table, 
+                          stats.obj$response, 
+                          stats.obj$filename,
+                          out.dir = out.dir)
+           }else  { # plot all the taxa that are provided in the table
+             #print("Beeswarm plot...")
+             run.beeswarm(x = x, response=response, filename="boxplot.pdf", out.dir = out.dir)
+           }
+         },
+         violin={
+           if (!is.null(fdr)) {
+             # if fdr is given, then use the feature statistics table
+             # otherwise use the whole taxa in the original table.
+             
+             stats.obj <- stats.plot.parameters(x, response,  fdr, feat_stats, nplot, is.shorten.taxa, plot.type)
+             run.beeswarm(stats.obj$new_taxon_table, 
+                          stats.obj$response, 
+                          stats.obj$filename,
+                          out.dir = out.dir)
+           }else  { # plot all the taxa that are provided in the table
+             #print("Beeswarm plot...")
+             run.beeswarm(x = x, response=response, filename="violin-plot.pdf", out.dir = out.dir)
+           }
+         },
+         stop("Please assign the correct plot type!(Optioins: beeswarm, graidents, heatmap, boxplot, viloin, scatterplot.")
     )
 }
 
