@@ -29,34 +29,34 @@
     stop("ROC fucntion needs at least one of the following values: trained model or predicted values!")
   }
   
-  roc.flag <- 1
-  for(id in length(levels(response))){
-    roc.flag <- roc.flag * length(which(response==levels(response)[id]))
-  }
+  #roc.flag <- 1
+  #for(id in length(levels(response))){
+  #  roc.flag <- roc.flag * length(which(response==levels(response)[id]))
+  #}
   
-  if(roc.flag != 0){
-    if (length(levels(response)) == 2)  { # binary classification
-      rocobj <- roc(response, as.numeric(predicted), percent=TRUE, ci=TRUE, plot=is.plot) 
-      if(is.plot){
-        title_text <- sprintf("AUC=%.3f", rocobj$auc)
-        usr <- par( "usr" )
-        text( 0, usr[ 3 ] + 5, title_text, adj = c( 1, 0 ), col = "blue" )
-      }
-    } else {# multi-class classification
-      rocobj <- multiclass.roc(response, as.numeric(predicted), percent=TRUE, plot=FALSE)
-      if(is.plot){
-        rocobj2 <- attr(rocobj$auc, "roc")$rocs[[3]]
-        plot(rocobj2)
-        title_text <- sprintf("AUC=%.3f", rocobj$auc)
-        usr <- par( "usr" )
-        text( 0, usr[ 3 ] + 5, title_text, adj = c( 1, 0 ), col = "blue" )
-      }
+  #if(roc.flag != 0){
+  if (length(levels(response)) == 2)  { # binary classification
+    rocobj <- roc(response, as.numeric(predicted), percent=F, ci=F, plot=is.plot) 
+    if(is.plot){
+      title_text <- sprintf("AUC=%.3f", rocobj$auc)
+      usr <- par( "usr" )
+      text( 0, usr[ 3 ] + 5, title_text, adj = c( 1, 0 ), col = "blue" )
     }
-  } else {
-    rocobj <- list()
-    rocobj$auc <- 0
-    #rocobj <- NULL
+  } else {# multi-class classification
+    rocobj <- multiclass.roc(response, as.numeric(predicted), percent=TRUE, plot=FALSE)
+    if(is.plot){
+      rocobj2 <- attr(rocobj$auc, "roc")$rocs[[3]]
+      plot(rocobj2)
+      title_text <- sprintf("AUC=%.3f", rocobj$auc)
+      usr <- par( "usr" )
+      text( 0, usr[ 3 ] + 5, title_text, adj = c( 1, 0 ), col = "blue" )
+    }
   }
+  #} else {
+  #  rocobj <- list()
+  #  rocobj$auc <- 0
+    #rocobj <- NULL
+  #}
   return(rocobj)
 }
 

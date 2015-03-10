@@ -120,34 +120,40 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   class.names <- levels(y)
   class.response <- list()
   class.length <- vector()
-  cv.ind <- vector()
+  cv.ind <- list()
+  #xx <- matrix()
   for(id in seq_len(length(class.names))){
     class.response[[id]] <- which(y==class.names[id])
     class.length[id] <- length(class.response[[id]])
     #names(class.response[[id]]) <- class.names[id]
-    cv.ind[id] <- sample(class.length[id])
+    cv.ind[[id]] <- sample(class.length[id])
   }
   
+  #xx <- rbind()
   #cv.ind <- sample(dim(x)[1])   # permutate the index
   #cv.samp.num <- floor(length(cv.ind)/nfolds)  
   #sampl_ind <- seq(1, dim(x)[1], by=1)
 
   minSample.number <- min(class.length)  # even nubmers of samples for each class
   cv.samp.num <- floor(minSample.number/nfolds)
-
-  candidate.model <- list()
-  candidate.rocobj <- list()
-  candidate.auc <- vector("numeric", nfolds)
-  candidate.error <- vector("numeric", nfolds)
-  
+ 
+  # balanced feature set
+  xx <- matrix()
+  yy <- vector()
+  for(id in seq_len(length(class.names))){
+    if(id == 1){
+      xx <- x[class.response[[id]][1:(cv.samp.num*nfolds)],]
+    } else xx <- rbind(xx, x[class.response[[id]][1:(cv.samp.num*nfolds)],])
+    yy <- c(yy, y[class.response[[id]][1:(cv.samp.num*nfolds)]])
+  }
+  sampl_ind <- seq(1, length(yy), by=1)
   # nested cross-validation
   #if (tolower(valid_type)=="cv"){ # case insensitive
  
-  
   #}else if(valid_type=="jk") { # jackknife function 
   # Jackknifing for modle evaluation
-  jk.ind <- seq(1, dim(x)[1], by=1)
-  jk.samp.num <- floor(length(cv.ind)/nfolds)
+  jk.ind <- seq(1, cv.samp.num*nfolds, by=1)
+  #jk.samp.num <- floor(length(cv.ind)/nfolds)
   
   candidate.model <- list()
   candidate.rocobj <- list()
@@ -156,21 +162,29 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   
   for (jk.fold in 1:nfolds){
     # fold index that is being hold out
-    if(jk.fold < nfolds){
-      idx <- jk.ind[seq((jk.fold-1)*jk.samp.num + 1, jk.fold*jk.samp.num, by=1)] 
-    }else {# the last fold could contain less than jk.samp.num
-      idx <- jk.ind[seq((jk.fold-1)*jk.samp.num + 1, length(jk.fold), by=1)]}
+    idx <- vector()
+    for(id in seq_len(length(class.names))){
+      idx <- c(idx, seq((jk.fold-1)*cv.samp.num + 1 + (id-1)*cv.samp.num*nfolds, 
+                        jk.fold*cv.samp.num + (id-1)*cv.samp.num*nfolds, by=1))
+    }
     
-    train.set <- x[!sampl_ind %in% idx,]
-    train.labels <- y[!sampl_ind %in% idx]
+    validation.set <- xx[idx,]
+    validation.labels <- yy[idx]
     
-    candidate <- cross.validation.mwas(train.set, train.labels, nfolds, classifier)
+    train.set <- xx[!sampl_ind %in% idx,]
+    train.labels <- yy[!sampl_ind %in% idx]
+    
+    candidate <- cross.validation.mwas(train.set, as.factor(train.labels), nfolds, classifier)
     candidate.model <- c(candidate.model, list(candidate))
-    candidate.error[jk.fold] <- candidate$best.performance
+    #candidate.error[jk.fold] <- candidate$best.performance
     
-    #candidate.obj <- roc.mwas(validation.set, model=candidate$best.model, response=validation.labels)
+    pred.label <- predict(candidate$best.model, validation.set)
+    candidate.error[jk.fold] <- length(which(pred.label != validation.labels))/length(validation.labels)
+    pred.prob <- predict(candidate$best.model, validation.set, type='prob')
+    
+    candidate.obj <- roc.mwas(validation.set, predicted=pred[validation.labels], response=as.factor(validation.labels))
     #candidate.rocobj <- c(candidate.model, list(candidate.obj))
-    #candidate.auc[jk.fold] <- as.numeric(candidate.rocobj$auc)
+    candidate.auc[jk.fold] <- as.numeric(candidate.obj$auc)
   }
   
   ####### Calculate mean and std of error - model performance estimation
@@ -185,40 +199,6 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   best.model <- best.model.obj$best.model
   best.model.eval <- model.evaluation.mwas(x, best.model, y)
   class(best.model.eval) <- class(best.model)
-  
-  # if (savefile) save(best.model, file = paste(opts$outdir,"/trained.model", collapse='', sep=''))
-  # Saving file is integrated into export.mwas.R
-  if(!is.feat) feat.set <- NULL
-  
-  file.out <- sprintf('train_%s_model_results', classifier)
-  export.mwas(trained.model=best.model, model.eval=best.model.eval, 
-              trained.model.perform=model.perform, feat.set=feat.set,
-              out.dir=out.dir, file.name = file.out)
-  
-  # class(best.model) <- "mwas"
-  
-  # 5-fold cv for model traing
-#   for (cv.id in 1:nfolds){
-#     # fold index that is being hold out
-#     if(cv.id < nfolds) {idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, cv.id*cv.samp.num, by=1)]
-#     }else {# the last fold could contain less than cv.samp.num of observations
-#       idx <- cv.ind[seq((cv.id-1)*cv.samp.num + 1, length(cv.ind), by=1)] 
-#     }
-#     
-#     validation.set <- x[idx,]
-#     validation.labels <- y[idx]
-#     
-#     train.set <- x[!sampl_ind %in% idx,]
-#     train.labels <- y[!sampl_ind %in% idx]
-#     
-#     candidate <- cross.validation.mwas(train.set, train.labels, nfolds, classifier)
-#     candidate.eval <- model.evaluation.mwas(validation.set, candidate$best.model, validation.labels)
-#     
-#     candidate.model <- c(candidate.model, list(candidate))
-#     candidate.error[cv.id] <- candidate.eval$performance["error"]
-#     candidate.auc[cv.id] <- candidate.eval$performance["auc"]
-#     
-#   }
   
   return(best.model)
 }
@@ -235,14 +215,13 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
 "cross.validation.mwas" <- function(x, y, nfolds=10, classifier = c("RF","SVM", "knn", "MLR")[1], ...){
   
   classifier <- tolower(classifier) # case insensitive for options
+  num_obs <- length(y)
   switch(classifier, rf = {
            #require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
            
            #best.model <- tune.randomForest(x, y, tunecontrol = tune.control(random=TRUE, sampling="cross", cross = nfolds))
            
-           best.model <- tune.randomForest(x, y, mtry=seq(from=min(round(sqrt(num_species)), round(num_species/5)), 
-                                                          to=max(round(sqrt(num_species)), round(4*num_species/5)), 
-                                                          by=5), 
+           best.model <- tune.randomForest(x, y, importance=TRUE,keep.forest=TRUE, mtry=c(round(sqrt(num_obs)/2), round(sqrt(num_obs)), round(2*sqrt(num_obs))),
                                          tunecontrol = tune.control(random=TRUE, sampling="cross", cross = 5))
            # $best.performance     the error rate for the best model
            # $train.ind            list of index vectors used for splits into training and validation sets
@@ -265,7 +244,34 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
          }, svm={
            #require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
 
-           best.model <- tune.svm(x, y, tunecontrol = tune.control(random=TRUE, sampling="cross", cross = nfolds), probability = TRUE)
+           #best.model <- tune.ksvm(x, y, tunecontrol = tune.control(random=TRUE, sampling="cross", cross = nfolds), probability = TRUE)
+           kernel <- tolower(kernel)
+           sigma <- c(2^(-4:0), seq(from=2, to=2^8, by=5))
+           if(kernel!='all'){
+             
+             best.model <- tune.ksvm(x, y, kernel, ranges=list(C=2^(-2:4), kpar=list(sigma=sigma)),
+                                     probability = TRUE)
+           }else{
+             all_kernel <- c("linear","rbf_eu","rbf_bc", "rbf_uf")
+             valid_obj <- list()
+             #sigma <- c(2^(-4:0), seq(from=2, to=2^8, by=5))
+             best_id <- 0
+             count <- 0
+             for(id in 1:length(all_kernel)){
+               count <- count + 1
+               valid.model <- tune.ksvm(x, y, all_kernel[id], ranges=list(C=2^(-2:4), kpar=list(sigma=sigma)),
+                                       probability = TRUE)
+               valid_obj <- c(valid_obj, valid.model)
+               if(best_id==0){
+                 best_id <- 1
+               } else{
+                 if(valid_obj[[best_id]]$best.performance > valid_obj$best.performance) best_id <- count
+               }               
+             }
+             
+             best.model <- valid_obj[[best_id]]
+           }
+
            # $best.model         the model trained on the complete training data using the best parameter combination.
            # $best.parameters    a 1 x k data frame, k number of parameters
            # $best.performance   best achieved performance
@@ -289,7 +295,7 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
            
          }, knn = {
            #require(e1071, quietly=TRUE, warn.conflicts=FALSE) 
-           best.model <- tune.knn(x, y, k = seq(from=1, to=min(dim(x)[1]/nfolds*(nfolds-1), 15), by =2), 
+           best.model <- tune.knn(x, y, k = seq(from=1, to=min(dim(x)[1]/nfolds*(nfolds-1), 25), by =2), 
                                   l= 1, sampling="cross", cross = nfolds, prob = TRUE) 
            class(best.model$best.model) <- 'knn'
            # $best.parameters$k          best k
@@ -305,7 +311,112 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   return(best.model)
 }
 
-#"tune.ksvm" <- function()
+"tune.ksvm" <- function(x, y, kernel, ranges=NULL, nfolds=5, probability = TRUE){
+  
+  kernel <- tolower(kernel)
+ ###### grid search
+ # Extract parameter ranges
+ if(!is.null(ranges)){
+   params <- names(ranges) # parameters to be tuned
+   if("C" %in% params) C <- ranges$C
+   if("kpar" %in% params) kpar <- ranges$kpar
+ } else { # default
+   C <- 1
+   kpar <- NULL
+ }
+ 
+ cv_obj <- list()
+ best_id <- 0
+ count <- 0
+ # grid search
+ if(!is.null(kpar)){
+   for(C_id in 1:length(C)){
+     for(kpar_id in 1:length(kpar$sigma)){
+       count <- count + 1
+       
+       switch(kernel,
+              linear={
+                valid_obj <- ksvm(x, y, type="C-svc", kernel="vanilladot", prob.model=probability, cross=nfolds,
+                                  C=C[C_id])
+              },
+              rbf_eu={
+                valid_obj <- ksvm(x, y, type="C-svc", kernel="rbfdot", prob.model=probability, cross=nfolds,
+                                  C=C[C_id], kpar=list(sigma=kpar$sigma[kpar_id]))
+              },
+              rbf_bc={
+                valid_obj <- ksvm(custom_dist_kernel(x, kernel, kpar$sigma[kpar_id]), y, type="C-svc",
+                                  kernel="matrix", prob.model=probability, cross=nfolds, C= C[C_id])
+              },
+              rbf_uf={
+                valid_obj <- ksvm(custom_dist_kernel(x, kernel, kpar$sigma[kpar_id]), y, type="C-svc",
+                                  kernel="matrix", prob.model=probability, cross=nfolds, C= C[C_id])
+              },
+              stop("'kernel' should be one of 'linear','rbf_eu','rbf_bc','rbf_uf', 'all' ")
+         )
+       # ..@error - training error
+       # ..@cross - cross validation error
+       # ..@kernelf@kpar$sigma - sigma
+       # ..@obj - Objective Function Value
+       # ..@param$C - C
+       # ..@nSV - nubmer of support vectors
+       
+       cv_obj <- c(cv_obj, valid_obj)
+       if(best_id==0){
+         best_id <- 1
+       } else{
+         if(cv_obj[[best_id]]@cross > valid_obj@cross) best_id <- count
+       }
+     }
+   }
+ } else {
+   for(C_id in 1:length(C)){
+     count <- count + 1
+     
+     switch(kernel,
+            linear={
+              valid_obj <- ksvm(x, y, type="C-svc", kernel="vanilladot", prob.model=probability, cross=nfolds,
+                                C=C[C_id])
+            },
+            rbf_eu={
+              valid_obj <- ksvm(x, y, type="C-svc", kernel="rbfdot", prob.model=probability, cross=nfolds,
+                                C=C[C_id], kpar=list(sigma=kpar$sigma[kpar_id]))
+            },
+            rbf_bc={
+              valid_obj <- ksvm(custom_dist_kernel(x, "bc", kpar$sigma[kpar_id]), y, type="C-svc",
+                                kernel="matrix", prob.model=probability, cross=nfolds, C= C[C_id])
+            },
+            rbf_uf={
+              valid_obj <- ksvm(custom_dist_kernel(x, "uf", kpar$sigma[kpar_id]), y, type="C-svc",
+                                kernel="matrix", prob.model=probability, cross=nfolds, C= C[C_id])
+            },
+            stop("'kernel' should be one of 'linear','rbf_eu','rbf_bc','rbf_uf','all' ")
+     )
+     
+     #valid_obj <- ksvm(x, y, type="C-svc", kernel=kernel, prob.model=probability, cross=nfolds, 
+     #                   C=C[C_id])
+     # ..@error - training error
+     # ..@cross - cross validation error
+     # ..@kernelf@kpar$sigma - sigma
+     # ..@obj - Objective Function Value
+     # ..@param$C - C
+     # ..@nSV - nubmer of support vectors
+     # ..
+     
+     cv_obj <- c(cv_obj, valid_obj)
+     if(best_id==0){
+       best_id <- 1
+     } else{
+       if(cv_obj[[best_id]]@cross > valid_obj@cross) best_id <- count
+     }
+   }
+ }
+ best.model <- list()
+ best.model$best.model <- cv_obj[[best_id]]
+ best.model$best.parameteris <- list(C=cv_obj[[best_id]]@param$C, sigma=cv_obj[[best_id]]@kernelf@kpar$sigma)
+ best.model$best.performance <- cv_obj[[best_id]]@cross
+ 
+ return(best.model)
+}
 
 # S3 method of predict.knn
 "predict.knn" <- function(model, test){
@@ -314,12 +425,15 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   return(prediction)
 }
 
-"custom_dist_kernel" <- function(dataMat, method, param=1){
+"custom_kernel" <- function(dataMat, method, param=1){
+  method <- tolower(method)
   switch(method,
-         Matrix = {
-           dist_kern <- as.kernelMatrix(exp(-dataMat/param))     
+         uf = { # UniFrac distance
+           # dataMat must be a UniFrac distance matrix
+           dist_kern <- as.kernelMatrix(exp(-dataMat/param))
          },
-         bray = {
+         bc = { # Bray-Curtis distance
+           # dataMat must be a raw data table
            b_dist <- vegdist(dataMat, method = "bray")
            b_dist <- as.matrix(b_dist)
            dist_kern <- as.kernelMatrix(exp(-dataMat/param))
@@ -329,15 +443,15 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   return(dist_kern)
 }
 
-"custom.knn" <- function(data1, data2, y1, k){
-  Ind1 <- dim(data1)[1]
-  new_data <- rbind(data1, data2)
-  dist_mat <-as.matrix(vegdist(new_data, method="bray"))
-  Num <- dim(dist_mat)[1]
-  y2 <- vector()
-  for(id in (Ind1+1):Num){
-    tt <- table(y1[match(names(sort(dist_mat[id, 1:Ind1])[1:k]), rownames(data1))])
-    y2[id - Ind1] <- names(sort(tt, decreasing=T)[1])
-  }
-  return(y2)
-}
+# "custom.knn" <- function(data1, data2, y1, k){
+#   Ind1 <- dim(data1)[1]
+#   new_data <- rbind(data1, data2)
+#   dist_mat <-as.matrix(vegdist(new_data, method="bray"))
+#   Num <- dim(dist_mat)[1]
+#   y2 <- vector()
+#   for(id in (Ind1+1):Num){
+#     tt <- table(y1[match(names(sort(dist_mat[id, 1:Ind1])[1:k]), rownames(data1))])
+#     y2[id - Ind1] <- names(sort(tt, decreasing=T)[1])
+#   }
+#   return(y2)
+# }
