@@ -15,7 +15,7 @@
 #   
 # ------
 #  Last update: 10/28/2014
-"model.statistical.test.mwas" <- function(data, ...){
+"statistical.test.mwas" <- function(data, ...){
   
   options <- list(...)
   
@@ -50,8 +50,9 @@
     out.dir <- options$outdir
     plot.type <- options$plottype
   }
+  test.type <- tolower(test.type)
   switch(test.type,
-         diff = {
+         fdr = {
            
          },
          linear = {
@@ -60,7 +61,7 @@
          ttest = {
           
          },
-         stop("Please assign the correct plot type!(Optioins: beeswarm, graidents, heatmap, scatter.")
+         stop("Please assign the correct testing type!(Optioins:ttest, FDR, ")
   )
 }
 

@@ -26,6 +26,8 @@
   
   if(is.null(out.dir)) out.dir <- "."
   
+  num_obs <- length(response)
+  
   method <- tolower(method)
   switch(method,
          fdr = {
@@ -48,7 +50,7 @@
            file_name = sprintf("%s/%s_%.2f_feature_importance_rank.txt", out.dir, method, selection_threshold)
            
            #model.rf <- tune.randomForest(x, y, importance=TRUE, mtry=seq(from=min(round(sqrt(num_species)), round(num_species/5)), to=max(round(sqrt(num_species)), round(4*num_species/5)), by=5), 
-           model.rf <- tune.randomForest(x, y, importance=TRUE, mtry=c(round(sqrt(num_species)/2), round(sqrt(num_species)), round(2*sqrt(num_species))), 
+           model.rf <- tune.randomForest(x, as.factor(y), importance=TRUE, mtry=c(round(sqrt(num_obs)/2), round(sqrt(num_obs)), round(2*sqrt(num_obs))), 
                                          tunecontrol = tune.control(random=TRUE, sampling="cross", cross = 5))
            summary(model.rf)
            
@@ -84,6 +86,6 @@
   return(feat_set)
 }
 
-"feature.number" <- function(feat_set){
+#"feature.number" <- function(feat_set, ){
   
-}  
+#}  
