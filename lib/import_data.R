@@ -110,10 +110,10 @@ if (!require("beeswarm", quietly=TRUE, warn.conflicts = FALSE)) {
                      is.feat=opts$is_feat, 
                      feat.param = opts$feat_param,
                      method=opts$method, 
-                     c.params=opts$method_param, 
                      ft_method=opts$ftMethod, 
                      out.dir=opts$outdir, 
-                     nfolds=opts$nfolds)
+                     nfolds=opts$nfolds,
+                     kernel=opts$method_param)
   # c.params is parameter sets for the classifier
   class(param.list) <- "mwas"
   

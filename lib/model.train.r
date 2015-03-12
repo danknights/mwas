@@ -53,51 +53,73 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
 #require(randomForest, quietly=TRUE, warn.conflicts=FALSE)
 #require(pROC, quietly=TRUE, warn.conflicts=FALSE)
 
-"train.mwas" <- function(data.set, y=NULL, is.feat = FALSE, 
-                         method=c("RF","SVM", "knn", "MLR")[1], 
-                         #valid_type = c("cv", "jk")[1], 
-                         ft_method=c("fdr","rf")[1],
-                         nfolds = 10,
+"train.mwas" <- function(data.set, y=NULL, is.feat = NULL, 
+                         #method=c("RF","SVM", "knn", "MLR")[1], 
+                         method = NULL,
+                         #ft_method=c("fdr","rf")[1],
+                         ft_method=NULL,
+                         kernel=NULL,
+                         nfolds = NULL,
                          out.dir=NULL,
-                         feat.threshold=0){
+                         feat.threshold=NULL){
   
   if (class(data.set)=="mwas") {
     x <- data.set$features 
     y <- data.set$response
     
     is.feat <- data.set$is.feat
-    if(is.null(is.feat)) is.feat=FALSE
+    if(is.null(is.feat)) {
+      is.feat=FALSE 
+    }else {
+      ft_method <- data.set$ft_method
+      if(is.null((ft_method))) stop("Please designate a feature selection method: FDR or RF?")
+    }
     
-    if(!is.null(data.set$feat_param)) {
-      feat.threshold <- data.set$feat_param
-    }else feat.threshold <- 0
+    if(!is.null(data.set$feat.param)) {
+      feat.threshold <- data.set$feat.param
+    }else {
+      feat.threshold <- 0
+    }
     
     method <- data.set$method
-    
-    valid_type <- data.set$valid_type
-    if(is.null(valid_type)) valid_type <- "cv"
-    
+
     out.dir <- data.set$out.dir
+    
+    kernel <- data.set$kernel
+    nfolds <- data.set$nfolds
+    
   }else if(is.null(y)){
     stop("Response values are missing for the model training!")
-  }else x <- data.set
+  }else { 
+    x <- data.set
+    is.feat <- FALSE 
+    method <- "RF"
+    ft_method <- "fdr"
+    kernel <- NULL
+    nfolds <- 5
+    out.dir <- NULL
+    feat.threshold <- 0.05
+  }
   
   if (is.feat){
     if(is.null(out.dir)) out.dir <- "."
     file.out <- paste0(out.dir, "/feat_statistics")
-    dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
-    feat.set <- feature.selection(x, y, selection_threshold = feat.threshold, ft_method, file.out)
+    dir.create(file.out,showWarnings=FALSE, recursive=TRUE)
+    feat_set <- feature.selection(x, y, selection_threshold = feat.threshold, ft_method, file.out)
     #feat_num <- feature.number(feat.set, method, th)
-    train.set <- x[,feat.set]
+    #train.set <- x[,feat.set$id]
+    train.set <- feat_set$features
+    feat.set <- feat_set$id
   }else {
     feat.set <- colnames(x)
     train.set <- x
   }
   best.model <- persist.model.mwas(train.set, y, nfolds=nfolds, classifier=method, 
-                                   valid_type, is.feat = is.feat, feat.set=feat.set, 
-                                   out.dir=out.dir)
-  
-  #export.mwas(trained.model = best.model, feat.set = feat.set)
+                                   out.dir=out.dir, kernel=kernel)
+  file.name <- sprintf("%s_train_model_performance", method)
+  export.mwas(trained.model = best.model$best.model, model.eval=best.model$model.perform, 
+              trained.model.perform = best.model$best.model.eval,  
+              feat.set = feat.set, out.dir=out.dir, file.name=file.name)
   return(best.model)
 }
 
@@ -107,9 +129,7 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
 
 "persist.model.mwas" <- function(x, y, nfolds=5, 
                                  classifier=c("RF","SVM", "knn", "MLR")[1],
-                                 #valid_type=c("cv", "jk")[1], 
-                                 is.feat=FALSE,
-                                 feat.set=NULL, out.dir=NULL){
+                                 out.dir=NULL, kernel=NULL){
   
   #require(pROC, quietly=TRUE, warn.conflicts=FALSE)
   
@@ -164,6 +184,7 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   
   for (jk.fold in 1:nfolds){
     # fold index that is being hold out
+    cat("Jackknifing fold: ", jk.fold, "\n")
     idx <- vector()
     for(id in seq_len(length(class.names))){
       idx <- c(idx, seq((jk.fold-1)*cv.samp.num + 1 + (id-1)*cv.samp.num*nfolds, 
@@ -176,7 +197,7 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
     train.set <- xx[!sampl_ind %in% idx,]
     train.labels <- yy[!sampl_ind %in% idx]
     
-    candidate <- cross.validation.mwas(train.set, as.factor(train.labels), nfolds, classifier)
+    candidate <- cross.validation.mwas(train.set, as.factor(train.labels), nfolds, classifier, kernel)
     candidate.model <- c(candidate.model, list(candidate))
     #candidate.error[jk.fold] <- candidate$best.performance
     
@@ -184,7 +205,7 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
     candidate.error[jk.fold] <- length(which(pred.label != validation.labels))/length(validation.labels)
     pred.prob <- predict(candidate$best.model, validation.set, type='prob')
     
-    candidate.obj <- roc.mwas(validation.set, predicted=pred[validation.labels], response=as.factor(validation.labels))
+    candidate.obj <- roc.mwas(validation.set, predicted=pred.label[validation.labels], response=as.factor(validation.labels))
     #candidate.rocobj <- c(candidate.model, list(candidate.obj))
     candidate.auc[jk.fold] <- as.numeric(candidate.obj$auc)
   }
@@ -197,12 +218,12 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
   
   ####### Train final model on whole data set
   #
-  best.model.obj <- cross.validation.mwas(x, y, nfolds, classifier)
+  best.model.obj <- cross.validation.mwas(x, as.factor(y), nfolds, classifier, kernel)
   best.model <- best.model.obj$best.model
   best.model.eval <- model.evaluation.mwas(x, best.model, y)
   class(best.model.eval) <- class(best.model)
   
-  return(best.model)
+  return(list(best.model=best.model, best.model.eval=best.model.eval,model.perform=model.perform))
 }
 
 # cross-validation 
@@ -214,7 +235,9 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
 # -- output
 #  best.model : model parameters
 
-"cross.validation.mwas" <- function(x, y, nfolds=10, classifier = c("RF","SVM", "knn", "MLR")[1], ...){
+"cross.validation.mwas" <- function(x, y, nfolds=10, 
+                                    classifier = c("RF","SVM", "knn", "MLR")[1], 
+                                    kernel=NULL){
   
   classifier <- tolower(classifier) # case insensitive for options
   num_obs <- length(y)
@@ -250,9 +273,14 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
            kernel <- tolower(kernel)
            sigma <- c(2^(-4:0), seq(from=2, to=2^8, by=5))
            if(kernel!='all'){
+             if(kernel=='linear'){
+               best.model <- tune.ksvm(x, y, kernel, ranges=list(C=2^(-2:3)),
+                                       probability = TRUE)
+             }else{
+               best.model <- tune.ksvm(x, y, kernel, ranges=list(C=2^(-2:3), kpar=list(sigma=sigma)),
+                                       probability = TRUE)
+             }
              
-             best.model <- tune.ksvm(x, y, kernel, ranges=list(C=2^(-2:4), kpar=list(sigma=sigma)),
-                                     probability = TRUE)
            }else{
              all_kernel <- c("linear","rbf_eu","rbf_bc", "rbf_uf")
              valid_obj <- list()
@@ -321,7 +349,7 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
  if(!is.null(ranges)){
    params <- names(ranges) # parameters to be tuned
    if("C" %in% params) C <- ranges$C
-   if("kpar" %in% params) kpar <- ranges$kpar
+   if("kpar" %in% params) kpar <- ranges$kpar else kpar <- NULL
  } else { # default
    C <- 1
    kpar <- NULL
@@ -333,14 +361,16 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
  # grid search
  if(!is.null(kpar)){
    for(C_id in 1:length(C)){
+     if (kernel=="linear"){
+       count <- count + 1
+       cat(">>>>>Inner loop grid search: ", count, "\n")
+       valid_obj <- ksvm(x, y, type="C-svc", kernel="vanilladot", prob.model=probability, 
+                         cross=nfolds, C=C[C_id])
+     }else{
      for(kpar_id in 1:length(kpar$sigma)){
        count <- count + 1
-       
+       cat("Inner loop grid search: ", count, "\n")
        switch(kernel,
-              linear={
-                valid_obj <- ksvm(x, y, type="C-svc", kernel="vanilladot", prob.model=probability, cross=nfolds,
-                                  C=C[C_id])
-              },
               rbf_eu={
                 valid_obj <- ksvm(x, y, type="C-svc", kernel="rbfdot", prob.model=probability, cross=nfolds,
                                   C=C[C_id], kpar=list(sigma=kpar$sigma[kpar_id]))
@@ -369,11 +399,12 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
          if(cv_obj[[best_id]]@cross > valid_obj@cross) best_id <- count
        }
      }
+     }
    }
  } else {
    for(C_id in 1:length(C)){
      count <- count + 1
-     
+     cat(">>>>>>Inner loop grid search: ", count, "\n")
      switch(kernel,
             linear={
               valid_obj <- ksvm(x, y, type="C-svc", kernel="vanilladot", prob.model=probability, cross=nfolds,

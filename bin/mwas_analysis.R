@@ -19,9 +19,9 @@
 #  10. b - whether collapse the table by correlation [default: FALSE]
 #   <classifier related>
 #  11. C - classifier parameters- kernel function only for SVM classification method
-#  12. v - validation type (k-fold cross-validation - cv; jackknifing - jk)
+#  12. v - Feature selection methods: 'FDR' or 'RF' [default: FDR]
 #  13. n - number of folds in cross-validation [default: 10]
-#  14. f - Is feature selection option [default: FALSE]
+#  14. f - Whether to do feature selection option [default: FALSE]
 #  15. s - feature selection parameter [default: 0]
 #  <plot> (options are capital)
 #  16. F - feature statistics table file from differentiated test

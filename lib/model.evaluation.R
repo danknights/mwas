@@ -41,11 +41,14 @@
            evalobj$probabilities <- predict(model, x, type="prob")
            evalobj$prediction <- predict(model, x, type="response")
            
-         }, svm={
-           predicted <- predict(model, x, decision.values = TRUE, probability=TRUE)
+         }, ksvm={
+           #predicted <- predict(model, x, type="response")
            
-           evalobj$probabilities <- attr(predicted, "probabilities")
-           evalobj$prediction <- predict(model, x)
+           #evalobj$probabilities <- attr(predicted, "probabilities")
+           #evalobj$prediction <- predict(model, x)
+           
+           evalobj$prediction <- predict(model, x, type="response")
+           evalobj$probabilities <- predict(model, x, type="probabilities")
            
          }, mlr={
            
@@ -106,5 +109,7 @@
     if (length(evalobj$performance)==3) { names(evalobj$performance) <- c("error", "accuracy", "AUC") 
     }else names(evalobj$performance) <- c("error", "accuracy", "AUC", " Matthews_corr_coeff","Cohens_Kappa")
   }
+  evalobj$rownames <- rownames(x)
+  evalobj$colnmaes <- levels(evalobj$prediction)
   return(evalobj)
 }
