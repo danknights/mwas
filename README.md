@@ -4,10 +4,6 @@ Developers: "Hu Huang,Emmanuel Montassier, Pajau Vangay, Gabe Al Ghalith, Dan Kn
 Date: "03-01-2015"
 ---
 
-To use this project, add an environment variable 'MWAS' pointing to the top level folder of the repo.
-
-Please check the documents under doc/ for further functional testing. 
-
 ****
 
 
