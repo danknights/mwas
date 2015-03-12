@@ -7,7 +7,7 @@ Date: "03-01-2015"
 ****
 
 
-**MWAS (microbiome-wide association study) **package is an R-based toolbox for microbiome study, developped by the members of the Knights Lab at the University of Minnesota, Twin Cities. It provides three main functional modules: learning a predictve model, predicting an unknown microbiome data, and visualization of different results. The latest update is version 0.9.3 (03-2015). 
+**MWAS (microbiome-wide association study)** package is an R-based toolbox for microbiome study, developped by the members of the Knights Lab at the University of Minnesota, Twin Cities. It provides three main functional modules: learning a predictve model, predicting an unknown microbiome data, and visualization of different results. The latest update is version 0.9.3 (03-2015). 
 
 MWAS is developed in R, however, it also provides a Unix command-line interface as a simplified application for those who are not familliar with R.  
   
