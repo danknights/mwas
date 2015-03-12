@@ -13,7 +13,7 @@ MWAS is developed in R, however, it also provides a Unix command-line interface 
 
 ****
 
-#### Quick Index
+(Examples are in preparation. Full document will be available soon.)    
   
 #### 1. [Installing MWAS](http://rpubs.com/hwangtiger/install_mwas)  
 
