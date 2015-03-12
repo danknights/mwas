@@ -1,7 +1,7 @@
 ---
-Title |"MWAS R Package v0.9.3"
-Developers| "Hu Huang,Emmanuel Montassier, Pajau Vangay, Gabe Al Ghalith, Dan Knights"
-Date | "03-2015"
+Title: "MWAS R Package v0.9.3"
+Developers: "Hu Huang,Emmanuel Montassier, Pajau Vangay, Gabe Al Ghalith, Dan Knights"
+Date: "03-01-2015"
 ---
 
 To use this project, add an environment variable 'MWAS' pointing to the top level folder of the repo.
