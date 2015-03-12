@@ -47,7 +47,7 @@
          },
          rf = {
            feature.selection(x, as.factor(response), selection_threshold = 0.05, method="rf", out.dir = out.dir)
-           cat("The feature statistics listed in the directory ", out.dir, "\n")
+           cat("The feature statistics are listed in the directory ", out.dir, "\n")
          },
          #ttest = {
         #  
@@ -94,7 +94,7 @@
 	adj.pvals[!na.ix] <- p.adjust(pvals[!na.ix],'fdr')
 	keep.ix <- adj.pvals < fdr
 	keep.ix[is.na(keep.ix)] <- FALSE
-	if(!any(keep.ix)) stop('select.features failed to find any features.')
+	if(!any(keep.ix)) stop('select.features failed to find any features with the given threshold.')
 
 	# add stars to column names based on significance
 	annotations <- colnames(x)
