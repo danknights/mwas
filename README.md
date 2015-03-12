@@ -33,6 +33,20 @@ Click the above link (section title) for detailed information.
 
 #### 2. MWAS "*learn*" Module  
 
+* **Command-line version (in Terminal)**     
+`Rscript bin/mwas_analysis.R -w learn -M SVM -C linear -i data/taxa/GG_100nt_even10k-adults_L7.biom -m data/gg-map-adults.txt -o example/svm_output -c COUNTRY -f -v FDR -s 0.05`
+
+`-w`: learn mode  
+`-M`: classifier type  
+`-C`: kernel type for SVM  
+`-i`: input file  
+`-m`: mapfile  
+`-c`: category name  
+`-o`: output directory  
+`-f`: proceed feature selection
+`-v`: feature selection method: `fdr` or `rf`  
+`-s`: threshold for feature selection (determines the number of features)
+
 ***
 
 #### 3. MWAS "*predict*" Module
@@ -48,6 +62,9 @@ Click the above link (section title) for detailed information.
 ***
 
 #### 6. Example 1: Learning a predictive model   
+
+
+
 
 ***
 #### 7. Example 2: Prediction from an unknown dataset  

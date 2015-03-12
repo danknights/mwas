@@ -114,6 +114,7 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
     feat.set <- colnames(x)
     train.set <- x
   }
+  
   best.model <- persist.model.mwas(train.set, y, nfolds=nfolds, classifier=method, 
                                    out.dir=out.dir, kernel=kernel)
   file.name <- sprintf("%s_train_model_performance", method)
@@ -203,7 +204,7 @@ if (!require("pROC", quietly=TRUE, warn.conflicts = FALSE)) {
     
     pred.label <- predict(candidate$best.model, validation.set)
     candidate.error[jk.fold] <- length(which(pred.label != validation.labels))/length(validation.labels)
-    pred.prob <- predict(candidate$best.model, validation.set, type='prob')
+    #pred.prob <- predict(candidate$best.model, validation.set, type='prob')
     
     candidate.obj <- roc.mwas(validation.set, predicted=pred.label[validation.labels], response=as.factor(validation.labels))
     #candidate.rocobj <- c(candidate.model, list(candidate.obj))

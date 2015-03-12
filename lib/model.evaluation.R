@@ -109,7 +109,7 @@
     if (length(evalobj$performance)==3) { names(evalobj$performance) <- c("error", "accuracy", "AUC") 
     }else names(evalobj$performance) <- c("error", "accuracy", "AUC", " Matthews_corr_coeff","Cohens_Kappa")
   }
-  evalobj$rownames <- rownames(x)
-  evalobj$colnmaes <- levels(evalobj$prediction)
+  #evalobj$rownames <- rownames(x)
+  #evalobj$colnmaes <- levels(evalobj$prediction)
   return(evalobj)
 }

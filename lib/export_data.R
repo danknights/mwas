@@ -58,14 +58,14 @@
     file.name <- sprintf('%s/%s.txt', out.dir, file.name)
     
     # save as .txt format
-    scipen.save <- options('scipen') 
-    options(scipen=20)                         # avoid exponential notation
+    #scipen.save <- options('scipen') 
+    #options(scipen=20)                         # avoid exponential notation
     sink(file.name)
-    cat('The Jackknife model evaluation: \n')
-    cat('\t Error rate: ', model.eval$mean.error, " +/- ", model.eval$std.error, "\n")
-    cat('\t AUC from ROC: ', model.eval$mean.auc, " +/- ", model.eval$std.auc, "\n")
+    cat('The Jackknife model evaluation: \n\n')
+    cat('\t Error rate: \t', model.eval$mean.error, " +/- ", model.eval$std.error, "\n\n")
+    cat('\t AUC from ROC: \t', model.eval$mean.auc, " +/- ", model.eval$std.auc, "\n\n")
     sink(NULL)
-    options(scipen=scipen.save)
+    #options(scipen=scipen.save)
     #save.xlsx(objects=model.eval, file.name=file.name)
   }  
 
@@ -73,21 +73,26 @@
     # save trained model evaluation
     file.name1 <- sprintf('%s/trained_%s_model_perform_labels.txt', out.dir, class(trained.model))
     #save.xlsx(objects=trained.model.perform, file.name=file.name)
-    pred.table <- cbind(trained.model.perform$prediction, trained.model.perform$probabilities)
-    rownames(pred.table) <- trained.model.perform$rownames
+    pred.table <- data.frame(Labels=trained.model.perform$prediction, trained.model.perform$probabilities)
+    #rownames(pred.table) <- trained.model.perform$rownames
+    colnames(pred.table)[1] <- "Labels"
     #colnames(pred.table) <- c("labels", trained.model.perform$colnames)
     sink(file.name1)
-    write.table(pred.table,quote=F,sep='\t')
+    cat("SampleID\t")
+    write.table(pred.table, quote=F, sep='\t', row.names=TRUE)
     sink(NULL)
     
     file.name2 <- sprintf('%s/trained_%s_model_performance.txt', out.dir, class(trained.model))
     
-    perform_table <- list()
-    perform_table$confusion.matrix <- trained.model.perform$confusion.matrix
-    perform_table$performance <- trained.model.perform$performance
+    #perform_table <- list() #data.frame(trained.model.perform$confusion.matrix, trained.model.perform$performance)
+    #perform_table$confusion.matrix <- trained.model.perform$confusion.matrix
+    #perform_table$performance <- trained.model.perform$performance
     
     sink(file.name2)
-    lapply(perform_table, print, file=file.name2, append=TRUE)
+    #lapply(perform_table, print, file=file.name2, append=TRUE)
+    print(trained.model.perform$confusion.matrix, max.levels=500)
+    cat("\n\n")
+    print(trained.model.perform$performance)
     sink(NULL)
   }  
    
@@ -100,6 +105,7 @@
     flush(file.out)
     close(file.out)
   }
+  cat("The results are saved in ", out.dir)
 }
 
 # save data tabel in a Excel workbook.
