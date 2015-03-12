@@ -34,7 +34,7 @@ Click the above link (section title) for detailed information.
 #### 2. [MWAS "*learn*" Module](http://rpubs.com/hwangtiger/mwas_learn)  
 
 * **Command-line version (in Terminal)**     
-`Rscript bin/mwas_analysis.R -w learn -M SVM -C linear -i data/taxa/GG_100nt_even10k-adults_L7.biom -m data/gg-map-adults.txt -o example/svm_output -c COUNTRY -f -v FDR -s 0.05`
+`Rscript MWAS_DIR/bin/mwas_analysis.R -w learn -M SVM -C linear -i MWAS_DIR/data/taxa/GG_100nt_even10k-adults_L7.biom -m MWAS_DIR/data/gg-map-adults.txt -o example/svm_output -c COUNTRY -f -v FDR -s 0.05`
 
 `-w`: learn mode  
 `-M`: classifier type  
