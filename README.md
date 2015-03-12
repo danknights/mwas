@@ -33,19 +33,31 @@ Click the above link (section title) for detailed information.
 
 #### 2. MWAS "*learn*" Module  
 
+***
+
 #### 3. MWAS "*predict*" Module
+
+***
 
 #### 4. [MWAS Visualization Module](http://rpubs.com/hwangtiger/mwas_visualization)  
 
+***
+
 #### 5. [MWAS feature "*statistics*" Module](http://rpubs.com/hwangtiger/MWAS_feat_stats)
+
+***
 
 #### 6. Example 1: Learning a predictive model   
 
+***
 #### 7. Example 2: Prediction from an unknown dataset  
+
+***
 
 #### 8. Example 3: Taxon Statistical Analysis and Visualization  
 
 ***
+
 ### References  
 
 Storey, J. D. (2002). **A direct approach to false discovery rates**. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 64(3), 479-498.  
