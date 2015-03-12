@@ -58,6 +58,10 @@ Click the above link (section title) for detailed information.
 
 ***
 
+#### 9. Common Errors and Solutions
+
+***
+
 ### References  
 
 Storey, J. D. (2002). **A direct approach to false discovery rates**. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 64(3), 479-498.  
