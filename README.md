@@ -47,6 +47,27 @@ Click the above link (section title) for detailed information.
 `-v`: feature selection method: `fdr` or `rf`  
 `-s`: threshold for feature selection (determines the number of features)
 
+* **R version (in R Console)**
+
+If you are familiar with R, you could manipulate your data in a more flexible way. Here is the same example as shown in the command-line version.  
+
+`opts <- list()`  
+`opts$mode <- "learn"`  
+`opts$method <- "SVM"`  
+`opts$input_fp <- "data/taxa/GG_100nt_even10k-adults_L7.biom"`  
+`opts$map_fp <- "data/gg-map-adults.txt"`  
+`opts$category <- "COUNTRY"`  
+`opts$outdir <- "example/svm_learn"`  
+`opts$nfolds <- 5`  
+`opts$method_param <- "linear"`  
+`opts$ftMethod <- "FDR"`  
+`opts$is_feat <- TRUE`  
+`opts$feat_param <- 0.05`  
+
+`train_params <- import.train.params(opts)`  
+`best_model <- train.mwas(train_params)`  
+
+
 ***
 
 #### 3. [MWAS "*predict*" Module](http://rpubs.com/hwangtiger/mwas_predict)
