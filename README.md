@@ -17,7 +17,7 @@ MWAS is developed in R, however, it also provides a Unix command-line interface 
   
 #### 1. [Installing MWAS](http://rpubs.com/hwangtiger/install_mwas)  
 
-Click the above link (section title) for detailed information.  
+Click the above link (section title) for more details.  
 
 * Use the following command to set `MWAS_DIR` in the Terminal (or an equivalent command window; `/MWAS_directory` should be your actual directory):   
 `echo "export MWAS_DIR=$HOME/MWAS_directory" >> ~/.bash_profile`  
