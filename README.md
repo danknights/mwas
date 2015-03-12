@@ -19,7 +19,8 @@ MWAS is developed in R, however, it also provides a Unix command-line interface 
 
 Click the above link for detailed information.  
 
-* Use the following command to set `MWAS_DIR` in the Terminal (or an equivalent command window; `/MWAS_directory` should be your actual directory): `echo "export MWAS_DIR=$HOME/MWAS_directory" >> ~/.bash_profile`  
+* Use the following command to set `MWAS_DIR` in the Terminal (or an equivalent command window; `/MWAS_directory` should be your actual directory):   
+`echo "export MWAS_DIR=$HOME/MWAS_directory" >> ~/.bash_profile`  
 
 * You might need to install dependencies seperately, if it cannot install or load the required packages. Most of the dependencies would be installed when running the corresponding function commands, except one pacakge `optparse`. Follow the steps below to install this package:  
    + Open R Console in Terminal (or use RStudio)  
