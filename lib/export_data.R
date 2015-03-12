@@ -95,7 +95,9 @@
 
 
 # saves list of results from feature.statistics to file (or prints)
-"write.statistical.test.results" <- function(results, filename='feature_statistics'){
+"write.statistical.test.results" <- function(results, out.dir=NULL, filename='feature_statistics'){
+  
+  if(is.null(out.dir)) out.dir <- '.'
   
   # save as .txt format
   scipen.save <- options('scipen') 
@@ -105,7 +107,7 @@
   colnames(hits)[1:2] <- c('pvalue','qvalue')
   hits <- hits[!is.na(hits[,1]),,drop=F]     # remove all NA values
   hits <- hits[order(hits[,1]),]
-  filename1 <- sprintf("%s.txt", filename)
+  filename1 <- sprintf("%s/%s.txt", out.dir, filename)
   sink(filename1)
   cat('Features\t')
   write.table(hits,quote=F,sep='\t')

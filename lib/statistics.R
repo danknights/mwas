@@ -20,47 +20,38 @@
   options <- list(...)
   
   if (class(data) == "mwas"){
-    x <- data$x 
-    pc <- data$pc 
-    fp <- data$fp 
-    m <- data$m 
-    taxon.names <- data$taxon.names
+    x <- data$features 
     response <- data$response
-    is.multiple_axes <- data$is.multiple_axes
-    response_order <- data$response_order
-    is.sort_by_abundance <- data$is.sort_by_abundance
-    num_taxa <- data$num_taxa
     fdr <- data$fdr
-    x_axis_label <- data$x_axis_label
-    out.dir <- data$outdir
-    plot.type <- data$plottype
+    is.parametric <- data$is.parametric
+    out.dir <- data$out.dir
+    #include.subset <- data$include.subset
+    test.type <- data$test.type
   } else{
     x <- data 
-    pc <- options$pc 
-    fp <- options$fp 
-    m <- options$m 
-    taxon.names <- options$taxon.names
-    response <- options$response
-    is.multiple_axes <- options$is.multiple_axes
-    response_order <- options$response_order
-    is.sort_by_abundance <- options$is.sort_by_abundance
-    num_taxa <- options$num_taxa
-    fdr <- options$fdr
-    x_axis_label <- options$x_axis_label
-    out.dir <- options$outdir
-    plot.type <- options$plottype
+    #response <- response
+    #fdr <- f
+    #is.parametric <- data$is.parametric
+    #out.dir <- data$include.subset
+    #test.type <- test.type
   }
+  
   test.type <- tolower(test.type)
   switch(test.type,
          fdr = {
-           
+           results <- feature.statistics(x, response, fdr, 
+                                         parametric=is.parametric, 
+                                         include.subset=FALSE)
+           write.statistical.test.results(results, out.dir = out.dir)
+           cat("The feature statistics listed in the directory ", out.dir, "\n")
          },
-         linear = {
-           
+         rf = {
+           feature.selection(x, as.factor(response), selection_threshold = 0.05, method="rf", out.dir = out.dir)
+           cat("The feature statistics listed in the directory ", out.dir, "\n")
          },
-         ttest = {
-          
-         },
+         #ttest = {
+        #  
+        # },
          stop("Please assign the correct testing type!(Optioins:ttest, FDR, ")
   )
 }

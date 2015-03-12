@@ -193,7 +193,7 @@ if (!require("beeswarm", quietly=TRUE, warn.conflicts = FALSE)) {
     kegg <- setNames(otu_table$lineages, colnames(otu))
   }
 
-  # load differentiated feature table
+  # load feature statistics table
   if(!is.null(opts$feat_stats_fp)){ 
     feat_stats <- read.table(opts$feat_stats_fp,sep='\t',head=T,row=1,check=F,quote='"',comment='')  
   }else feat_stats <- NULL 
@@ -304,15 +304,55 @@ if (!require("beeswarm", quietly=TRUE, warn.conflicts = FALSE)) {
 }
 
 "import.stats.params" <- function(opts){
-
-  mapping <-  load.qiime.mapping.file(opts$map_fp)   # mapping file
   
-  feat.Data <- load.qiime.otu.table(opts$input_fp)  # OTU table - feature data for training
+  if(is.null(opts$suppress_relative_abundance_conversion)) opts$suppress_relative_abundance_conversion <- TRUE
+  if(is.null(opts$collapse_table)) opts$collapse_table <- FALSE
+  if(is.null(opts$filter_kegg)) opts$filter_kegg <- FALSE
+  if(is.null(opts$transform_type)) opts$transform_type <- "none"
+  if(is.null(opts$parametric)) opts$parametric <- FALSE
   
-  response <- droplevels(factor(mapping[, opts$category])) # desired labels 
+  # load OTU table/taxon table in either BIOM or txt format 
+  otu <- load.qiime.otu.table(opts$input_fp, include.lineages=FALSE)  # OTU table - feature data for training
   
-  param.list <- list(features=feat.Data, response=response, alpha=opts$alpha, is.parametric=opts$parametric, 
-                     include.subset=opts$subset)
+  # load mapping file
+  if(!is.null(opts$map_fp)){
+    m <-  load.qiime.mapping.file(opts$map_fp)         # mapping file
+  }else m <- NULL
+  
+  # whether supress converting to relative abundance
+  if(opts$suppress_relative_abundance_conversion) {
+    is.relative.conversion = FALSE
+  } else {
+    if (sum(rowSums(otu)) != dim(otu)[1]) {
+      # If row sum is not equal to 1, then convert to relative abundance; 
+      # otherwise, no need to convert
+      is.relative.conversion = TRUE 
+    } else is.relative.conversion = FALSE
+  }
+  
+  # Preprocessing: 
+  # 1) remove extra samples (rows) that don't match across different matrices;
+  # 2)  
+  preporcessed.obj <- preprocess.mwas(input.data = otu, 
+                                      map = m, 
+                                      min_prevalence = opts$min_prevalence,
+                                      transform_type = opts$transform_type,
+                                      is.filter.kegg = opts$filter_kegg,
+                                      is.collapse = opts$collapse_table,
+                                      is.relative.conversion=is.relative.conversion
+  )
+  
+  otu=preporcessed.obj$otu
+  m = preporcessed.obj$map
+  
+  response <- droplevels(factor(m[[opts$category]])) # desired labels 
+  names(response) <- rownames(m) 
+  
+  if(opts$outdir != ".") dir.create(opts$outdir,showWarnings=FALSE, recursive=TRUE)
+  
+  param.list <- list(features=otu, response=response, fdr=opts$fdr, is.parametric=opts$parametric, 
+                     include.subset=opts$subset, out.dir=opts$outdir, test.type=opts$method)
+  
   class(param.list) <- "mwas"
   
   return(param.list)

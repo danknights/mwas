@@ -42,8 +42,8 @@
 
 # Source files
 
-#file.sources = list.files("lib", pattern="*.R$",
-file.sources = list.files(paste(Sys.getenv('MWAS_DIR'),'/lib',sep=''), pattern="*.R$",
+file.sources = list.files("lib", pattern="*.R$",
+#file.sources = list.files(paste(Sys.getenv('MWAS_DIR'),'/lib',sep=''), pattern="*.R$",
                           full.names=TRUE, ignore.case=TRUE)
 invisible(sapply(file.sources, source, .GlobalEnv))
 
@@ -144,7 +144,7 @@ switch(case_mode,
          #print("Visualization")
        }, 
        statistics = { mwas.obj <- import.stats.params(opts)
-                      model.statistical.test.mwas(mwas.obj)
+                      statistical.test.mwas(mwas.obj)
          #print("statistics")
        }, 
        stop("Please specify a function mode: learn, predict, plot, statistics.")
