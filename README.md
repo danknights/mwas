@@ -49,7 +49,7 @@ Click the above link (section title) for detailed information.
 
 ***
 
-#### 3. MWAS "*predict*" Module
+#### 3. [MWAS "*predict*" Module](http://rpubs.com/hwangtiger/mwas_predict)
 
 ***
 
