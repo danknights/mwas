@@ -80,7 +80,16 @@ Click the above link (section title) for detailed information.
 ***
 
 ### References  
-
+Breiman, L. (2001). **Random forests**. Machine learning. 45(1), 5-32.  
+Leo Breiman and Adele Cutler. (2003) **Random Forest - Classification Description**. Retrieved on November 1, 2014 from [http://www.math.usu.edu/~adele/forests/cc_home.htm](http://www.math.usu.edu/~adele/forests/cc_home.htm)  
+Hastie, T., Tibshirani, R., Friedman, J., Hastie, T., Friedman, J., & Tibshirani, R. (2009). **The Elements of Statistical Learning** (Vol. 2, No. 1). New York: springer.  
+Adbi, H., & Williams, L. J. (2010). **Jackknife**. In: Neil Salkind (Ed.), _Encyclopedia of Research Design_. Thousand Oaks, CA: Sage.   
+Robin, X., Turck, N., Hainard, A., Tiberti, N., Lisacek, F., Sanchez, J. C., & Müller, M. (2011). **pROC: an open-source package for R and S+ to analyze and compare ROC curves**. BMC bioinformatics, 12(1), 77.  
+Chang, C. C., & Lin, C. J. (2011). **LIBSVM: a library for support vector machines**. ACM Transactions on Intelligent Systems and Technology (TIST), 2(3), 27.  
+Karatzoglou, A., Smola, A., Hornik, K., & Zeileis, A. (2004). **kernlab-an S4 package for kernel methods in R**. Journal of Statistical Software, 11(9)  
+Jerome Friedman, Trevor Hastie, Robert Tibshirani (2010). **Regularization paths for generalized linear models via coordinate descent**. Journal of Statistical Software, 33(1), 1-22.  
+Ben-Hur, A., & Weston, J. (2010). **A user’s guide to support vector machines**. In: O. Carugo, F. Eisenhaber (eds.), _Data mining techniques for the life sciences_ (pp. 223-239). Humana Press.  
+Cawley, G. C., & Talbot, N. L. (2010). **On over-fitting in model selection and subsequent selection bias in performance evaluation**. The Journal of Machine Learning Research, 11, 2079-2107.  
 Storey, J. D. (2002). **A direct approach to false discovery rates**. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 64(3), 479-498.  
 Noble, W. S. (2009). **How does multiple testing correction work?** Nature biotechnology, 27(12), 1135-1137.  
 Storey, J.D. (2010). **False discovery rate**. Retrieved on Feb. 1, 2015, from [http://www.genomine.org/papers/Storey_FDR_2010.pdf](http://www.genomine.org/papers/Storey_FDR_2010.pdf)  
