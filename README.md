@@ -10,10 +10,25 @@ Date: "03-01-2015"
 **MWAS (microbiome-wide association study)** package is an R-based toolbox for microbiome study, developped by the members of the Knights Lab at the University of Minnesota, Twin Cities. It provides three main functional modules: learning a predictve model, predicting an unknown microbiome data, and visualization of different results. The latest update is version 0.9.3 (03-2015). 
 
 MWAS is developed in R, however, it also provides a Unix command-line interface as a simplified application for those who are not familliar with R.  
-  
+
+****
+
 #### Quick Index
   
 #### 1. [Installing MWAS](http://rpubs.com/hwangtiger/install_mwas)  
+
+Click the above link for detailed information.  
+
+* Use the following command to set `MWAS_DIR` in the Terminal (or an equivalent command window; `/MWAS_directory` should be your actual directory): `echo "export MWAS_DIR=$HOME/MWAS_directory" >> ~/.bash_profile`  
+
+* You might need to install dependencies seperately, if it cannot install or load the required packages. Most of the dependencies would be installed when running the corresponding function commands, except one pacakge `optparse`. Follow the steps below to install this package:  
+   + Open R Console in Terminal (or use RStudio)  
+   + Install the pacakge: `install.packages("optparse")`  
+   + You should be able to use the MWAS functions now.   
+   
+*(Detailed testing information is available [here](http://rpubs.com/hwangtiger/install_mwas).)*
+
+***
 
 #### 2. MWAS "*learn*" Module  
 
