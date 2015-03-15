@@ -343,19 +343,24 @@
   if (!is.null(feat_stats)){
     # if the feature statistic table is provided, then load from file
     # else calculate q-values
-    ft.qvalue <- subset(feat_stats, qvalues <= fdr) # ft - feature statistics vector
+    ft.qvalue <- subset(feat_stats, qvalues < fdr) # ft - feature statistics vector
     ft.qvalue <- t(ft.qvalue)
-    ft.qvalue <- ft.qvalue[,order(ft.qvalue["pvalues", ], decreasing=F)[1:min(nplot,dim(ft.qvalue)[2])]]
+    #ft.qvalue <- ft.qvalue[,order(ft.qvalue["pvalues", ], decreasing=F)[1:min(nplot,dim(ft.qvalue)[2])]]
+    ft.qvalue <- ft.qvalue[,order(ft.qvalue["pvalues", ], decreasing=F)]
     
     keep_bugs <- colnames(x)[colnames(x) %in% colnames(ft.qvalue)]
   } else { 
     
     # if the feature stats table is not given, 
-    stats.table <- feature.statistics(x, response, fdr = fdr)
-    hit.ix <- order(stats.table$pvalues, decreasing=F)[1:min(nplot,length(stats.table$pvalues))]
-    ft.qvalue <- stats.table$qvalues[hit.ix]
+    stats.table <- feature.statistics(x, response, fdr = fdr, include.subset=FALSE)
+    #hit.ix <- order(stats.table$pvalues, decreasing=F)[1:min(nplot,length(stats.table$pvalues))]
+    hit.ix <- order(stats.table$pvalues[stats.table$feature], decreasing=F)
+    #ft.qvalue <- stats.table$qvalues[hit.ix]
     
-    keep_bugs <- colnames(x)[colnames(x) %in% names(ft.qvalue)]
+    keep_bugs <- names(stats.table$features[hit.ix])
+    
+    #keep_bugs <- colnames(x)[colnames(x) %in% names(ft.qvalue)]
+    #keep_bugs <- colnames(stats.table$subset)
   }
   
   if (length(keep_bugs)==0) stop("Please input a taxon table (not OTU table); or there is no overlapped taxa information between these two tables.")
