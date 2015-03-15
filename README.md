@@ -22,7 +22,7 @@ Click the above link (section title) for more details.
 * Use the following command to set `MWAS_DIR` in the Terminal (or an equivalent command window; `/MWAS_directory` should be your actual directory):   
 `echo "export MWAS_DIR=$HOME/MWAS_directory" >> ~/.bash_profile`  
 
-* You might need to install dependencies seperately, if it cannot install or load the required packages. Most of the dependencies would be installed when running the corresponding function commands, except one pacakge `optparse`. Follow the steps below to install this package:  
+* You might need to install dependencies seperately, if it cannot install or load the required packages. Most of the dependencies would be installed when running the corresponding function commands, except one pacakge `optparse`. Follow the steps below to install this package (_This step is needed only when you use the command-line functions for the first time_.):  
    + Open R Console in Terminal (or use RStudio)  
    + Install the pacakge: `install.packages("optparse")`  
    + You should be able to use the MWAS functions now.   
@@ -50,6 +50,9 @@ Click the above link (section title) for more details.
 * **R version (in R Console)**
 
 If you are familiar with R, you could manipulate your data in a more flexible way. Here is the same example as shown in the command-line version.  
+
+`file.sources = list.files("MWAS_DIR/lib", pattern="*.R$", full.names=TRUE, ignore.case=TRUE)`
+`invisible(sapply(file.sources, source, .GlobalEnv))`  
 
 `opts <- list()`  
 `opts$mode <- "learn"`  
