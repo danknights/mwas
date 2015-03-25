@@ -109,6 +109,8 @@ option_list <- list(
               help='Whether filter kegg list'),
   make_option(c("-N", "--nplot"), type="numeric", default=NULL,
               help="Number of taxa to plot (in order of decreasing significance). Ignored if --which_taxa exists [default: %default]"),
+  make_option(c("-O","--category_order"), type="character", default=NULL,
+              help="Optional ordering of categories (comma-separated) [default alphabetical]."),  
   # Statistical test parameters
   make_option(c("-a", "--statistcs"),type='character',default="linear",
               help="Statistical testing options [default: %default]")

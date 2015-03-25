@@ -292,6 +292,7 @@ if (!require("beeswarm", quietly=TRUE, warn.conflicts = FALSE)) {
                      is.shorten.taxa = opts$shorten_taxa, 
                      taxon.names = taxon.names,
                      category = opts$category,
+                     category_order = opts$category_order,
                      response = response,
                      is.multiple_axes = opts$multiple_axes,
                      fdr = opts$fdr,

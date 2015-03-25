@@ -28,6 +28,7 @@
     taxon.names <- data$taxon.names
     is.shorten.taxa <- data$is.shorten.taxa
     category <- data$category
+    category_order <- data$category_order
     is.multiple_axes <- data$is.multiple_axes
     fdr <- data$fdr
     plot.type <- data$plot.type
@@ -42,6 +43,7 @@
     taxon.names <- options$taxon.names
     is.shorten.taxa <- options$is.shorten.taxa
     category <- options$category
+    category_order <- options$category_order
     is.multiple_axes <- options$is.multiple_axes
     fdr <- options$fdr
     plot.type <- options$plot.type
@@ -58,13 +60,15 @@
              run.beeswarm(stats.obj$new_taxon_table, 
                           stats.obj$response, 
                           stats.obj$filename,
+                          category_order=category_order,
                           out.dir = out.dir)
            }else  { # plot all the taxa that are provided in the table
              #print("Beeswarm plot...")
-             run.beeswarm(x = x, response=response, filename="beeswarm-plot.pdf", out.dir = out.dir)
+             run.beeswarm(x = x, response=response, filename="beeswarm-plot.pdf", 
+                          category_order = category_order, out.dir = out.dir)
            }
          },
-         gradient = {
+         gradients = {
            #processed.data <- preprocess.mwas(data)
            plot.gradients(x=x, 
                           pc=pc, out.dir=out.dir, m=m,
@@ -125,7 +129,7 @@
              run.beeswarm(x = x, response=response, filename="violin-plot.pdf", out.dir = out.dir)
            }
          },
-         stop("Please assign the correct plot type!(Optioins: beeswarm, graidents, heatmap, boxplot, viloin, scatterplot.")
+         stop("Please assign the correct plot type!(Optioins: beeswarm, gradients, heatmap, boxplot, viloin, scatterplot.")
     )
 }
 
@@ -173,7 +177,8 @@
 # ------
 # Last update: 03/01/2015
 #
-"run.beeswarm" <- function(x, response, filename="beeswarm-plot.pdf", out.dir){
+"run.beeswarm" <- function(x, response, filename="beeswarm-plot.pdf", category_order=NULL,
+                           out.dir){
   
   x2beeswarmfile <- cbind(response,x)
   beeswarmfile <- x2beeswarmfile[order(response,decreasing=TRUE),]
@@ -189,6 +194,18 @@
     file.out <- sprintf('%s/%s', out.dir, filename)
     pdf(file.out,width=6,height=7)
     #print(file.out)
+  }
+  
+  # fix order if requested
+  if(!is.null(category_order)){
+    level.order <- strsplit(category_order,',')[[1]]
+    expected.levels <- sort(unique(as.character(response)))
+    if(!identical(sort(unique(level.order)),expected.levels)){
+      stop(paste("--category_order list does not contain the same categories",
+                 "as the provided mapping file:",
+                 paste(sort(unique(response)),collapse=', '),'\n',sep=' '))
+    }
+    response <- factor(response,levels=level.order)
   }
   
   for (i in 1:dim(beeswarmfile3)[2]){
